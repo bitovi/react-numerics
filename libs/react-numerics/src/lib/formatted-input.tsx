@@ -13,7 +13,7 @@ export function FormattedInput({
   onKeyDown,
   ...props
 }: Props) {
-  const key = useRef("");
+  const key = useRef<string | null>(null);
 
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
     const { selectionEnd, value } = evt.target;
@@ -23,12 +23,12 @@ export function FormattedInput({
         ? "backspace"
         : key.current === "Delete" || key.current === "Del"
         ? "delete"
-        : selectionEnd < value.length
+        : (selectionEnd ?? value.length) < value.length
         ? "replace"
         : "add";
 
     // Truncate the value to the selection end.
-    const truncValue = value.substring(0, selectionEnd);
+    const truncValue = value.substring(0, selectionEnd ?? value.length);
 
     onChange(truncValue, valueChangeType);
     key.current = null;

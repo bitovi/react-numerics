@@ -49,7 +49,8 @@ export function getCurrencyData(locale: string, currency = "USD") {
     }).formatToParts(1.1);
 
     mapLocaleToCurrencySymbol[locale] = {
-      fractionLength: formatted.find(p => p.type === "fraction")?.value?.length,
+      fractionLength:
+        formatted.find(p => p.type === "fraction")?.value?.length ?? 0,
       symbol: formatted.find(p => p.type === "currency")?.value ?? "$"
     };
   }

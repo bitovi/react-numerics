@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Logr } from "@blast-client/logr";
-import useLog from "../../hooks/use-log";
 import { Filter } from "./filters/filters";
 import { Formatter } from "./formatters/formatters";
 import { Converter } from "./converters/converters";
@@ -32,19 +30,12 @@ export function FormattedNumericInput({
   numericValue,
   ...props
 }: Props) {
-  const logr = useLog("frm");
   const numeric = useRef(filter(numericValue));
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */
   const userKeyedNumeric = useRef(false);
   const [displayValue, setDisplayValue] = useState(
-    getInitialDisplayValue(
-      numericValue,
-      filter,
-      formatter,
-      onNumericChange,
-      logr
-    )
+    getInitialDisplayValue(numericValue, filter, formatter, onNumericChange)
   );
 
   useEffect(() => {
@@ -58,18 +49,14 @@ export function FormattedNumericInput({
         userKeyed: userKeyedNumeric.current
       });
 
-      logr.debug(
-        () =>
-          `FormattedNumericInput useEffect: numericValue='${numericValue}', formatted='${formatted}', userKeyedNumeric.current=${userKeyedNumeric.current} `
-      );
       userKeyedNumeric.current = false;
 
       return formatted;
     });
-  }, [filter, formatter, logr, numericValue]);
+  }, [filter, formatter, numericValue]);
 
   function handleBlur(evt: React.FocusEvent<HTMLInputElement>) {
-    const nextDisplayValue = formatter(filter(evt.target.value), null, {
+    const nextDisplayValue = formatter(filter(evt.target.value), displayValue, {
       type: "blur"
     });
 
@@ -85,26 +72,13 @@ export function FormattedNumericInput({
       // Value will have the format of the current locale. Before processing the
       // number convert it to an en-US representation.
       const enValue = converter ? converter(value) : value;
-      logr.debug(
-        () => `FormattedNumericInput handleChange: value='${enValue}'`
-      );
 
       let next = filter(enValue, numeric.current);
-      logr.debug(
-        () => `FormattedNumericInput handleChange[filter]: next='${next}'`
-      );
 
       next = formatter(next, displayValue, { type: "change" });
-      logr.debug(
-        () => `FormattedNumericInput handleChange[formatter]: next='${next}'`
-      );
 
       const deleteType = changeType !== "add" && changeType !== "replace";
       const nextDisplay = deleteType ? value : next;
-      logr.debug(
-        () =>
-          `FormattedNumericInput handleChange: nextDisplay='${nextDisplay}', changeType='${changeType}'`
-      );
 
       // If characters are being deleted, don't reformat the string. Also this
       // must not set the userKeyedNumeric ref because the user did not press a
@@ -118,26 +92,17 @@ export function FormattedNumericInput({
       const nextNumeric = filter(
         converter ? converter(nextDisplay) : nextDisplay
       );
-      logr.debug(
-        () =>
-          `FormattedNumericInput handleChange: numeric='${numeric.current}', nextNumeric='${nextNumeric}'`
-      );
 
       if (numeric.current !== nextNumeric) {
-        logr.debug(
-          () =>
-            `FormattedNumericInput handleChange; numeric.current='${numeric.current}',  nextNumeric='${nextNumeric}'`
-        );
-
         numeric.current = nextNumeric;
-        onNumericChange(nextNumeric);
+        onNumericChange && onNumericChange(nextNumeric);
       }
     },
-    [converter, displayValue, filter, formatter, logr, onNumericChange]
+    [converter, displayValue, filter, formatter, onNumericChange]
   );
 
   const handleKeyDown: NumericInputProps["onKeyDown"] = useCallback(
-    evt => {
+    (evt: React.KeyboardEvent) => {
       userKeyedNumeric.current = true;
 
       // If this is not a key that represents a single character (like a
@@ -153,11 +118,6 @@ export function FormattedNumericInput({
       }
     },
     [filter, numericValue]
-  );
-
-  logr.debug(
-    () =>
-      `FormattedNumericInput: numericValue='${numericValue}', displayValue='${displayValue}', userKeyedNumeric.current=${userKeyedNumeric.current}`
   );
 
   return (
@@ -191,30 +151,26 @@ interface Props extends Omit<NumericInputProps, "formattedValue" | "onChange"> {
   numericValue: string;
   /** Invoked when the numeric value of the input changes (as determined by
    * comparing the `numericValue` to the result of `filter`). */
-  onNumericChange: (value: string) => void;
+  onNumericChange: ((value: string) => void) | null;
 }
 
 function getInitialDisplayValue(
   numericValue: string,
-  filter: Props["filter"],
-  formatter: Props["formatter"],
-  onNumericChange: Props["onNumericChange"],
-  log: Logr
+  filter: Required<Props>["filter"],
+  formatter: Required<Props>["formatter"],
+  onNumericChange: Props["onNumericChange"]
 ) {
   const formatted = formatter(filter(numericValue));
   const filtered = filter(formatted);
-
-  log.debug(
-    () =>
-      `getInitialDisplayValue: numericValue='${numericValue}', formatted='${formatted}', filtered='${filtered}'`
-  );
 
   // getInitialDisplayValue is invoked during the first render of the component,
   // the provided number doesn't match the allowed inputs so this component is
   // rejecting the initial provided value. The invocation of the
   // `onNumericChange` with the allowed value needs to be queued to let the
   // React render stack unwind first.
-  filtered !== numericValue && setTimeout(() => onNumericChange(filtered), 0);
+  filtered !== numericValue &&
+    onNumericChange &&
+    setTimeout(() => onNumericChange(filtered), 0);
 
   return formatted;
 }

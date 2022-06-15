@@ -2,7 +2,7 @@ import {
   extractDigits,
   getDecimalSeparator,
   numberSign
-} from "../../../util/numbers";
+} from "../util/numbers";
 
 /**
  * Convert a number string from one locale to another. All characters except

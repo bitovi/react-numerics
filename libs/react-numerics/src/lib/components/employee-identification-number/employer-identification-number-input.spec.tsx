@@ -1,4 +1,4 @@
-import { act, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { EmployerIdentificationNumberInput } from "./employer-identification-number-input";
 
@@ -171,25 +171,27 @@ describe("EmployerIdentificationNumberInput", () => {
   });
 
   it("rejects a string that is too long", async () => {
-    const handleChange = jest.fn();
-
-    // This render is wrapped in `act` because the initial render of
-    // `EmployerIdentificationNumberInput` will cause `onNumericChange` to be
-    // invoked in a `setTimeout` callback. onNumericChange invoked because the
-    // initial numericValue prop value is "5432109876" which is too long for an
-    // EIN.
-    await act(() => {
-      render(
-        <EmployerIdentificationNumberInput
-          numericValue="5432109876"
-          onNumericChange={handleChange}
-          placeholder="TEST"
-        />
-      );
-
-      return new Promise(resolve => setTimeout(() => resolve(), 0));
+    let resolver: (value: void | PromiseLike<void>) => void;
+    const waitForNumericChange = new Promise<void>(resolve => {
+      resolver = resolve;
     });
 
-    expect(handleChange).toBeCalledWith("543210987");
+    const handleNumericChange = jest.fn(() => resolver());
+
+    // onNumericChange invoked because the initial numericValue prop value is
+    // "5432109876" which is too long for an EIN.
+    render(
+      <EmployerIdentificationNumberInput
+        numericValue="5432109876"
+        onNumericChange={handleNumericChange}
+        placeholder="TEST"
+      />
+    );
+
+    // Wait for the first handleNumericChange invocation (which happens
+    // asynchronously) before continuing.
+    await waitForNumericChange;
+
+    expect(handleNumericChange).toBeCalledWith("543210987");
   });
 });

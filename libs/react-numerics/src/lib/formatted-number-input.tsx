@@ -52,9 +52,13 @@ type FormattedNumericInputProps = React.ComponentPropsWithoutRef<
   typeof FormattedNumericInput
 >;
 
+type FormatFloatSecondParameter = NonNullable<
+  Parameters<typeof formatFloat>[1]
+>;
+
 export interface Props
   extends Omit<FormattedNumericInputProps, "converter" | "filter"> {
-  decimalPlaces?: Parameters<typeof formatFloat>[1]["decimalPlaces"];
+  decimalPlaces?: FormatFloatSecondParameter["decimalPlaces"];
   locales?: Parameters<FormatterFactory>[0];
-  roundingMode?: Parameters<typeof formatFloat>[1]["roundingMode"];
+  roundingMode?: FormatFloatSecondParameter["roundingMode"];
 }

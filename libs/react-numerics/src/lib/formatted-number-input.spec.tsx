@@ -179,10 +179,10 @@ describe("FormattedNumberInput: enter value", () => {
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper(handleNumericChange) }
+      { wrapper: createFormattedNumberInputWrapper() }
     );
 
     const elem = getByPlaceholderText("TEST") as HTMLInputElement;
@@ -208,10 +208,10 @@ describe("FormattedNumberInput: enter value", () => {
       <FormattedNumberInput
         min={-0.1}
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper(handleNumericChange) }
+      { wrapper: createFormattedNumberInputWrapper() }
     );
 
     const elem = getByPlaceholderText("TEST") as HTMLInputElement;
@@ -237,10 +237,10 @@ describe("FormattedNumberInput: enter value", () => {
       <FormattedNumberInput
         min={0}
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper(handleNumericChange) }
+      { wrapper: createFormattedNumberInputWrapper() }
     );
 
     const elem = getByPlaceholderText("TEST") as HTMLInputElement;

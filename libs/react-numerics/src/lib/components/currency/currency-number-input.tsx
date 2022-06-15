@@ -6,7 +6,7 @@ import {
 } from "../../formatted-number-input";
 import { Locales } from "../../types";
 import { formatCurrency } from "../../formatters/formatters";
-import { getCurrencyData, padRight } from "../../../../util/numbers";
+import { getCurrencyData, padRight } from "../../util/numbers";
 
 /**
  * Allow the user to enter a currency value. Currency format and display are
@@ -30,7 +30,7 @@ export function CurrencyNumberInput({
     if (paddingStage === paddingStages.pending) {
       if (typeof numericValue === "string") {
         setPaddingStage(paddingStages.active);
-        onNumericChange(padFraction(locales, numericValue));
+        onNumericChange && onNumericChange(padFraction(locales, numericValue));
       }
     } else if (paddingStage === paddingStages.active) {
       setPaddingStage(paddingStages.complete);
@@ -47,7 +47,7 @@ export function CurrencyNumberInput({
   const handleBlur = useCallback(
     (evt: React.FocusEvent<HTMLInputElement>) => {
       if (showFraction) {
-        onNumericChange(padFraction(locales, numericValue));
+        onNumericChange && onNumericChange(padFraction(locales, numericValue));
       }
 
       onBlur && onBlur(evt);
@@ -73,6 +73,10 @@ const paddingStages = { pending: -1, active: 0, complete: 1 };
 
 function padFraction(locales: Locales, numericValue: string) {
   if (!numericValue) {
+    return numericValue;
+  }
+
+  if (!locales) {
     return numericValue;
   }
 

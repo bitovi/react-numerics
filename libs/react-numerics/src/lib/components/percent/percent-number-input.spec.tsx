@@ -1,4 +1,4 @@
-import { act, render, RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PercentNumberInput } from "./percent-number-input";
 import { createFormattedNumberInputWrapper } from "../../test/wrapper";
@@ -26,11 +26,11 @@ describe("PercentNumberInput", () => {
       <PercentNumberInput
         max={100}
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
       {
-        wrapper: createFormattedNumberInputWrapper(handleNumericChange)
+        wrapper: createFormattedNumberInputWrapper()
       }
     );
 
@@ -61,11 +61,11 @@ describe("PercentNumberInput", () => {
       <PercentNumberInput
         min={-1}
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
       {
-        wrapper: createFormattedNumberInputWrapper(handleNumericChange)
+        wrapper: createFormattedNumberInputWrapper()
       }
     );
 
@@ -90,11 +90,11 @@ describe("PercentNumberInput", () => {
       <PercentNumberInput
         min={0}
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
       {
-        wrapper: createFormattedNumberInputWrapper(handleNumericChange)
+        wrapper: createFormattedNumberInputWrapper()
       }
     );
 
@@ -117,11 +117,11 @@ describe("PercentNumberInput", () => {
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput
         numericValue=""
-        onNumericChange={null}
+        onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
       {
-        wrapper: createFormattedNumberInputWrapper(handleNumericChange, "45")
+        wrapper: createFormattedNumberInputWrapper("45")
       }
     );
 
@@ -150,31 +150,28 @@ describe("PercentNumberInput", () => {
   it("does not allow a negative when the min is 0 or greater", async () => {
     const user = userEvent.setup();
 
-    const handleNumericChange = jest.fn();
-
-    let getAllByPlaceholderText: RenderResult["getAllByPlaceholderText"];
-
-    // This render is wrapped in `act` because the initial render of
-    // `PercentNumberInput` will cause `onNumericChange` to be invoked in a
-    // `setTimeout` callback. It is invoked because the min prop value is "0"
-    // and the initial provided value is "-23".
-    await act(() => {
-      getAllByPlaceholderText = render(
-        <PercentNumberInput
-          min={0}
-          numericValue=""
-          onNumericChange={null}
-          placeholder="TEST"
-        />,
-        {
-          wrapper: createFormattedNumberInputWrapper(handleNumericChange, "-23")
-        }
-      ).getAllByPlaceholderText;
-
-      // Queue up a request that will resolve after `onNumericChange` is
-      // invoked.
-      return new Promise<void>(resolve => setTimeout(() => resolve(), 0));
+    let resolver: (value: void | PromiseLike<void>) => void;
+    const waitForNumericChange = new Promise<void>(resolve => {
+      resolver = resolve;
     });
+
+    const handleNumericChange = jest.fn(() => resolver());
+
+    const { getAllByPlaceholderText } = render(
+      <PercentNumberInput
+        min={0}
+        numericValue=""
+        onNumericChange={handleNumericChange}
+        placeholder="TEST"
+      />,
+      {
+        wrapper: createFormattedNumberInputWrapper("-23")
+      }
+    );
+
+    // Wait for the first handleNumericChange invocation (which happens
+    // asynchronously) before continuing.
+    await waitForNumericChange;
 
     const elem = (getAllByPlaceholderText("TEST") as HTMLInputElement[])[0];
 

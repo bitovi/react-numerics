@@ -2,7 +2,7 @@ import {
   extractDigits,
   localizedStringToNumber,
   numberSign
-} from "../../../util/numbers";
+} from "../util/numbers";
 
 // export const filterToInteger: Filter = (next, previous = "") => {
 //   return /^(-(?!0)|-?[1-9]+)[0-9]*$/m.test(next) ? next ?? "" : previous;

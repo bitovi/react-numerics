@@ -1,32 +1,38 @@
 import React, { useState } from "react";
+import { act } from "@testing-library/react";
 import { FormattedNumberInput } from "../formatted-number-input";
 
 /**
  * Create a Wrapper component that maintains the `numericValue` and provides it
  * to the component that is being tested.
- * @param handleNumericChange Invoked when the numericValue in the child
- * changes.
  * @param initialNumericValue The initial value for the input, defaults to an
  * empty string.
  */
-export function createFormattedNumberInputWrapper(
-  handleNumericChange: jest.Mock,
-  initialNumericValue = ""
-) {
-  return function Wrapper({ children }: React.PropsWithChildren<never>) {
-    const [numericValue, setNumericValue] =
-      useState<string>(initialNumericValue);
+export function createFormattedNumberInputWrapper(initialNumericValue = "") {
+  return function Wrapper({ children }: WrapperProps) {
+    const [numericValue, setNumericValue] = useState<string>();
 
-    handleNumericChange.mockImplementation(value => setNumericValue(value));
+    const cloneProps: ChildrenProps = {
+      numericValue: numericValue ?? initialNumericValue,
+      onNumericChange: value => {
+        act(() => {
+          setNumericValue(value);
+        });
 
-    const cloneProps: Pick<
-      React.ComponentPropsWithoutRef<typeof FormattedNumberInput>,
-      "numericValue" | "onNumericChange"
-    > = {
-      numericValue,
-      onNumericChange: handleNumericChange
+        children?.props?.onNumericChange &&
+          children.props.onNumericChange(value);
+      }
     };
 
-    return React.cloneElement(children as any, cloneProps);
+    return React.cloneElement(children as React.ReactElement, cloneProps);
   };
+}
+
+type ChildrenProps = Pick<
+  React.ComponentPropsWithoutRef<typeof FormattedNumberInput>,
+  "numericValue" | "onNumericChange"
+>;
+
+interface WrapperProps {
+  children: React.ReactElement<ChildrenProps>;
 }

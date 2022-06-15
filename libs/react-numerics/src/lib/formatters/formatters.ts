@@ -5,7 +5,7 @@ import {
   getDecimalSeparator,
   getGroupingSeparator,
   padRight
-} from "../../../util/numbers";
+} from "../util/numbers";
 
 /**
  * Format a number as localized currency.
@@ -13,7 +13,10 @@ import {
  * @see Formatter
  */
 export const formatCurrency: CurrencyFormatterFactory =
-  (locales, { padRight: padRightOpt, showFraction = true, ...opts }) =>
+  (
+    locales = "en-US",
+    { padRight: padRightOpt, showFraction = true, ...opts } = {}
+  ) =>
   (number: string, previousFormatted?: string, context?: FormatterContext) => {
     const locale = Array.isArray(locales) ? locales[0] : locales;
 
@@ -26,7 +29,7 @@ export const formatCurrency: CurrencyFormatterFactory =
         locales,
         ...opts
       },
-      previousFormatted
+      previousFormatted ?? ""
     );
 
     const decimalSeparator = getDecimalSeparator(locale);
@@ -206,7 +209,7 @@ function formatNumberString(
   }: Partial<
     FormatNumberStringOptions & FormatFloatStringOptions & FormatterContext
   >,
-  previousFormatted: string = ""
+  previousFormatted = ""
 ) {
   const safeNumber = number.trim();
 
@@ -264,16 +267,19 @@ function formatNumberString(
   const decimalPlacesMax =
     typeof decimalPlaces === "number" ? decimalPlaces : 20;
 
+  // The toFormat documentation allows roundingMode to be undefined, the
+  // signature type is wrong.
   const formatted = num.toFormat(
     fraction.length < decimalPlacesMax ? fraction.length : decimalPlacesMax,
-    roundingMode,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    roundingMode as any,
     numberFormat
   );
 
   let includeSeparator = safeNumber.endsWith(".");
   if (type === "blur") {
     includeSeparator = false;
-  } else if (decimalPlaces < 1) {
+  } else if ((decimalPlaces ?? 1) < 1) {
     includeSeparator = false;
   }
 

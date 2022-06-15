@@ -7,27 +7,25 @@ export default {
     numericValue: {
       control: {
         disable: true
-      },
-      type: { required: true }
+      }
     },
-    onNumericChange: {
-      control: {
-        disable: true
-      },
-      type: { required: true }
-    }
+    onNumericChange: { action: "onNumericChange" }
   },
   component: EmployerIdentificationNumberInput,
-  title: "Inputs/Formatted/Employer Identification Number Input"
+  title: "EmployerIdentificationNumberInput"
 } as ComponentMeta<typeof EmployerIdentificationNumberInput>;
 
-const Template: Story<typeof EmployerIdentificationNumberInput> = args => {
-  const [value, setValue] = useState((args as any).numericValue);
+const Template: Story<
+  React.ComponentPropsWithoutRef<typeof EmployerIdentificationNumberInput>
+> = args => {
+  const { numericValue, onNumericChange } = args;
+
+  const [value, setValue] = useState(numericValue);
 
   return (
     <EmployerIdentificationNumberInput
       onNumericChange={numeric => {
-        (args as any).onNumericChange(numeric);
+        onNumericChange && onNumericChange(numeric);
         setValue(numeric);
       }}
       numericValue={value}
@@ -35,7 +33,7 @@ const Template: Story<typeof EmployerIdentificationNumberInput> = args => {
   );
 };
 
-const Primary: Story = Template.bind({});
+const Primary = Template.bind({});
 Primary.args = {
   numericValue: "123456789"
 };

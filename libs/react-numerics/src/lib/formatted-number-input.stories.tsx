@@ -7,28 +7,23 @@ export default {
     decimalPlaces: { type: "number" },
     locales: { options: ["en-US", "de-DE"] },
     numericValue: {
-      control: { type: "text" },
-      type: { required: true }
-    },
-    onNumericChange: {
       control: {
         disable: true
-      },
-      type: { required: true }
+      }
     },
+    onNumericChange: { action: "onNumericChange" },
     roundingMode: { options: [null, 1, 2, 3, 4, 5, 6, 7, 8] }
   },
   component: FormattedNumberInput,
-  title: "Inputs/Formatted/Number Input"
+  title: "FormattedNumberInput"
 } as ComponentMeta<typeof FormattedNumberInput>;
 
-const Template: Story<typeof FormattedNumberInput> = args => {
-  const { numericValue, onNumericChange, ...props } =
-    args as unknown as React.ComponentPropsWithoutRef<
-      typeof FormattedNumberInput
-    >;
+const Template: Story<
+  React.ComponentPropsWithoutRef<typeof FormattedNumberInput>
+> = args => {
+  const { numericValue, onNumericChange, ...props } = args;
 
-  const [value, setValue] = useState<typeof numericValue>();
+  const [value, setValue] = useState<typeof numericValue>("");
 
   useEffect(() => {
     setValue(numericValue);
@@ -39,14 +34,14 @@ const Template: Story<typeof FormattedNumberInput> = args => {
       {...props}
       numericValue={value}
       onNumericChange={numeric => {
-        onNumericChange(numeric);
+        onNumericChange && onNumericChange(numeric);
         setValue(numeric);
       }}
     />
   );
 };
 
-const Primary: Story = Template.bind({});
+const Primary = Template.bind({});
 Primary.args = {
   decimalPlaces: 4,
   locales: "en-US",

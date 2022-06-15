@@ -15,31 +15,26 @@ export default {
       control: { type: "number" }
     },
     numericValue: {
-      control: { type: "text" },
-      type: { required: true }
-    },
-    onNumericChange: {
       control: {
         disable: true
-      },
-      type: { required: true }
+      }
     },
+    onNumericChange: { action: "onNumericChange" },
     roundingMode: {
       control: { type: "select" },
       options: [null, 1, 2, 3, 4, 5, 6, 7, 8]
     }
   },
   component: PercentNumberInput,
-  title: "Inputs/Formatted/Percent Number Input"
+  title: "PercentNumberInput"
 } as ComponentMeta<typeof PercentNumberInput>;
 
-const Template: Story<typeof PercentNumberInput> = args => {
-  const { numericValue, onNumericChange, ...props } =
-    args as unknown as React.ComponentPropsWithoutRef<
-      typeof PercentNumberInput
-    >;
+const Template: Story<
+  React.ComponentPropsWithoutRef<typeof PercentNumberInput>
+> = args => {
+  const { numericValue, onNumericChange, ...props } = args;
 
-  const [value, setValue] = useState<typeof numericValue>();
+  const [value, setValue] = useState<typeof numericValue>("");
 
   useEffect(() => {
     setValue(numericValue);
@@ -49,7 +44,7 @@ const Template: Story<typeof PercentNumberInput> = args => {
     <PercentNumberInput
       {...props}
       onNumericChange={numeric => {
-        onNumericChange(numeric);
+        onNumericChange && onNumericChange(numeric);
         setValue(numeric);
       }}
       numericValue={value}
@@ -57,7 +52,7 @@ const Template: Story<typeof PercentNumberInput> = args => {
   );
 };
 
-const Primary: Story = Template.bind({});
+const Primary = Template.bind({});
 Primary.args = {
   decimalPlaces: 3,
   locales: "en-US",

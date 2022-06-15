@@ -7,36 +7,34 @@ export default {
     numericValue: {
       control: {
         disable: true
-      },
-      type: { required: true }
+      }
     },
-    onNumericChange: {
-      control: {
-        disable: true
-      },
-      type: { required: true }
-    }
+    onNumericChange: { action: "onNumericChange" }
   },
   component: TelephoneNumberInput,
-  title: "Inputs/Formatted/Telephone Number Input"
+  title: "TelephoneNumberInput"
 } as ComponentMeta<typeof TelephoneNumberInput>;
 
-const Template: Story<typeof TelephoneNumberInput> = args => {
-  const [value, setValue] = useState((args as any).numericValue);
+const Template: Story<
+  React.ComponentPropsWithoutRef<typeof TelephoneNumberInput>
+> = args => {
+  const { numericValue, onNumericChange, ...props } = args;
+
+  const [value, setValue] = useState(numericValue);
 
   return (
     <TelephoneNumberInput
-      locales={(args as any).locales}
+      {...props}
       numericValue={value}
       onNumericChange={numeric => {
-        (args as any).onNumericChange(numeric);
+        onNumericChange && onNumericChange(numeric);
         setValue(numeric);
       }}
     />
   );
 };
 
-const Primary: Story = Template.bind({});
+const Primary = Template.bind({});
 Primary.args = {
   locales: "en-US",
   numericValue: "5551239876"

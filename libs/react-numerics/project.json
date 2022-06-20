@@ -1,74 +1,80 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/react-numerics/src",
   "projectType": "library",
+  "root": "libs/react-numerics",
+  "sourceRoot": "libs/react-numerics/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/react-numerics",
-        "tsConfig": "libs/react-numerics/tsconfig.lib.json",
-        "project": "libs/react-numerics/package.json",
-        "entryFile": "libs/react-numerics/src/index.ts",
-        "external": ["react/jsx-runtime"],
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-        "compiler": "babel",
         "assets": [
           {
             "glob": "libs/react-numerics/README.md",
             "input": ".",
             "output": "."
           }
-        ]
-      }
+        ],
+        "compiler": "babel",
+        "entryFile": "libs/react-numerics/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "globals": [
+          {
+            "moduleId": "bignumber.js",
+            "global": "BigNumber"
+          }
+        ],
+        "outputPath": "dist/libs/react-numerics",
+        "project": "libs/react-numerics/package.json",
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "tsConfig": "libs/react-numerics/tsconfig.lib.json"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "build-storybook": {
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      },
+      "executor": "@nrwl/storybook:build",
+      "options": {
+        "config": {
+          "configFolder": "libs/react-numerics/.storybook"
+        },
+        "outputPath": "dist/storybook/react-numerics",
+        "uiFramework": "@storybook/react"
+      },
+      "outputs": ["{options.outputPath}"]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/react-numerics/**/*.{ts,tsx,js,jsx}"]
+      },
+      "outputs": ["{options.outputFile}"]
+    },
+    "storybook": {
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      },
+      "executor": "@nrwl/storybook:storybook",
+      "options": {
+        "config": {
+          "configFolder": "libs/react-numerics/.storybook"
+        },
+        "port": 4400,
+        "uiFramework": "@storybook/react"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/react-numerics"],
       "options": {
         "jestConfig": "libs/react-numerics/jest.config.ts",
         "passWithNoTests": true
-      }
-    },
-    "storybook": {
-      "executor": "@nrwl/storybook:storybook",
-      "options": {
-        "uiFramework": "@storybook/react",
-        "port": 4400,
-        "config": {
-          "configFolder": "libs/react-numerics/.storybook"
-        }
       },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "build-storybook": {
-      "executor": "@nrwl/storybook:build",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "uiFramework": "@storybook/react",
-        "outputPath": "dist/storybook/react-numerics",
-        "config": {
-          "configFolder": "libs/react-numerics/.storybook"
-        }
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
+      "outputs": ["coverage/libs/react-numerics"]
     }
   }
 }

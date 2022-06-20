@@ -1,8 +1,10 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "react-numerics",
   "affected": {
     "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
   },
   "implicitDependencies": {
     "package.json": {
@@ -13,7 +15,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
         "cacheableOperations": [
           "build",
@@ -48,5 +50,6 @@
         "linter": "eslint"
       }
     }
-  }
+  },
+  "defaultProject": "react-numerics"
 }

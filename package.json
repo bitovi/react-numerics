@@ -7,7 +7,6 @@
     "build": "nx build",
     "test": "nx test"
   },
-  "private": false,
   "dependencies": {
     "bignumber.js": "^9.0.2",
     "core-js": "^3.6.5",

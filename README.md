@@ -17,4 +17,4 @@ this file).
 - Delete the `dist` directory.
 - Build the library: `yarn build`.
 - `cd` into the "dist/libs/react-numerics" directory.
-- Run `npm publish`.
+- Run `npm publish --access=public`.

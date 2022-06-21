@@ -16,7 +16,11 @@
         ],
         "compiler": "babel",
         "entryFile": "libs/react-numerics/src/index.ts",
-        "external": ["react/jsx-runtime"],
+        "external": [
+          "bignumber.js",
+          "react",
+          "react/jsx-runtime"
+        ],
         "globals": [
           {
             "moduleId": "bignumber.js",
@@ -28,7 +32,9 @@
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
         "tsConfig": "libs/react-numerics/tsconfig.lib.json"
       },
-      "outputs": ["{options.outputPath}"]
+      "outputs": [
+        "{options.outputPath}"
+      ]
     },
     "build-storybook": {
       "configurations": {
@@ -44,14 +50,20 @@
         "outputPath": "dist/storybook/react-numerics",
         "uiFramework": "@storybook/react"
       },
-      "outputs": ["{options.outputPath}"]
+      "outputs": [
+        "{options.outputPath}"
+      ]
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/react-numerics/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "libs/react-numerics/**/*.{ts,tsx,js,jsx}"
+        ]
       },
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "storybook": {
       "configurations": {
@@ -74,7 +86,9 @@
         "jestConfig": "libs/react-numerics/jest.config.ts",
         "passWithNoTests": true
       },
-      "outputs": ["coverage/libs/react-numerics"]
+      "outputs": [
+        "coverage/libs/react-numerics"
+      ]
     }
   }
 }

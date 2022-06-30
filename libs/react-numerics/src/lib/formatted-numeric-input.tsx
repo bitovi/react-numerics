@@ -75,7 +75,10 @@ export function FormattedNumericInput({
 
       let next = filter(enValue, numeric.current);
 
-      next = formatter(next, displayValue, { type: "change" });
+      next = formatter(next, displayValue, {
+        type: "change",
+        userKeyed: userKeyedNumeric.current
+      });
 
       const deleteType = changeType !== "add" && changeType !== "replace";
       const nextDisplay = deleteType ? value : next;

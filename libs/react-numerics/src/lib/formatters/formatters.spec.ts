@@ -1,4 +1,9 @@
-import { formatCurrency, formatFloat, formatInteger } from "./formatters";
+import {
+  formatCurrency,
+  formatFloat,
+  formatInteger,
+  formatPercent
+} from "./formatters";
 
 describe("formatFloat", () => {
   it("formats", () => {
@@ -112,5 +117,15 @@ describe("formatCurrency", () => {
       showFraction: false
     });
     expect(formatter("")).toBe("");
+  });
+});
+
+describe("formatPercent", () => {
+  it("trims before rounding for type 'change'", () => {
+    const formatter = formatPercent("en-US", { decimalPlaces: 2 });
+    expect(
+      formatter("1.239", "1.23", { type: "change", userKeyed: true })
+    ).toBe("1.23");
+    expect(formatter("1.239")).toBe("1.24%");
   });
 });

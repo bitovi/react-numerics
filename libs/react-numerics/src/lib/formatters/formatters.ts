@@ -100,7 +100,8 @@ export const formatPercent: FloatFormatterFactory =
       {
         locales,
         ...options,
-        type: context?.type
+        type: context?.type,
+        userKeyed: context?.userKeyed
       },
       previousFormatted
     );
@@ -260,6 +261,7 @@ function formatNumberString(
     locales = "en-US",
     roundingMode,
     type,
+    userKeyed,
     ...opts
   }: Partial<
     FormatNumberStringOptions & FormatFloatStringOptions & FormatterContext
@@ -322,12 +324,22 @@ function formatNumberString(
   const decimalPlacesMax =
     typeof decimalPlaces === "number" ? decimalPlaces : 20;
 
+  // If `type` is "change" and `userKeyed` is `true` set the rounding mode to
+  // `floor`. The practical effect here is truncating the fractional part of the
+  // number to the maximum number of decimal places that are allowed. This is
+  // only done when the user is typing, other change types (like pasting an
+  // input with more decimal places than allowed) will be rounded.
+  let modifiedRoundingMode: BigNumber.RoundingMode | undefined = roundingMode;
+  if (type === "change" && userKeyed) {
+    modifiedRoundingMode = BigNumber.ROUND_FLOOR;
+  }
+
   // The toFormat documentation allows roundingMode to be undefined, the
   // signature type is wrong.
   const formatted = num.toFormat(
     fraction.length < decimalPlacesMax ? fraction.length : decimalPlacesMax,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    roundingMode as any,
+    modifiedRoundingMode as any,
     numberFormat
   );
 

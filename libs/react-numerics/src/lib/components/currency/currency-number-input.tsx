@@ -4,9 +4,10 @@ import {
   FormattedNumberInput,
   Props as FormattedNumberInputProps
 } from "../../formatted-number-input";
-import { Locales } from "../../types";
-import { formatCurrency } from "../../formatters/formatters";
-import { getCurrencyData, padRight } from "../../util/numbers";
+import {
+  formatCurrency,
+  padNumericFraction
+} from "../../formatters/formatters";
 
 /**
  * Allow the user to enter a currency value. Currency format and display are
@@ -30,7 +31,10 @@ export function CurrencyNumberInput({
     if (paddingStage === paddingStages.pending) {
       if (typeof numericValue === "string") {
         setPaddingStage(paddingStages.active);
-        onNumericChange && onNumericChange(padFraction(locales, numericValue));
+        onNumericChange &&
+          onNumericChange(
+            padNumericFraction(locales, numericValue, { decimalSeparator: "." })
+          );
       }
     } else if (paddingStage === paddingStages.active) {
       setPaddingStage(paddingStages.complete);
@@ -47,7 +51,10 @@ export function CurrencyNumberInput({
   const handleBlur = useCallback(
     (evt: React.FocusEvent<HTMLInputElement>) => {
       if (showFraction) {
-        onNumericChange && onNumericChange(padFraction(locales, numericValue));
+        onNumericChange &&
+          onNumericChange(
+            padNumericFraction(locales, numericValue, { decimalSeparator: "." })
+          );
       }
 
       onBlur && onBlur(evt);
@@ -70,23 +77,6 @@ export function CurrencyNumberInput({
 }
 
 const paddingStages = { pending: -1, active: 0, complete: 1 };
-
-function padFraction(locales: Locales, numericValue: string) {
-  if (!numericValue) {
-    return numericValue;
-  }
-
-  if (!locales) {
-    return numericValue;
-  }
-
-  const [integer = "", fraction = ""] = numericValue.split(".");
-  const { fractionLength } = getCurrencyData(
-    Array.isArray(locales) ? locales[0] : locales
-  );
-  const fractionPadded = padRight(fraction, "0".repeat(fractionLength));
-  return `${integer}.${fractionPadded}`;
-}
 
 interface Props
   extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {

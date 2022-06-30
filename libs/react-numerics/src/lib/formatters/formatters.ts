@@ -34,13 +34,12 @@ export const formatCurrency: CurrencyFormatterFactory =
 
     const decimalSeparator = getDecimalSeparator(locale);
 
-    if (showFraction && (padRightOpt || context?.type === "blur")) {
+    if (value && showFraction && (padRightOpt || context?.type === "blur")) {
       // Pad the fractional part with zeros.
-      const [integer, fraction = ""] = value.split(decimalSeparator);
-      const fractionPadded = showFraction
-        ? padRight(fraction, "0".repeat(fractionLength))
-        : "";
-      value = `${integer}${decimalSeparator}${fractionPadded}`;
+      value = padNumericFraction(locale, value, {
+        decimalSeparator,
+        fractionLength
+      });
     }
 
     return `${value ? symbol : ""}${value}`;
@@ -137,6 +136,55 @@ export const formatTelephoneNumber: FormatterFactory =
       number
     );
   };
+
+/**
+ * Right-zero-pad the fractional part of a number. If numericValue is an empty
+ * string, null, or undefined then numericValue will be returned.
+ * @param locales The locales used to get fractionLength and decimalSeparator if
+ * not supplied.
+ * @param numericValue The value to pad.
+ * @param options These options override the values that would normally be used
+ * based on the locales.
+ * @returns
+ */
+export function padNumericFraction(
+  locales: Locales,
+  numericValue: string,
+  options?: { decimalSeparator?: string; fractionLength?: number }
+) {
+  if (!numericValue) {
+    return numericValue;
+  }
+
+  if (!locales) {
+    return numericValue;
+  }
+
+  const [integer = "", fraction = ""] = numericValue.split(".");
+
+  let safeFractionLength: number;
+  if (!options?.fractionLength && options?.fractionLength !== 0) {
+    ({ fractionLength: safeFractionLength } = getCurrencyData(
+      Array.isArray(locales) ? locales[0] : locales
+    ));
+  } else {
+    safeFractionLength = options.fractionLength;
+  }
+
+  let safeDecimalSeparator: string;
+  if (!options?.decimalSeparator) {
+    safeDecimalSeparator = getDecimalSeparator(
+      Array.isArray(locales) ? locales[0] : locales
+    );
+  } else {
+    safeDecimalSeparator = options.decimalSeparator;
+  }
+
+  const fractionPadded = padRight(fraction, "0".repeat(safeFractionLength));
+  return `${integer}${
+    fractionPadded ? safeDecimalSeparator : ""
+  }${fractionPadded}`;
+}
 
 /**
  * Optionally accepts one or more locales and returns a Formatter that generates

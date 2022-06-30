@@ -1,4 +1,4 @@
-import { formatFloat, formatInteger } from "./formatters";
+import { formatCurrency, formatFloat, formatInteger } from "./formatters";
 
 describe("formatFloat", () => {
   it("formats", () => {
@@ -78,5 +78,39 @@ describe("formatInteger", () => {
 
   it("removes whitespace", () => {
     expect(formatFloat()(` 55555\n`)).toBe("55,555");
+  });
+});
+
+describe("formatCurrency", () => {
+  it("formats an integer string", () => {
+    const formatter = formatCurrency("en-US", {
+      padRight: true,
+      showFraction: true
+    });
+    expect(formatter("4")).toBe("$4.00");
+  });
+
+  it("formats an integer string, no fraction", () => {
+    const formatter = formatCurrency("en-US", {
+      padRight: true,
+      showFraction: false
+    });
+    expect(formatter("7")).toBe("$7");
+  });
+
+  it("formats an empty string", () => {
+    const formatter = formatCurrency("en-US", {
+      padRight: true,
+      showFraction: true
+    });
+    expect(formatter("")).toBe("");
+  });
+
+  it("formats an empty string, no fraction", () => {
+    const formatter = formatCurrency("en-US", {
+      padRight: true,
+      showFraction: false
+    });
+    expect(formatter("")).toBe("");
   });
 });

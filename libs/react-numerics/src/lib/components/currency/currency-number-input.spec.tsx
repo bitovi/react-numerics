@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { CurrencyNumberInput } from "./currency-number-input";
 
 describe("CurrencyNumberInput", () => {
@@ -39,5 +40,32 @@ describe("CurrencyNumberInput", () => {
 
     expect(handleNumericChange).toHaveBeenCalledWith("2.224");
     expect(getByDisplayValue("$2.22")).toBeInTheDocument();
+  });
+
+  it("does not zero pad when the value is an empty string", async () => {
+    const user = userEvent.setup();
+
+    const handleNumericChange = jest.fn();
+    const { getByDisplayValue } = render(
+      <CurrencyNumberInput
+        numericValue=""
+        onNumericChange={handleNumericChange}
+      />
+    );
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenCalledWith("");
+
+    const elem = getByDisplayValue("", { exact: true }) as HTMLInputElement;
+    expect(elem).toBeInTheDocument();
+
+    elem.focus();
+    expect(elem).toHaveFocus();
+
+    await user.tab();
+
+    expect(elem).not.toHaveFocus();
+    expect(handleNumericChange).toHaveBeenCalledTimes(2);
+    expect(elem).toHaveDisplayValue("");
   });
 });

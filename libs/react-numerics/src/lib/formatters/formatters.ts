@@ -113,6 +113,13 @@ export const formatPercent: FloatFormatterFactory =
   };
 
 /**
+ * Format a US zip code.
+ */
+export const formatPostalCodeNumber: Formatter = (number: string) => {
+  return formatNumericString(["", "", "", "", ""], number);
+};
+
+/**
  * Format a social security number (SSN).
  */
 export const formatSocialSecurityNumber: Formatter = (number: string) => {

@@ -35,6 +35,10 @@ describe("filterToSignedFloat", () => {
     expect(filterToSignedFloat("1.2.3")).toBe("1.23");
   });
 
+  it("retains 0", () => {
+    expect(filterToSignedFloat("0")).toBe("0");
+  });
+
   it("retains leading 0", () => {
     expect(filterToSignedFloat("0.5")).toBe("0.5");
   });

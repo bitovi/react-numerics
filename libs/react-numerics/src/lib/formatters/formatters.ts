@@ -15,7 +15,7 @@ import {
 export const formatCurrency: CurrencyFormatterFactory =
   (
     locales = "en-US",
-    { padRight: padRightOpt, showFraction = true, ...opts } = {}
+    { padRight: padRightOpt, showFraction = true, ...options } = {}
   ) =>
   (number: string, previousFormatted?: string, context?: FormatterContext) => {
     const locale = Array.isArray(locales) ? locales[0] : locales;
@@ -27,7 +27,9 @@ export const formatCurrency: CurrencyFormatterFactory =
       {
         decimalPlaces: showFraction ? fractionLength : 0,
         locales,
-        ...opts
+        ...options,
+        type: context?.type,
+        userKeyed: context?.userKeyed
       },
       previousFormatted ?? ""
     );
@@ -68,7 +70,8 @@ export const formatFloat: FloatFormatterFactory =
         locales,
         roundingMode: options?.roundingMode ?? BigNumber.ROUND_DOWN,
         ...options,
-        type: context?.type
+        type: context?.type,
+        userKeyed: context?.userKeyed
       },
       previousFormatted
     );

@@ -128,4 +128,12 @@ describe("formatPercent", () => {
     ).toBe("1.23");
     expect(formatter("1.239")).toBe("1.24%");
   });
+
+  it("trims negative numbers before rounding for type 'change'", () => {
+    const formatter = formatPercent("en-US", { decimalPlaces: 2 });
+    expect(
+      formatter("-3.119", "-3.11", { type: "change", userKeyed: true })
+    ).toBe("-3.11");
+    expect(formatter("-3.119")).toBe("-3.12%");
+  });
 });

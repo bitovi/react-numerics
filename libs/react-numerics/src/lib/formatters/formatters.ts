@@ -331,7 +331,7 @@ function formatNumberString(
   // input with more decimal places than allowed) will be rounded.
   let modifiedRoundingMode: BigNumber.RoundingMode | undefined = roundingMode;
   if (type === "change" && userKeyed) {
-    modifiedRoundingMode = BigNumber.ROUND_FLOOR;
+    modifiedRoundingMode = BigNumber.ROUND_DOWN;
   }
 
   // The toFormat documentation allows roundingMode to be undefined, the

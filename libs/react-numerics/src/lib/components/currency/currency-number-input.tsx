@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
 import {
   FormattedNumberInput,
-  Props as FormattedNumberInputProps
+  FormattedNumberInputProps
 } from "../../formatted-number-input";
 import {
   formatCurrency,
@@ -13,6 +13,14 @@ import {
  * Allow the user to enter a currency value. Currency format and display are
  * driven by the locale. The ability to enter fractional parts of a currency
  * (e.g. cents) can also be controlled.
+ *
+ * The display will show the localized currency symbol then the amount as the
+ * user types. For example "$1.23".
+ *
+ * Supported locales: U.S.
+ *
+ * @param props - Component props.<p>`locales` defaults to
+ * "en-US".</p><p>`numericValue` must only contain digits.</p>
  */
 export function CurrencyNumberInput({
   numericValue,
@@ -22,7 +30,7 @@ export function CurrencyNumberInput({
   showFraction = true,
   locales,
   ...props
-}: Props) {
+}: CurrencyNumberInputProps) {
   const [paddingStage, setPaddingStage] = useState<
     typeof paddingStages[keyof typeof paddingStages]
   >(paddingStages.pending);
@@ -78,9 +86,9 @@ export function CurrencyNumberInput({
 
 const paddingStages = { pending: -1, active: 0, complete: 1 };
 
-interface Props
+export interface CurrencyNumberInputProps
   extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {
   /** Control whether the user can enter fractional parts of the currency (e.g.
-   * cents); defaults to true */
+   * cents). */
   showFraction?: boolean;
 }

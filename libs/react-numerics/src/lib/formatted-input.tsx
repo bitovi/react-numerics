@@ -12,7 +12,7 @@ export function FormattedInput({
   onChange,
   onKeyDown,
   ...props
-}: Props) {
+}: FormattedInputProps) {
   const key = useRef<string | null>(null);
 
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
@@ -49,7 +49,7 @@ export function FormattedInput({
   );
 }
 
-interface Props
+export interface FormattedInputProps
   extends Omit<
     React.DetailedHTMLProps<
       React.InputHTMLAttributes<HTMLInputElement>,

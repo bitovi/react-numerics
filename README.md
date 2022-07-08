@@ -3,10 +3,11 @@
 A library of React components to render input fields that simplify displaying
 formatted numbers such as currency or telephone numbers.
 
-## Usage
+## Install & Usage
 
-See the [README](libs/react-numerics/README.md) (libs/react-numerics/README.md)
-for documentation.
+See the [@bitovi/react-numerics
+documentation](https://bitovi.github.io/react-numerics/) for details on
+installing and using the library.
 
 ## Publish
 

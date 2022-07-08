@@ -2,9 +2,15 @@ import { useMemo } from "react";
 import { formatPercent } from "../../formatters/formatters";
 import {
   FormattedNumberInput,
-  Props as FormattedNumberInputProps
+  FormattedNumberInputProps
 } from "../../formatted-number-input";
 
+/**
+ * Create a number followed by the % sign. The percent sign will be appended
+ * when the user leaves the field (i.e. `onBlur`).
+ * @param props - Component props.<p>`locales` defaults to
+ * "en-US".</p><p>`numericValue` allows: "-", digits 0-9, and ".".</p>
+ */
 export function PercentNumberInput({
   decimalPlaces,
   onNumericChange,
@@ -13,7 +19,7 @@ export function PercentNumberInput({
   max,
   min,
   ...props
-}: Props) {
+}: PercentNumberInputProps) {
   const formatter = useMemo(() => {
     return formatPercent(locales, { decimalPlaces, max, min, roundingMode });
   }, [decimalPlaces, locales, max, min, roundingMode]);
@@ -27,4 +33,5 @@ export function PercentNumberInput({
   );
 }
 
-interface Props extends Omit<FormattedNumberInputProps, "formatter"> {}
+export interface PercentNumberInputProps
+  extends Omit<FormattedNumberInputProps, "formatter"> {}

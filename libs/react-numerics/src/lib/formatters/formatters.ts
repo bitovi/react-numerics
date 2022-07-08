@@ -8,7 +8,7 @@ import {
 } from "../util/numbers";
 
 /**
- * Format a number as localized currency.
+ * Format a number as localized currency.<p>`locales defaults to "en-US".`</p>
  * @see CurrencyFormatterFactory
  * @see Formatter
  */

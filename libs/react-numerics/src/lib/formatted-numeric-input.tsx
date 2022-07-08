@@ -2,7 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Filter } from "./filters/filters";
 import { Formatter } from "./formatters/formatters";
 import { Converter } from "./converters/converters";
-import { FormattedInput } from "./formatted-input";
+import {
+  FormattedInput,
+  FormattedInputProps as FormattedInputPropsImported
+} from "./formatted-input";
 
 /**
  * Expects a `numericValue` string containing either only number characters or
@@ -29,7 +32,7 @@ export function FormattedNumericInput({
   onNumericChange,
   numericValue,
   ...props
-}: Props) {
+}: FormattedNumericInputProps) {
   const numeric = useRef(filter(numericValue));
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */
@@ -67,7 +70,7 @@ export function FormattedNumericInput({
     }
   }
 
-  const handleChange: NumericInputProps["onChange"] = useCallback(
+  const handleChange: FormattedInputPropsImported["onChange"] = useCallback(
     (value, changeType) => {
       // Value will have the format of the current locale. Before processing the
       // number convert it to an en-US representation.
@@ -104,7 +107,7 @@ export function FormattedNumericInput({
     [converter, displayValue, filter, formatter, onNumericChange]
   );
 
-  const handleKeyDown: NumericInputProps["onKeyDown"] = useCallback(
+  const handleKeyDown: FormattedInputPropsImported["onKeyDown"] = useCallback(
     (evt: React.KeyboardEvent) => {
       userKeyedNumeric.current = true;
 
@@ -134,9 +137,12 @@ export function FormattedNumericInput({
   );
 }
 
-type NumericInputProps = React.ComponentPropsWithoutRef<typeof FormattedInput>;
+type FormattedInputProps = Omit<
+  FormattedInputPropsImported,
+  "formattedValue" | "onChange" | "onKeyDown"
+>;
 
-interface Props extends Omit<NumericInputProps, "formattedValue" | "onChange"> {
+export interface FormattedNumericInputProps extends FormattedInputProps {
   /** Converts a numeric string from the display locale to the en-US locale. For
    * example a de-DE value of "1.234,5" will be converted to an en-US string
    * "1,234.56". Normally the default converter (@see convertNumber) should
@@ -149,19 +155,22 @@ interface Props extends Omit<NumericInputProps, "formattedValue" | "onChange"> {
   filter?: Filter;
   /** Formats the numeric string for display. */
   formatter?: Formatter;
-  /** A string containing a numeric representation. This must have the same
-   * format provided by the `filter` output. */
+  /** A string containing a numeric representation. The string may only contain
+   * '-', digits 0-9, and '.'. If the string represents a number the integer and
+   * fractional parts of the number must be separated by a '.'. The length and
+   * valid subset of characters in the string will vary by implementation
+   * (restricted by the `filter` and `formatter`). */
   numericValue: string;
-  /** Invoked when the numeric value of the input changes (as determined by
-   * comparing the `numericValue` to the result of `filter`). */
+  /** Invoked when the numeric value of the input changes. In some cases the
+   * display value will change, but the numeric value will not. */
   onNumericChange: ((value: string) => void) | null;
 }
 
 function getInitialDisplayValue(
   numericValue: string,
-  filter: Required<Props>["filter"],
-  formatter: Required<Props>["formatter"],
-  onNumericChange: Props["onNumericChange"]
+  filter: Required<FormattedNumericInputProps>["filter"],
+  formatter: Required<FormattedNumericInputProps>["formatter"],
+  onNumericChange: FormattedNumericInputProps["onNumericChange"]
 ) {
   const formatted = formatter(filter(numericValue));
   const filtered = filter(formatted);

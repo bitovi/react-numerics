@@ -3,14 +3,39 @@
 A library of React components to render input fields that simplify displaying
 formatted numbers such as currency or telephone numbers.
 
-## API
+## Install
 
-- `CurrencyNumberInput`
-- `EmployerIdentificationNumberInput` - U.S.
-- `FormattedNumberInput` - low-level base component of concrete implementations.
-- `PercentNumberInput`
-- `SocialSecurityNumberInput` - U.S.
-- `TelephoneNumberInput` - U.S.
+Install the package.
+
+```sh
+yarn install @bitovi/react-numerics
+```
+
+## Usage
+
+Import the component that you need.
+
+```tsx
+import { PercentNumberInput } from "@bitovi/react-numerics";
+
+export function Form({ numericValue }: Props){
+  function handleNumericChange(value){
+    // Do something with the value.
+  }
+
+  return (
+    <PercentNumberInput
+      numericValue={numericValue}
+      onNumericChange={handleNumericChange}
+    />
+  );
+}
+```
+
+Components require the `numericValue` and `onNumericChange` props. Each
+component accepts values for most of the standard `HTMLInputElement` attributes.
+
+Each component will render an `<input>` element without styling.
 
 ## Architecture
 

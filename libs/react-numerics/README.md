@@ -3,6 +3,8 @@
 A library of React components to render input fields that simplify displaying
 formatted numbers such as currency or telephone numbers.
 
+A [Bitovi React team](https://www.bitovi.com/frontend-javascript-consulting/react-consulting) project.
+
 ## Install
 
 Install the package.
@@ -35,7 +37,8 @@ export function Form({ numericValue }: Props){
 Components require the `numericValue` and `onNumericChange` props. Each
 component accepts values for most of the standard `HTMLInputElement` attributes.
 
-Each component will render an `<input>` element without styling.
+Each component will render an `<input>` element with `type` equal to "text"
+without styling.
 
 ## Architecture
 

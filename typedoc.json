@@ -5,5 +5,5 @@
   ],
   "readme": "libs/react-numerics/README.md",
   "tsconfig": "libs/react-numerics/tsconfig.lib.json",
-  "out": "doc"
+  "out": "docs"
 }

@@ -1,3 +1,9 @@
+import type { Formatter, FormatterFactory } from "./lib/formatters/formatters";
+import { formatFloat, formatInteger } from "./lib/formatters/formatters";
+
+export type { Formatter, FormatterFactory };
+export { formatFloat, formatInteger };
+
 export * from "./lib/components/currency/currency-number-input";
 export * from "./lib/components/employee-identification-number/employer-identification-number-input";
 export * from "./lib/formatted-number-input";

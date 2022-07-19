@@ -16,6 +16,7 @@
 </a>
 <p>A library of React components to render input fields that simplify displaying
 formatted numbers such as currency or telephone numbers.</p>
+<p>A <a href="https://www.bitovi.com/frontend-javascript-consulting/react-consulting">Bitovi React team</a> project.</p>
 
 <a href="#install" id="install" style="color: inherit; text-decoration: none;">
   <h2>Install</h2>
@@ -32,7 +33,8 @@ formatted numbers such as currency or telephone numbers.</p>
 </code></pre>
 <p>Components require the <code>numericValue</code> and <code>onNumericChange</code> props. Each
 component accepts values for most of the standard <code>HTMLInputElement</code> attributes.</p>
-<p>Each component will render an <code>&lt;input&gt;</code> element without styling.</p>
+<p>Each component will render an <code>&lt;input&gt;</code> element with <code>type</code> equal to &quot;text&quot;
+without styling.</p>
 
 <a href="#architecture" id="architecture" style="color: inherit; text-decoration: none;">
   <h2>Architecture</h2>
@@ -76,7 +78,11 @@ interface are provided to the numeric component.</li>
 <ul>
 <li class="tsd-kind-interface"><a href="interfaces/CurrencyNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Currency<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/EmployerIdentificationNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Employer<wbr/>Identification<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/FormatFloatStringOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Format<wbr/>Float<wbr/>String<wbr/>Options</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/FormatNumberStringOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Format<wbr/>Number<wbr/>String<wbr/>Options</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/FormattedNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Formatted<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/Formatter.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Formatter</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/FormatterFactory.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Formatter<wbr/>Factory</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/PercentNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Percent<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/PostalCodeNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Postal<wbr/>Code<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/SocialSecurityNumberInputProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Social<wbr/>Security<wbr/>Number<wbr/>Input<wbr/>Props</a></li>
@@ -87,7 +93,9 @@ interface are provided to the numeric component.</li>
 <li class="tsd-kind-function"><a href="functions/PercentNumberInput.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Percent<wbr/>Number<wbr/>Input</a></li>
 <li class="tsd-kind-function"><a href="functions/PostalCodeNumberInput.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Postal<wbr/>Code<wbr/>Number<wbr/>Input</a></li>
 <li class="tsd-kind-function"><a href="functions/SocialSecurityNumberInput.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Social<wbr/>Security<wbr/>Number<wbr/>Input</a></li>
-<li class="tsd-kind-function"><a href="functions/TelephoneNumberInput.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Telephone<wbr/>Number<wbr/>Input</a></li></ul></nav></div></div>
+<li class="tsd-kind-function"><a href="functions/TelephoneNumberInput.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Telephone<wbr/>Number<wbr/>Input</a></li>
+<li class="tsd-kind-function"><a href="functions/formatFloat.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>format<wbr/>Float</a></li>
+<li class="tsd-kind-function"><a href="functions/formatInteger.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>format<wbr/>Integer</a></li></ul></nav></div></div>
 <div class="container tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div><script src="assets/main.js"></script></body></html>

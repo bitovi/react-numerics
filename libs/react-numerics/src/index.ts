@@ -1,7 +1,17 @@
-import type { Formatter, FormatterFactory } from "./lib/formatters/formatters";
+import type {
+  Formatter,
+  FormatterFactory,
+  FormatFloatStringOptions,
+  FormatNumberStringOptions
+} from "./lib/formatters/formatters";
 import { formatFloat, formatInteger } from "./lib/formatters/formatters";
 
-export type { Formatter, FormatterFactory };
+export type {
+  Formatter,
+  FormatterFactory,
+  FormatFloatStringOptions,
+  FormatNumberStringOptions
+};
 export { formatFloat, formatInteger };
 
 export * from "./lib/components/currency/currency-number-input";

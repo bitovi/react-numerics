@@ -78,13 +78,15 @@ export const formatFloat: FloatFormatterFactory =
 
 /**
  * Format an integer.
+ * @param locales Defaults to "en-US".
  * @see FormatterFactory
  * @see Formatter
  */
 export const formatInteger: FormatterFactory =
-  (locales = "en-US") =>
+  (locales = "en-US", options) =>
   (number: string) =>
     formatNumberString(number, {
+      ...options,
       locales,
       decimalPlaces: 0,
       roundingMode: BigNumber.ROUND_DOWN
@@ -253,7 +255,9 @@ export interface Formatter {
 export interface FormatterFactory {
   (
     /** The locales to use when the Formatter is invoked. */
-    locales?: FormatNumberStringOptions["locales"]
+    locales?: FormatNumberStringOptions["locales"],
+    /** Requested options for formatting the number. */
+    options?: Partial<Omit<FormatNumberStringOptions, "locales">>
   ): Formatter;
 }
 
@@ -382,7 +386,7 @@ function numberStartsWithSign(input: string) {
 }
 
 /** Options that apply to numbers with a fractional part. */
-interface FormatFloatStringOptions {
+export interface FormatFloatStringOptions {
   /** The number of places to return in the formatted value. */
   decimalPlaces: number;
   /** How a number with more precision than the allowed decimal places should be
@@ -391,7 +395,7 @@ interface FormatFloatStringOptions {
 }
 
 /** Options that apply to all numerics that represent a number. */
-interface FormatNumberStringOptions {
+export interface FormatNumberStringOptions {
   /** The locales to use when the Formatter is invoked. */
   locales: Locales;
   /** The maximum allowed number value. */

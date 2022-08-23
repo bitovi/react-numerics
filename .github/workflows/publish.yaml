@@ -1,4 +1,4 @@
-name: 'Publish'
+name: Publish
 
 on:
   workflow_dispatch: 
@@ -39,9 +39,9 @@ jobs:
 
     - name: Version and Publish
       uses: bitovi/github-actions-npm-publish:main
-        with:
-          update_type: ${{ github.event.inputs.update_type }}
-          publish: ${{ github.event.inputs.publish }}
-          npm_token: ${{ secrets.NPM_TOKEN }}
+      with:
+        update_type: ${{ github.event.inputs.update_type }}
+        publish: ${{ github.event.inputs.publish }}
+        npm_token: ${{ secrets.NPM_TOKEN }}
 
 

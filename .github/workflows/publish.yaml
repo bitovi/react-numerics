@@ -39,6 +39,10 @@ jobs:
 
     - uses: borales/actions-yarn@v3.0.0
       with:
+        cmd: install
+
+    - uses: borales/actions-yarn@v3.0.0
+      with:
         cmd: typedoc
 
     - uses: borales/actions-yarn@v3.0.0

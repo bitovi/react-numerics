@@ -12,12 +12,36 @@ on:
         - major
         - minor
         - patch
+      publish:
+        description: Publish to NPM
+        required: true
+        default: 'true'
+        type: choice
+        options:
+        - true
+        - false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-     - name: Checkout
-       uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+
+    - name: "Install"
+      run: npm ci
+
+    - name: Version and Publish
+      uses: bitovi/github-actions-npm-publish:main
+        with:
+          update_type: ${{ github.event.inputs.update_type }}
+          publish: ${{ github.event.inputs.publish }}
+          npm_token: ${{ secrets.NPM_TOKEN }}
+
 

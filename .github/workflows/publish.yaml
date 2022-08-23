@@ -12,14 +12,6 @@ on:
         - major
         - minor
         - patch
-      publish:
-        description: Publish to NPM
-        required: true
-        default: 'true'
-        type: choice
-        options:
-        - true
-        - false
 
 jobs:
   publish:
@@ -34,14 +26,29 @@ jobs:
       with:
         node-version: "16"
 
-    - name: "Install"
-      run: npm ci
+    - name: update version
+      id: update-version
+      run: |
+        cd libs/react-numerics
+        v=$(npm version ${{ github.event.inputs.update_type }} -m "Test v%s")
+        echo '::set-output name=VERSION::$v'
+        cd ../..
 
-    - name: Version and Publish
-      uses: bitovi/github-actions-npm-publish@main
+    - name: Show version
+      run: echo "Version is ${{ steps.update-version.outputs.VERSION }}"
+
+    - uses: borales/actions-yarn@v3.0.0
       with:
-        update_type: ${{ github.event.inputs.update_type }}
-        publish: ${{ github.event.inputs.publish }}
-        npm_token: ${{ secrets.NPM_TOKEN }}
+        cmd: typedoc
+
+    - uses: borales/actions-yarn@v3.0.0
+      with:
+        cmd: build
+
+    - run: cat dist/libs/react-numerics/package.json
+    - run: echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    - run: cat libs/react-numerics/package.json
+
+    - run: cd dist/libs/react-numerics
 
 

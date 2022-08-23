@@ -30,12 +30,11 @@ jobs:
       id: update-version
       run: |
         cd libs/react-numerics
-        v=$(npm version ${{ github.event.inputs.update_type }} -m "Test v%s")
-        echo '::set-output name=VERSION::$v'
+        echo '::set-output name=VERSION::$(npm version ${{ github.event.inputs.update_type }} -m "Test v%s")'
         cd ../..
 
     - name: Show version
-      run: echo "Version is ${{ steps.update-version.outputs.VERSION }}"
+      run: echo 'Version is ${{ steps.update-version.outputs.VERSION }}'
 
     - uses: borales/actions-yarn@v3.0.0
       with:

@@ -38,7 +38,7 @@ jobs:
       run: npm ci
 
     - name: Version and Publish
-      uses: bitovi/github-actions-npm-publish:main
+      uses: bitovi/github-actions-npm-publish@main
       with:
         update_type: ${{ github.event.inputs.update_type }}
         publish: ${{ github.event.inputs.publish }}

@@ -33,6 +33,8 @@ jobs:
         npm version ${{ github.event.inputs.update_type }} -m "Test v%s"
         cd ../..
 
+    - run: printenv
+
     - uses: borales/actions-yarn@v3.0.0
       with:
         cmd: install
@@ -48,6 +50,7 @@ jobs:
     - run: cat dist/libs/react-numerics/package.json
     - run: echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     - run: cat libs/react-numerics/package.json
+    - run: git tag
 
     - run: cd dist/libs/react-numerics
 

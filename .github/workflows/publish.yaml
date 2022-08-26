@@ -30,7 +30,7 @@ jobs:
       id: update-version
       run: |
         cd libs/react-numerics
-        npm version ${{ github.event.inputs.update_type }} -m "Test v%s"
+        v=$(npm version ${{ github.event.inputs.update_type }} -m "Test v%s")
         cd ../..
 
     - run: printenv

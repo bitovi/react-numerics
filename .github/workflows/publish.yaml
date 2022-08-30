@@ -6,7 +6,7 @@ on:
       update_type:
         description: Major, Minor, or patch
         required: true
-        default: 'patch'
+        default: patch
         type: choice
         options:
         - major
@@ -25,6 +25,12 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: "16"
+
+    - id: Setup-Git
+      shell: bash
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
 
     - name: update version
       id: update-version
@@ -55,8 +61,6 @@ jobs:
     - id: Tag-push
       shell: bash
       run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
         git add .
         git commit -m "Update version"
         git push --tags

@@ -36,10 +36,9 @@ jobs:
       id: update-version
       run: |
         cd libs/react-numerics
-        npm version ${{ github.event.inputs.update_type }} -m "Test v%s"
+        git tag $(npm version ${{ github.event.inputs.update_type }} ) && ga package.json package-lock.json && gc -m "Bump version"
+        # npm version ${{ github.event.inputs.update_type }} -m "Test v%s"
         cd ../..
-
-    - run: printenv
 
     - uses: borales/actions-yarn@v3.0.0
       with:

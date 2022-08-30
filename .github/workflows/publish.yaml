@@ -37,9 +37,6 @@ jobs:
       run: |
         cd libs/react-numerics
         git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json && git commit -m "Bump version"
-        cat package.json
-        git push
-        git push --tags
         cd ../..
 
     - uses: borales/actions-yarn@v3.0.0
@@ -53,7 +50,9 @@ jobs:
     - uses: borales/actions-yarn@v3.0.0
       with:
         cmd: build
-  
+
+    - run: cd dist/libs/react-numerics
+    
  #   - name: Publish to NPM Registry
  #       uses: JS-DevTools/npm-publish@v1
  #       with:
@@ -62,6 +61,5 @@ jobs:
     - id: Tag-push
       shell: bash
       run: |
-        git add .
-        git commit -m "Update version"
+        git push
         git push --tags

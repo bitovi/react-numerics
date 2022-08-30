@@ -30,7 +30,7 @@ jobs:
       id: update-version
       run: |
         cd libs/react-numerics
-        v=$(npm version ${{ github.event.inputs.update_type }} -m "Test v%s")
+        npm version ${{ github.event.inputs.update_type }} -m "Test v%s"
         cd ../..
 
     - run: printenv
@@ -46,12 +46,17 @@ jobs:
     - uses: borales/actions-yarn@v3.0.0
       with:
         cmd: build
+  
+ #   - name: Publish to NPM Registry
+ #       uses: JS-DevTools/npm-publish@v1
+ #       with:
+ #         token: ${{ github.event.inputs.npm_token }}
 
-    - run: cat dist/libs/react-numerics/package.json
-    - run: echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    - run: cat libs/react-numerics/package.json
-    - run: git tag
-
-    - run: cd dist/libs/react-numerics
-
-
+    - id: Tag-push
+      shell: bash
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "Update version"
+        git push --tags

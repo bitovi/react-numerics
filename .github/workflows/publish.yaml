@@ -12,6 +12,19 @@ on:
         - major
         - minor
         - patch
+      tag:
+        description: Next does not save back to GIT
+        required: true
+        default: next
+        type: choice
+        options:
+        - latest
+        - next
+      npm_token:
+        description: NPM Token
+        required: true
+        type: string
+      
 
 jobs:
   publish:
@@ -52,13 +65,15 @@ jobs:
         cmd: build
 
     - run: cd dist/libs/react-numerics
-    
+
  #   - name: Publish to NPM Registry
  #       uses: JS-DevTools/npm-publish@v1
  #       with:
  #         token: ${{ github.event.inputs.npm_token }}
+ #         tag: ${{ github.event.inputs.tag }}
 
-    - id: Tag-push
+    - id: Git Push.  Only runs for latest tag
+      if: ${{ github.event.inputs.tag == 'latest' }}
       shell: bash
       run: |
         git push

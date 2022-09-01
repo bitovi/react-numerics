@@ -20,11 +20,7 @@ on:
         options:
         - latest
         - next
-      npm_token:
-        description: NPM Token
-        required: true
-        type: string
-      
+     
 
 jobs:
   publish:
@@ -50,7 +46,7 @@ jobs:
       run: |
         cd libs/react-numerics
         git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json && git commit -m "Bump version"
-        cd ../..
+        cd -
 
     - uses: borales/actions-yarn@v3.0.0
       with:
@@ -66,11 +62,11 @@ jobs:
 
     - run: cd dist/libs/react-numerics
 
- #   - name: Publish to NPM Registry
- #       uses: JS-DevTools/npm-publish@v1
- #       with:
- #         token: ${{ github.event.inputs.npm_token }}
- #         tag: ${{ github.event.inputs.tag }}
+    - name: Publish to NPM Registry
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ github.event.inputs.tag }}
 
     - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}

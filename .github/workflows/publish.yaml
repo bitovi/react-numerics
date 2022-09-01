@@ -72,7 +72,7 @@ jobs:
  #         token: ${{ github.event.inputs.npm_token }}
  #         tag: ${{ github.event.inputs.tag }}
 
-    - id: Git Push.  Only runs for latest tag
+    - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}
       shell: bash
       run: |

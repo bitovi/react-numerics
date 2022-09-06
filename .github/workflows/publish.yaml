@@ -49,28 +49,29 @@ jobs:
         git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json
         cd -
 
-    - uses: borales/actions-yarn@v3.0.0
+    - name: Yarn Install
+      uses: borales/actions-yarn@v3.0.0
       with:
         cmd: install
 
-    - uses: borales/actions-yarn@v3.0.0
+    - name: Yarn TypeDoc
+      uses: borales/actions-yarn@v3.0.0
       with:
         cmd: typedoc
 
-    - uses: borales/actions-yarn@v3.0.0
+    - name: Yarn Build
+      uses: borales/actions-yarn@v3.0.0
       with:
         cmd: build
 
-    - run: cd dist/libs/react-numerics
-
     - id: npm-publish
       name: Publish to NPM Registry
-      working-directory: ./dist/libs/react-numerics
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
         tag: ${{ github.event.inputs.tag }}
         dry-run: ${{ github.event.inputs.tag == 'build-only '}}
+        package: ./dist/libs/react-numerics/package.json
 
     - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}

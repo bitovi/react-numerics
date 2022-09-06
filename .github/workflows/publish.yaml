@@ -63,7 +63,7 @@ jobs:
     - run: cd dist/libs/react-numerics
 
     - name: Publish to NPM Registry
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish:v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ github.event.inputs.tag }}

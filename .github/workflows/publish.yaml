@@ -42,7 +42,7 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
 
-    - name: update version
+    - name: Update version
       id: update-version
       run: |
         cd libs/react-numerics
@@ -64,8 +64,8 @@ jobs:
     - run: cd dist/libs/react-numerics
 
     - id: npm-publish
-
       name: Publish to NPM Registry
+      working-directory: ./dist/libs/react-numerics
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}

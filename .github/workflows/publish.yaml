@@ -64,9 +64,9 @@ jobs:
 
     - name: Publish to NPM Registry
       uses: JS-DevTools/npm-publish@v1.0.0
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: ${{ github.event.inputs.tag }}
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        tag: ${{ github.event.inputs.tag }}
 
     - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}

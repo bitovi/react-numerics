@@ -9,17 +9,18 @@ on:
         default: patch
         type: choice
         options:
-        - major
-        - minor
         - patch
+        - minor
+        - major
       tag:
         description: Tag, next does not save back to GIT
         required: true
-        default: next
+        default: build-only
         type: choice
         options:
-        - latest
+        - build-only
         - next
+        - latest
      
 
 jobs:
@@ -63,12 +64,13 @@ jobs:
     - run: cd dist/libs/react-numerics
 
     - id: npm-publish
+      if: ${{ github.event.inputs.tag != 'build-only '}}
       name: Publish to NPM Registry
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
         tag: ${{ github.event.inputs.tag }}
-        dryRun: true
+        dry-run: true
 
     - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}

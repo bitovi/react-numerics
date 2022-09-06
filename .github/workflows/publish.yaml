@@ -64,13 +64,13 @@ jobs:
     - run: cd dist/libs/react-numerics
 
     - id: npm-publish
-      if: ${{ github.event.inputs.tag != 'build-only '}}
+
       name: Publish to NPM Registry
       uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
         tag: ${{ github.event.inputs.tag }}
-        dry-run: true
+        dry-run: ${{ github.event.inputs.tag == 'build-only '}}
 
     - id: git-push
       if: ${{ github.event.inputs.tag == 'latest' }}

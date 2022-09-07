@@ -15,13 +15,17 @@ on:
       tag:
         description: Tag, next does not save back to GIT
         required: true
-        default: build-only
+        default: next
         type: choice
         options:
-        - build-only
         - next
         - latest
-     
+      build_only:
+        description: Build Only
+        required: true
+        default: true
+        type: boolean
+    
 
 jobs:
   publish:
@@ -70,7 +74,7 @@ jobs:
       with:
         token: ${{ secrets.NPM_TOKEN }}
         tag: ${{ github.event.inputs.tag }}
-        dry-run: ${{ github.event.inputs.tag == 'build-only '}}
+        dry-run: ${{ github.event.inputs.build_only}}
         package: ./dist/libs/react-numerics/package.json
 
     - id: git-push

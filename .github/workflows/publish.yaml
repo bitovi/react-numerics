@@ -25,13 +25,14 @@ on:
         required: true
         default: true
         type: boolean
-    
+
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
+
     - name: Checkout
       uses: actions/checkout@v2
 
@@ -86,3 +87,4 @@ jobs:
         git commit -m "Publish version ${{ steps.npm-publish.outputs.version }}"
         git push
         git push --tags
+

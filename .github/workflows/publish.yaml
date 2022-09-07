@@ -74,13 +74,15 @@ jobs:
       with:
         token: ${{ secrets.NPM_TOKEN }}
         tag: ${{ github.event.inputs.tag }}
-        dry-run: ${{ github.event.inputs.build_only}}
+        dry-run: ${{ github.event.inputs.build_only }}
         package: ./dist/libs/react-numerics/package.json
 
-    - id: git-push
-      if: ${{ github.event.inputs.tag == 'latest' }}
+   - run: echo "Published  ${{ steps.npm-publish.outputs.version }}"
+
+   - id: git-push
+      if: ${{ (github.event.inputs.tag == 'latest') && !(github.event.inputs.build_only) }}
       shell: bash
       run: |
         git commit -m "Publish version ${{ steps.npm-publish.outputs.version }}"
         git push
-        # git push --tags
+        git push --tags

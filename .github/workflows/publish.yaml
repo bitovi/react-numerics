@@ -6,18 +6,85 @@ on:
       update_type:
         description: Major, Minor, or patch
         required: true
-        default: 'patch'
+        default: patch
         type: choice
         options:
-        - major
-        - minor
         - patch
+        - minor
+        - major
+      tag:
+        description: Tag, next does not save back to GIT
+        required: true
+        default: next
+        type: choice
+        options:
+        - next
+        - latest
+      build_only:
+        description: Build Only
+        required: true
+        default: true
+        type: boolean
+
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-     - name: Checkout
-       uses: actions/checkout@v2
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+
+    - id: Setup-Git
+      shell: bash
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+
+    - name: Update version
+      id: update-version
+      run: |
+        cd libs/react-numerics
+        git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json
+        cd -
+
+    - name: Yarn Install
+      uses: borales/actions-yarn@v3.0.0
+      with:
+        cmd: install
+
+    - name: Yarn TypeDoc
+      uses: borales/actions-yarn@v3.0.0
+      with:
+        cmd: typedoc
+
+    - name: Yarn Build
+      uses: borales/actions-yarn@v3.0.0
+      with:
+        cmd: build
+
+    - id: npm-publish
+      name: Publish to NPM Registry
+      uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        tag: ${{ github.event.inputs.tag }}
+        dry-run: ${{ github.event.inputs.build_only }}
+        package: ./dist/libs/react-numerics/package.json
+
+    - run: echo "Published  ${{ steps.npm-publish.outputs.version }}"
+
+    - id: git-push
+      if: ${{ (github.event.inputs.tag == 'latest') && !(github.event.inputs.build_only) }}
+      shell: bash
+      run: |
+        git commit -m "Publish version ${{ steps.npm-publish.outputs.version }}"
+        git push
+        git push --tags
 

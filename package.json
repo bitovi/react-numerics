@@ -5,16 +5,29 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "typecheck": "tsc --noEmit",
+    "eslint": "eslint libs/react-numerics/src",
+    "prettier": "prettier --check libs/react-numerics/src",
+    "depcheck": "depcheck ."
   },
   "dependencies": {
     "bignumber.js": "^9.0.2",
     "core-js": "^3.6.5",
+    "depcheck": "^1.4.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-intl": "^6.0.4",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "@bitovi/eslint-config/react"
+  },
+  "prettier": {
+    "semi": false,
+    "trailingComma": "all"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",

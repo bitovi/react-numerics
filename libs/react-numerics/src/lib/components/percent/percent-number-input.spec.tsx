@@ -1,9 +1,27 @@
+import React from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PercentNumberInput } from "./percent-number-input";
 import { createFormattedNumberInputWrapper } from "../../test/wrapper";
 
 describe("PercentNumberInput", () => {
+  it("inputRef works", () => {
+    const myRef = React.createRef<HTMLInputElement>()
+    render(
+      <PercentNumberInput
+        numericValue="222"
+        onNumericChange={jest.fn()}
+        inputRef={myRef}
+      />
+    );
+
+    if (myRef.current instanceof HTMLInputElement) {
+      expect(myRef.current.value).toEqual("222%");
+    } else {
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+    }
+  });
+
   it("renders without rounding", () => {
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(

@@ -11,6 +11,7 @@ export function FormattedInput({
   formattedValue,
   onChange,
   onKeyDown,
+  inputRef,
   ...props
 }: FormattedInputProps) {
   const key = useRef<string | null>(null);
@@ -42,6 +43,7 @@ export function FormattedInput({
   return (
     <input
       {...props}
+      ref={inputRef}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       value={formattedValue}
@@ -63,4 +65,6 @@ export interface FormattedInputProps
   onChange: (value: string, changeType: ChangeType) => void;
   /** Pass a handler to be notified of key down events. */
   onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+  /** Pass a reference back up to the underlying input element */
+  inputRef?: React.RefObject<HTMLInputElement>;
 }

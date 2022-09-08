@@ -20,8 +20,8 @@ Import the component that you need.
 ```tsx
 import { PercentNumberInput } from "@bitovi/react-numerics";
 
-export function Form({ numericValue }: Props){
-  function handleNumericChange(value){
+export function Form({ numericValue }: Props) {
+  function handleNumericChange(value) {
     // Do something with the value.
   }
 
@@ -39,6 +39,31 @@ component accepts values for most of the standard `HTMLInputElement` attributes.
 
 Each component will render an `<input>` element with `type` equal to "text"
 without styling.
+
+### Reference to the input element
+
+Each component allows an `inputRef` prop that will become a reference to the underlying html input element, if needed.
+
+```tsx
+import { PostalCodeNumberInput } from "@bitovi/react-numerics";
+
+export function Form({ numericValue }: Props) {
+  const myRef = React.createRef<HTMLInputElement>();
+  // once rendered, `myRef.current` is the underlying <input> element
+
+  function handleNumericChange(value) {
+    // Do something with the value.
+  }
+
+  return (
+    <PostalCodeNumberInput
+      inputRef={myRef}
+      numericValue="01970"
+      onNumericChange={handleNumericChange}
+    />
+  );
+}
+```
 
 ## Architecture
 

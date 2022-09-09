@@ -18,6 +18,7 @@ export function PercentNumberInput({
   locales,
   max,
   min,
+  inputMode = "decimal",
   ...props
 }: PercentNumberInputProps) {
   const formatter = useMemo(() => {
@@ -29,9 +30,20 @@ export function PercentNumberInput({
       {...props}
       formatter={formatter}
       onNumericChange={onNumericChange}
+      inputMode={inputMode}
     />
   );
 }
 
 export interface PercentNumberInputProps
-  extends Omit<FormattedNumberInputProps, "formatter"> {}
+  extends Omit<FormattedNumberInputProps, "formatter"> {
+  inputMode?:
+    | "none"
+    | "text"
+    | "tel"
+    | "url"
+    | "email"
+    | "numeric"
+    | "decimal"
+    | "search";
+}

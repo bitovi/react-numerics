@@ -12,6 +12,7 @@ export function FormattedInput({
   onChange,
   onKeyDown,
   inputRef,
+  inputMode,
   ...props
 }: FormattedInputProps) {
   const key = useRef<string | null>(null);
@@ -47,6 +48,7 @@ export function FormattedInput({
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       value={formattedValue}
+      inputMode={inputMode}
     />
   );
 }
@@ -67,4 +69,6 @@ export interface FormattedInputProps
   onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
   /** Pass a reference back up to the underlying input element */
   inputRef?: React.RefObject<HTMLInputElement>;
+  /** Change the input element's inputmode */
+  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
 }

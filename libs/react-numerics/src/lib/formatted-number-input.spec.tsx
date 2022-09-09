@@ -22,6 +22,43 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
       expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
     }
   });
+
+  it("inputMode is correct when unset", () => {
+    const myRef = React.createRef<HTMLInputElement>()
+    render(
+      <FormattedNumberInput
+        numericValue="222"
+        onNumericChange={jest.fn()}
+        inputRef={myRef}
+      />
+    );
+
+    if (myRef.current instanceof HTMLInputElement) {
+      expect(myRef.current.inputMode).toEqual("");
+      expect(myRef.current.getAttribute("inputmode")).toEqual(null);
+      expect(myRef.current.hasAttribute("inputmode")).toEqual(false);
+    } else {
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+    }
+  });
+
+  it("inputMode works", () => {
+    const myRef = React.createRef<HTMLInputElement>()
+    render(
+      <FormattedNumberInput
+        numericValue="222"
+        onNumericChange={jest.fn()}
+        inputRef={myRef}
+        inputMode="search"
+      />
+    );
+
+    if (myRef.current instanceof HTMLInputElement) {
+      expect(myRef.current.inputMode).toEqual("search");
+    } else {
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+    }
+  });
 });
 
 describe("FormattedNumberInput: initial value", () => {

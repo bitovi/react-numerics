@@ -18,12 +18,14 @@ import {
  */
 export function TelephoneNumberInput({
   locales,
+  inputMode = "tel",
   ...props
 }: TelephoneNumberInputProps) {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
       formatter={formatTelephoneNumber(locales)}
+      inputMode={inputMode}
       {...props}
     />
   );
@@ -39,4 +41,13 @@ export interface TelephoneNumberInputProps
   > {
   /** The locales to use when the Formatter is invoked. */
   locales?: Parameters<FormatterFactory>[0];
+  inputMode?:
+    | "none"
+    | "text"
+    | "tel"
+    | "url"
+    | "email"
+    | "numeric"
+    | "decimal"
+    | "search";
 }

@@ -1,8 +1,26 @@
+import React from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { EmployerIdentificationNumberInput } from "./employer-identification-number-input";
 
 describe("EmployerIdentificationNumberInput", () => {
+  it("inputRef works", () => {
+    const myRef = React.createRef<HTMLInputElement>()
+    render(
+      <EmployerIdentificationNumberInput
+        numericValue="222"
+        onNumericChange={jest.fn()}
+        inputRef={myRef}
+      />
+    );
+
+    if (myRef.current instanceof HTMLInputElement) {
+      expect(myRef.current.value).toEqual("22-2");
+    } else {
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+    }
+  });
+
   it("renders", () => {
     const handleChange = jest.fn();
     const { getByDisplayValue } = render(

@@ -29,6 +29,7 @@ export function CurrencyNumberInput({
   roundingMode = BigNumber.ROUND_HALF_UP,
   showFraction = true,
   locales,
+  inputMode = "decimal",
   ...props
 }: CurrencyNumberInputProps) {
   const [paddingStage, setPaddingStage] = useState<
@@ -80,6 +81,7 @@ export function CurrencyNumberInput({
       numericValue={nextNumericValue}
       onBlur={handleBlur}
       onNumericChange={onNumericChange}
+      inputMode={inputMode}
     />
   );
 }
@@ -91,4 +93,13 @@ export interface CurrencyNumberInputProps
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean;
+  inputMode?:
+    | "none"
+    | "text"
+    | "tel"
+    | "url"
+    | "email"
+    | "numeric"
+    | "decimal"
+    | "search";
 }

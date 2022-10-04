@@ -1,12 +1,12 @@
 import {
   FormattedNumericInput,
-  FormattedNumericInputProps
-} from "../../formatted-numeric-input";
-import { filterToNumeric } from "../../filters/filters";
+  FormattedNumericInputProps,
+} from "../../formatted-numeric-input"
+import { filterToNumeric } from "../../filters/filters"
 import {
   formatTelephoneNumber,
-  FormatterFactory
-} from "../../formatters/formatters";
+  FormatterFactory,
+} from "../../formatters/formatters"
 
 /**
  * Display a formatted telephone number.
@@ -28,7 +28,7 @@ export function TelephoneNumberInput({
       inputMode={inputMode}
       {...props}
     />
-  );
+  )
 }
 
 /**
@@ -40,7 +40,7 @@ export interface TelephoneNumberInputProps
     "converter" | "filter" | "formatter"
   > {
   /** The locales to use when the Formatter is invoked. */
-  locales?: Parameters<FormatterFactory>[0];
+  locales?: Parameters<FormatterFactory>[0]
   inputMode?:
     | "none"
     | "text"
@@ -49,5 +49,5 @@ export interface TelephoneNumberInputProps
     | "email"
     | "numeric"
     | "decimal"
-    | "search";
+    | "search"
 }

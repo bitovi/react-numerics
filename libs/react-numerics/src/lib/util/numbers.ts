@@ -12,27 +12,27 @@ export function extractDigits(
   nonDigitHandler: (
     char: string,
     index: number,
-    value: string
-  ) => string | null | undefined = () => ""
+    value: string,
+  ) => string | null | undefined = () => "",
 ) {
-  let output = "";
+  let output = ""
 
   for (let i = 0; i < value.length; i++) {
     if (isDigitCharacter(value[i])) {
       // numbers
-      output += value[i];
+      output += value[i]
     } else {
-      output += nonDigitHandler(value[i], i, value) ?? "";
+      output += nonDigitHandler(value[i], i, value) ?? ""
     }
   }
 
-  return output;
+  return output
 }
 
 const mapLocaleToCurrencySymbol: Record<
   string,
   { fractionLength: number; symbol: string }
-> = {};
+> = {}
 
 /**
  * Get the currency information for a locale.
@@ -45,20 +45,20 @@ export function getCurrencyData(locale: string, currency = "USD") {
     const formatted = Intl.NumberFormat(locale, {
       currency,
       currencyDisplay: "symbol",
-      style: "currency"
-    }).formatToParts(1.1);
+      style: "currency",
+    }).formatToParts(1.1)
 
     mapLocaleToCurrencySymbol[locale] = {
       fractionLength:
-        formatted.find(p => p.type === "fraction")?.value?.length ?? 0,
-      symbol: formatted.find(p => p.type === "currency")?.value ?? "$"
-    };
+        formatted.find((p) => p.type === "fraction")?.value?.length ?? 0,
+      symbol: formatted.find((p) => p.type === "currency")?.value ?? "$",
+    }
   }
 
-  return mapLocaleToCurrencySymbol[locale];
+  return mapLocaleToCurrencySymbol[locale]
 }
 
-const mapLocaleToDecimalSeparator: Record<string, string> = {};
+const mapLocaleToDecimalSeparator: Record<string, string> = {}
 
 /**
  * Get the decimal separator for a locale.
@@ -70,15 +70,15 @@ export function getDecimalSeparator(locale: string) {
   if (!(locale in mapLocaleToDecimalSeparator)) {
     const decimal = Intl.NumberFormat(locale)
       .formatToParts(1.1)
-      .find(part => part.type === "decimal")?.value;
+      .find((part) => part.type === "decimal")?.value
 
-    mapLocaleToDecimalSeparator[locale] = decimal ?? ".";
+    mapLocaleToDecimalSeparator[locale] = decimal ?? "."
   }
 
-  return mapLocaleToDecimalSeparator[locale];
+  return mapLocaleToDecimalSeparator[locale]
 }
 
-const mapLocaleToGroupingSeparator: Record<string, string> = {};
+const mapLocaleToGroupingSeparator: Record<string, string> = {}
 
 /**
  * Get the grouping separator for a locale.
@@ -90,12 +90,12 @@ export function getGroupingSeparator(locale: string) {
   if (!(locale in mapLocaleToGroupingSeparator)) {
     const grouping = Intl.NumberFormat(locale)
       .formatToParts(4444)
-      .find(part => part.type === "group")?.value;
+      .find((part) => part.type === "group")?.value
 
-    mapLocaleToGroupingSeparator[locale] = grouping ?? ".";
+    mapLocaleToGroupingSeparator[locale] = grouping ?? "."
   }
 
-  return mapLocaleToGroupingSeparator[locale];
+  return mapLocaleToGroupingSeparator[locale]
 }
 
 /**
@@ -106,11 +106,11 @@ export function getGroupingSeparator(locale: string) {
  */
 export function isDigitCharacter(char: string) {
   if (char.length !== 1) {
-    throw Error("Requires a string with only one character.");
+    throw Error("Requires a string with only one character.")
   }
 
-  const charCode = char.charCodeAt(0);
-  return 48 <= charCode && charCode <= 57;
+  const charCode = char.charCodeAt(0)
+  return 48 <= charCode && charCode <= 57
 }
 
 /**
@@ -122,21 +122,21 @@ export function isDigitCharacter(char: string) {
  */
 export function localizedStringToNumber(value: string, locale: string) {
   if (!value) {
-    return "";
+    return ""
   }
 
-  const separator = getDecimalSeparator(locale);
+  const separator = getDecimalSeparator(locale)
 
-  let separatorFound = false;
-  let output = numberSign(value);
-  output += extractDigits(value, char => {
+  let separatorFound = false
+  let output = numberSign(value)
+  output += extractDigits(value, (char) => {
     if (!separatorFound && separator === char) {
-      separatorFound = true;
-      return ".";
+      separatorFound = true
+      return "."
     }
-  });
+  })
 
-  return output;
+  return output
 }
 
 /**
@@ -148,19 +148,19 @@ export function localizedStringToNumber(value: string, locale: string) {
  */
 export function padRight(input: string, template: string) {
   if (template.length <= input.length) {
-    return input;
+    return input
   }
 
-  let result = "";
+  let result = ""
 
   for (let i = 0; i < template.length; i++) {
-    result += i < input.length ? input[i] : template[i];
+    result += i < input.length ? input[i] : template[i]
   }
 
-  return result;
+  return result
 }
 
 export function numberSign(input: string) {
-  const trimmed = input.trim();
-  return trimmed[0] === "+" || trimmed[0] === "-" ? trimmed[0] : "";
+  const trimmed = input.trim()
+  return trimmed[0] === "+" || trimmed[0] === "-" ? trimmed[0] : ""
 }

@@ -1,18 +1,10 @@
 {
-  "extends": ["plugin:@nrwl/nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
-    }
-  ]
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["react"],
+  "root": true,
+  "extends": "@bitovi/eslint-config/react"
 }

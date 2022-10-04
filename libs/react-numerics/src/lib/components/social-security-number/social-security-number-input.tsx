@@ -1,9 +1,9 @@
 import {
   FormattedNumericInput,
-  FormattedNumericInputProps
-} from "../../formatted-numeric-input";
-import { filterToNumeric } from "../../filters/filters";
-import { formatSocialSecurityNumber } from "../../formatters/formatters";
+  FormattedNumericInputProps,
+} from "../../formatted-numeric-input"
+import { filterToNumeric } from "../../filters/filters"
+import { formatSocialSecurityNumber } from "../../formatters/formatters"
 
 /**
  * Display a formatted U.S. Social Security Number. For example:
@@ -22,7 +22,7 @@ export function SocialSecurityNumberInput({
       inputMode={inputMode}
       {...props}
     />
-  );
+  )
 }
 
 export interface SocialSecurityNumberInputProps
@@ -38,5 +38,5 @@ export interface SocialSecurityNumberInputProps
     | "email"
     | "numeric"
     | "decimal"
-    | "search";
+    | "search"
 }

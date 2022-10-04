@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "typecheck": "tsc --noEmit",
+    "eslint": "eslint libs/react-numerics/src",
+    "prettier": "prettier --check libs/react-numerics/src",
+    "depcheck": "depcheck .",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "vitest libs/react-numerics/src/**.spec.tsx"
   },
   "dependencies": {
     "bignumber.js": "^9.0.2",
@@ -19,10 +23,10 @@
   "devDependencies": {
     "@babel/core": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
+    "@bitovi/eslint-config": "^1.4.1",
     "@nrwl/cli": "13.9.7",
     "@nrwl/cypress": "13.9.7",
     "@nrwl/eslint-plugin-nx": "13.9.7",
-    "@nrwl/jest": "13.9.7",
     "@nrwl/linter": "13.9.7",
     "@nrwl/react": "13.9.7",
     "@nrwl/storybook": "^14.3.6",
@@ -36,15 +40,14 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.2.1",
-    "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
     "@types/react": "17.0.40",
     "@types/react-dom": "17.0.13",
     "@typescript-eslint/eslint-plugin": "~5.10.0",
     "@typescript-eslint/parser": "~5.10.0",
-    "babel-jest": "27.2.3",
     "babel-loader": "8.1.0",
     "cypress": "^9.1.0",
+    "depcheck": "^1.4.3",
     "eslint": "~8.7.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
@@ -52,13 +55,12 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.29.3",
     "eslint-plugin-react-hooks": "4.3.0",
-    "jest": "27.2.3",
-    "nx": "13.9.7",
     "prettier": "^2.5.1",
     "react-test-renderer": "17.0.2",
-    "ts-jest": "27.0.5",
     "typedoc": "^0.23.6",
     "typescript": "~4.6.0",
-    "url-loader": "^3.0.0"
+    "url-loader": "^3.0.0",
+    "vite": "^3.0.3",
+    "vitest": "^0.19.1"
   }
 }

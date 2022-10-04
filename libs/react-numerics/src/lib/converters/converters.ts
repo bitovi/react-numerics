@@ -1,8 +1,4 @@
-import {
-  extractDigits,
-  getDecimalSeparator,
-  numberSign
-} from "../util/numbers";
+import { extractDigits, getDecimalSeparator, numberSign } from "../util/numbers"
 
 /**
  * Convert a number string from one locale to another. All characters except
@@ -12,25 +8,25 @@ export const convertNumber: ConverterFactory =
   (inputLocale = "en-US") =>
   (number, outputLocale = "en-US") => {
     if (!number) {
-      return "";
+      return ""
     }
 
     const inputSeparator = getDecimalSeparator(
-      Array.isArray(inputLocale) ? inputLocale[0] : inputLocale
-    );
-    const outputSeparator = getDecimalSeparator(outputLocale);
+      Array.isArray(inputLocale) ? inputLocale[0] : inputLocale,
+    )
+    const outputSeparator = getDecimalSeparator(outputLocale)
 
-    let separatorFound = false;
-    let output = numberSign(number);
-    output += extractDigits(number, char => {
+    let separatorFound = false
+    let output = numberSign(number)
+    output += extractDigits(number, (char) => {
       if (!separatorFound && inputSeparator === char) {
-        separatorFound = true;
-        return outputSeparator;
+        separatorFound = true
+        return outputSeparator
       }
-    });
+    })
 
-    return output;
-  };
+    return output
+  }
 
 /**
  * Accepts an input string of the specified locale and returns a string
@@ -40,7 +36,7 @@ export const convertNumber: ConverterFactory =
  * @param outputLocale The locale of the return value.
  */
 export interface Converter {
-  (input: string, outputLocale?: string): string;
+  (input: string, outputLocale?: string): string
 }
 
 /**
@@ -48,5 +44,5 @@ export interface Converter {
  * @param locales The locales that describe the input number to be converted.
  */
 export interface ConverterFactory {
-  (locale?: string | string[]): Converter;
+  (locale?: string | string[]): Converter
 }

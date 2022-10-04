@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { formatPercent } from "../../formatters/formatters";
+import { useMemo } from "react"
+import { formatPercent } from "../../formatters/formatters"
 import {
   FormattedNumberInput,
-  FormattedNumberInputProps
-} from "../../formatted-number-input";
+  FormattedNumberInputProps,
+} from "../../formatted-number-input"
 
 /**
  * Create a number followed by the % sign. The percent sign will be appended
@@ -22,8 +22,8 @@ export function PercentNumberInput({
   ...props
 }: PercentNumberInputProps) {
   const formatter = useMemo(() => {
-    return formatPercent(locales, { decimalPlaces, max, min, roundingMode });
-  }, [decimalPlaces, locales, max, min, roundingMode]);
+    return formatPercent(locales, { decimalPlaces, max, min, roundingMode })
+  }, [decimalPlaces, locales, max, min, roundingMode])
 
   return (
     <FormattedNumberInput
@@ -32,7 +32,7 @@ export function PercentNumberInput({
       onNumericChange={onNumericChange}
       inputMode={inputMode}
     />
-  );
+  )
 }
 
 export interface PercentNumberInputProps
@@ -45,5 +45,5 @@ export interface PercentNumberInputProps
     | "email"
     | "numeric"
     | "decimal"
-    | "search";
+    | "search"
 }

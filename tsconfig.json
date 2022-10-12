@@ -1,24 +1,26 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "lib": ["es2017", "dom"],
+    "jsx": "preserve",
     "module": "esnext",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "noImplicitReturns": false,
-    "paths": {
-      "@bitovi/react-numerics": ["libs/react-numerics/src/index.ts"]
-    },
-    "rootDir": ".",
-    "skipDefaultLibCheck": true,
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true,
+    "incremental": true,
+    "strict": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "target": "es2015"
   },
-  "exclude": ["node_modules", "tmp"]
+  "include": ["@types", "./libs/react-numerics/src", "jsx" ,"tsx"],
+  "exclude": ["node_modules", "./libs/react-numerics/src/**/*.spec.ts"]
 }
+
+

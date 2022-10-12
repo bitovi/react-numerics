@@ -20,7 +20,7 @@ export function PercentNumberInput({
   min,
   inputMode = "decimal",
   ...props
-}: PercentNumberInputProps) {
+}: PercentNumberInputProps): JSX.Element {
   const formatter = useMemo(() => {
     return formatPercent(locales, { decimalPlaces, max, min, roundingMode })
   }, [decimalPlaces, locales, max, min, roundingMode])

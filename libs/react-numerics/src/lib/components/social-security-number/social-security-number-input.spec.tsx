@@ -1,16 +1,14 @@
 import React from "react"
 import { render } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event";
 import { SocialSecurityNumberInput } from "./social-security-number-input"
-// import { createFormattedNumberInputWrapper } from "../../test/wrapper";
-
+import { vi } from "vitest"
 describe("SocialSecurityNumberInput", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <SocialSecurityNumberInput
         numericValue="222222222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -27,7 +25,7 @@ describe("SocialSecurityNumberInput", () => {
     render(
       <SocialSecurityNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -44,7 +42,7 @@ describe("SocialSecurityNumberInput", () => {
     render(
       <SocialSecurityNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="text"
       />,

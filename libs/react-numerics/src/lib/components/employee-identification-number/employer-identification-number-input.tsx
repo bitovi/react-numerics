@@ -14,7 +14,7 @@ import { formatEmployerIdentificationNumber } from "../../formatters/formatters"
 export function EmployerIdentificationNumberInput({
   inputMode = "numeric",
   ...props
-}: EmployerIdentificationNumberInputProps) {
+}: EmployerIdentificationNumberInputProps): JSX.Element {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}

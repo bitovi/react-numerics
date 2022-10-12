@@ -9,7 +9,7 @@ import { FormattedNumberInput } from "../formatted-number-input"
  * empty string.
  */
 export function createFormattedNumberInputWrapper(initialNumericValue = "") {
-  return function Wrapper({ children }: WrapperProps) {
+  return function Wrapper({ children }: WrapperProps): JSX.Element {
     const [numericValue, setNumericValue] = useState<string>()
 
     const cloneProps: ChildrenProps = {

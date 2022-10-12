@@ -31,7 +31,7 @@ export function FormattedNumberInput({
   onNumericChange,
   roundingMode,
   ...props
-}: FormattedNumberInputProps) {
+}: FormattedNumberInputProps): JSX.Element {
   const converter = useMemo(() => convertNumber(locales), [locales])
   const formatter = useMemo(
     () =>

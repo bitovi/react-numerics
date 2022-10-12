@@ -20,7 +20,7 @@ export function TelephoneNumberInput({
   locales,
   inputMode = "tel",
   ...props
-}: TelephoneNumberInputProps) {
+}: TelephoneNumberInputProps): JSX.Element {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}

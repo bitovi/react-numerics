@@ -4,14 +4,14 @@ import userEvent from "@testing-library/user-event"
 import BigNumber from "bignumber.js"
 import { FormattedNumberInput } from "./formatted-number-input"
 import { createFormattedNumberInputWrapper } from "./test/wrapper"
-
+import { vi } from "vitest"
 describe("FormattedNumberInput: can pass up a ref to the input element", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -28,7 +28,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -47,7 +47,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="search"
       />,
@@ -63,7 +63,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
 
 describe("FormattedNumberInput: initial value", () => {
   it("default integer value", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="123"
@@ -77,7 +77,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("groups a large value", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="987654321.0001"
@@ -91,7 +91,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("default float value", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="3.14"
@@ -105,7 +105,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("truncated float value -> down", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
@@ -120,7 +120,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("truncated float value; no roundingMode", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
@@ -135,7 +135,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("truncated float value; round half up -> down", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
@@ -151,7 +151,7 @@ describe("FormattedNumberInput: initial value", () => {
   })
 
   it("truncated float value; round half up -> up", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
@@ -173,7 +173,7 @@ describe("FormattedNumberInput: initial value", () => {
           max={1}
           min={2}
           numericValue="100"
-          onNumericChange={jest.fn()}
+          onNumericChange={vi.fn()}
           placeholder="TEST"
         />,
       )
@@ -187,7 +187,7 @@ describe("FormattedNumberInput: enter value", () => {
   it("replaces value on type", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="999"
@@ -209,7 +209,7 @@ describe("FormattedNumberInput: enter value", () => {
   it("replaces mid value on type", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="54321"
@@ -231,7 +231,7 @@ describe("FormattedNumberInput: enter value", () => {
   it("allows a typed '-' when the min is not set", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -259,7 +259,7 @@ describe("FormattedNumberInput: enter value", () => {
   it("allows a typed '-' when the min is less than 0", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -288,7 +288,7 @@ describe("FormattedNumberInput: enter value", () => {
   it("ignores a typed '-' when the min is greater than or equal to 0", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -319,7 +319,7 @@ describe("FormattedNumberInput: format onBlur", () => {
   it("removes trailing decimal", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="0."

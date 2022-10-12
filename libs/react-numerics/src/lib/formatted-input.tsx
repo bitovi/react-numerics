@@ -14,7 +14,7 @@ export function FormattedInput({
   inputRef,
   inputMode,
   ...props
-}: FormattedInputProps) {
+}: FormattedInputProps): JSX.Element {
   const key = useRef<string | null>(null)
 
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {

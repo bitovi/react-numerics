@@ -3,14 +3,14 @@ import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { PercentNumberInput } from "./percent-number-input"
 import { createFormattedNumberInputWrapper } from "../../test/wrapper"
-
+import { vi } from "vitest"
 describe("PercentNumberInput", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <PercentNumberInput
         numericValue="222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -27,7 +27,7 @@ describe("PercentNumberInput", () => {
     render(
       <PercentNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -44,7 +44,7 @@ describe("PercentNumberInput", () => {
     render(
       <PercentNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="text"
       />,
@@ -58,7 +58,7 @@ describe("PercentNumberInput", () => {
   })
 
   it("renders without rounding", () => {
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue } = render(
       <PercentNumberInput
         numericValue="50.123"
@@ -73,7 +73,7 @@ describe("PercentNumberInput", () => {
   it("respects the max value", async () => {
     const user = userEvent.setup({ delay: 10 })
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput
@@ -108,7 +108,7 @@ describe("PercentNumberInput", () => {
   it("respects the min value", async () => {
     const user = userEvent.setup({ delay: 10 })
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput
@@ -137,7 +137,7 @@ describe("PercentNumberInput", () => {
   it("adds a percent symbol on paste", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput
@@ -165,7 +165,7 @@ describe("PercentNumberInput", () => {
   it("does not add a percent following backspace", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
 
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput
@@ -208,7 +208,7 @@ describe("PercentNumberInput", () => {
       resolver = resolve
     })
 
-    const handleNumericChange = jest.fn(() => resolver())
+    const handleNumericChange = vi.fn(() => resolver())
 
     const { getAllByPlaceholderText } = render(
       <PercentNumberInput

@@ -1,16 +1,14 @@
 import React from "react"
 import { render } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event";
 import { PostalCodeNumberInput } from "./postal-code-number-input"
-// import { createFormattedNumberInputWrapper } from "../../test/wrapper";
-
+import { vi } from "vitest"
 describe("PostalCodeNumberInput", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <PostalCodeNumberInput
         numericValue="22222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -27,7 +25,7 @@ describe("PostalCodeNumberInput", () => {
     render(
       <PostalCodeNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -46,7 +44,7 @@ describe("PostalCodeNumberInput", () => {
     render(
       <PostalCodeNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="text"
       />,

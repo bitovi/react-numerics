@@ -1,16 +1,14 @@
 import React from "react"
 import { render } from "@testing-library/react"
-// import userEvent from "@testing-library/user-event";
 import { TelephoneNumberInput } from "./telephone-number-input"
-// import { createFormattedNumberInputWrapper } from "../../test/wrapper";
-
+import { vi } from "vitest"
 describe("TelephoneNumberInput", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <TelephoneNumberInput
         numericValue="2222222222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -27,7 +25,7 @@ describe("TelephoneNumberInput", () => {
     render(
       <TelephoneNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -44,7 +42,7 @@ describe("TelephoneNumberInput", () => {
     render(
       <TelephoneNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="text"
       />,

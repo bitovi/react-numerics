@@ -14,7 +14,7 @@ export function extractDigits(
     index: number,
     value: string,
   ) => string | null | undefined = () => "",
-) {
+): string {
   let output = ""
 
   for (let i = 0; i < value.length; i++) {
@@ -40,7 +40,10 @@ const mapLocaleToCurrencySymbol: Record<
  * @param currency The ISO three letter currency ID.
  * @returns The currency data.
  */
-export function getCurrencyData(locale: string, currency = "USD") {
+export function getCurrencyData(
+  locale: string,
+  currency = "USD",
+): { fractionLength: number; symbol: string } {
   if (!(locale in mapLocaleToCurrencySymbol)) {
     const formatted = Intl.NumberFormat(locale, {
       currency,
@@ -66,7 +69,7 @@ const mapLocaleToDecimalSeparator: Record<string, string> = {}
  * @returns The character used to separate the integral and fractional parts of
  * a number.
  */
-export function getDecimalSeparator(locale: string) {
+export function getDecimalSeparator(locale: string): string {
   if (!(locale in mapLocaleToDecimalSeparator)) {
     const decimal = Intl.NumberFormat(locale)
       .formatToParts(1.1)
@@ -86,7 +89,7 @@ const mapLocaleToGroupingSeparator: Record<string, string> = {}
  * @returns The character used to separate the integral and fractional parts of
  * a number.
  */
-export function getGroupingSeparator(locale: string) {
+export function getGroupingSeparator(locale: string): string {
   if (!(locale in mapLocaleToGroupingSeparator)) {
     const grouping = Intl.NumberFormat(locale)
       .formatToParts(4444)
@@ -104,7 +107,7 @@ export function getGroupingSeparator(locale: string) {
  * @param char A string with a single character.
  * @returns True if the character is a digit.
  */
-export function isDigitCharacter(char: string) {
+export function isDigitCharacter(char: string): boolean {
   if (char.length !== 1) {
     throw Error("Requires a string with only one character.")
   }
@@ -120,7 +123,7 @@ export function isDigitCharacter(char: string) {
  * @param value The localized numeric string value.
  * @param locale The locale of the value.
  */
-export function localizedStringToNumber(value: string, locale: string) {
+export function localizedStringToNumber(value: string, locale: string): string {
   if (!value) {
     return ""
   }
@@ -146,7 +149,7 @@ export function localizedStringToNumber(value: string, locale: string) {
  * of the input if needed.
  * @returns
  */
-export function padRight(input: string, template: string) {
+export function padRight(input: string, template: string): string {
   if (template.length <= input.length) {
     return input
   }
@@ -160,7 +163,7 @@ export function padRight(input: string, template: string) {
   return result
 }
 
-export function numberSign(input: string) {
+export function numberSign(input: string): string {
   const trimmed = input.trim()
   return trimmed[0] === "+" || trimmed[0] === "-" ? trimmed[0] : ""
 }

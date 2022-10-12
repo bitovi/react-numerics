@@ -28,7 +28,7 @@ export function CurrencyNumberInput({
   locales,
   inputMode = "decimal",
   ...props
-}: CurrencyNumberInputProps) {
+}: CurrencyNumberInputProps): JSX.Element {
   const [paddingStage, setPaddingStage] = useState<
     typeof paddingStages[keyof typeof paddingStages]
   >(paddingStages.pending)

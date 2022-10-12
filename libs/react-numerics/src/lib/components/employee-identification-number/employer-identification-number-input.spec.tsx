@@ -2,14 +2,14 @@ import React from "react"
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { EmployerIdentificationNumberInput } from "./employer-identification-number-input"
-
+import { vi } from "vitest"
 describe("EmployerIdentificationNumberInput", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <EmployerIdentificationNumberInput
         numericValue="222"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -26,7 +26,7 @@ describe("EmployerIdentificationNumberInput", () => {
     render(
       <EmployerIdentificationNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
       />,
     )
@@ -43,7 +43,7 @@ describe("EmployerIdentificationNumberInput", () => {
     render(
       <EmployerIdentificationNumberInput
         numericValue="222.333"
-        onNumericChange={jest.fn()}
+        onNumericChange={vi.fn()}
         inputRef={myRef}
         inputMode="text"
       />,
@@ -57,7 +57,7 @@ describe("EmployerIdentificationNumberInput", () => {
   })
 
   it("renders", () => {
-    const handleChange = jest.fn()
+    const handleChange = vi.fn()
     const { getByDisplayValue } = render(
       <EmployerIdentificationNumberInput
         numericValue="227777777"
@@ -72,7 +72,7 @@ describe("EmployerIdentificationNumberInput", () => {
   it("ignores appended characters", async () => {
     const user = userEvent.setup()
 
-    const handleChange = jest.fn()
+    const handleChange = vi.fn()
     const { getByDisplayValue } = render(
       <EmployerIdentificationNumberInput
         numericValue="227777777"
@@ -92,7 +92,7 @@ describe("EmployerIdentificationNumberInput", () => {
   it("formats prepended characters", async () => {
     const user = userEvent.setup()
 
-    const handleChange = jest.fn()
+    const handleChange = vi.fn()
     const { getByDisplayValue, rerender } = render(
       <EmployerIdentificationNumberInput
         numericValue="123456789"
@@ -130,7 +130,7 @@ describe("EmployerIdentificationNumberInput", () => {
   it("formats before non-numeric characters", async () => {
     const user = userEvent.setup()
 
-    const handleNumericChange = jest.fn()
+    const handleNumericChange = vi.fn()
     const { getByDisplayValue, rerender } = render(
       <EmployerIdentificationNumberInput
         numericValue="987654321"
@@ -168,7 +168,7 @@ describe("EmployerIdentificationNumberInput", () => {
   it("formats after non-numeric characters", async () => {
     const user = userEvent.setup()
 
-    const handleChange = jest.fn()
+    const handleChange = vi.fn()
     const { getByDisplayValue, rerender } = render(
       <EmployerIdentificationNumberInput
         numericValue="227654321"
@@ -206,7 +206,7 @@ describe("EmployerIdentificationNumberInput", () => {
   it("ignores non-numeric characters", async () => {
     const user = userEvent.setup()
 
-    const handleChange = jest.fn()
+    const handleChange = vi.fn()
     const { getByDisplayValue } = render(
       <EmployerIdentificationNumberInput
         numericValue="1"
@@ -229,7 +229,7 @@ describe("EmployerIdentificationNumberInput", () => {
       resolver = resolve
     })
 
-    const handleNumericChange = jest.fn(() => resolver())
+    const handleNumericChange = vi.fn(() => resolver())
 
     // onNumericChange invoked because the initial numericValue prop value is
     // "5432109876" which is too long for an EIN.

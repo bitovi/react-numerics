@@ -32,7 +32,7 @@ export function FormattedNumericInput({
   onNumericChange,
   numericValue,
   ...props
-}: FormattedNumericInputProps) {
+}: FormattedNumericInputProps): JSX.Element {
   const numeric = useRef(filter(numericValue))
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */

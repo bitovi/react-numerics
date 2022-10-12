@@ -13,7 +13,9 @@ import { formatPostalCodeNumber } from "../../formatters/formatters"
  * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` must only contain digits.</p>
  */
-export function PostalCodeNumberInput(props: PostalCodeNumberInputProps) {
+export function PostalCodeNumberInput(
+  props: PostalCodeNumberInputProps,
+): JSX.Element {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
@@ -24,6 +26,6 @@ export function PostalCodeNumberInput(props: PostalCodeNumberInputProps) {
 }
 
 export type PostalCodeNumberInputProps = Omit<
-    FormattedNumericInputProps,
-    "converter" | "filter" | "formatter"
-  >
+  FormattedNumericInputProps,
+  "converter" | "filter" | "formatter"
+>

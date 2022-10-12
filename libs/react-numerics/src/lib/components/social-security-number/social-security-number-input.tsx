@@ -14,7 +14,7 @@ import { formatSocialSecurityNumber } from "../../formatters/formatters"
 export function SocialSecurityNumberInput({
   inputMode = "numeric",
   ...props
-}: SocialSecurityNumberInputProps) {
+}: SocialSecurityNumberInputProps): JSX.Element {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}

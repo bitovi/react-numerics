@@ -1,41 +1,62 @@
 {
   "name": "react-numerics",
   "version": "0.0.0",
+  "keywords": [
+    "react",
+    "input",
+    "form",
+    "numeric",
+    "number",
+    "currency",
+    "percent",
+    "ssn",
+    "telephone"
+  ],
+  "homepage": "https://www.bitovi.com/frontend-javascript-consulting/react-consulting",
+  "bugs": {
+    "url": "https://github.com/bitovi/react-numerics/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitovi/react-numberics.git"
+  },
   "license": "MIT",
+  "author": "Bitovi",
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "build": "tsc && vite build",
+    "depcheck": "depcheck .",
     "eslint": "eslint libs/react-numerics/src",
     "prettier": "prettier --check libs/react-numerics/src",
-    "depcheck": "depcheck .",
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "vitest libs/react-numerics/src/**.spec.tsx"
+    "serve": "vite preview",
+    "storybook": "start-storybook -s public -p 6006",
+    "start": "vite",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@rollup/plugin-typescript": "^8.5.0",
+    "@vitejs/plugin-react": "^2.1.0",
+    "@vitejs/plugin-react-refresh": "^1.3.6",
     "bignumber.js": "^9.0.2",
     "core-js": "^3.6.5",
+    "happy-dom": "^7.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-intl": "^6.0.4",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "typescript": "^4.8.4",
+    "vite-plugin-svgr": "^2.2.1"
   },
   "devDependencies": {
     "@babel/core": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
     "@bitovi/eslint-config": "^1.4.1",
-    "@nrwl/cli": "13.9.7",
-    "@nrwl/cypress": "13.9.7",
-    "@nrwl/eslint-plugin-nx": "13.9.7",
-    "@nrwl/linter": "13.9.7",
-    "@nrwl/react": "13.9.7",
-    "@nrwl/storybook": "^14.3.6",
-    "@nrwl/web": "13.9.7",
-    "@nrwl/workspace": "13.9.7",
-    "@storybook/addon-essentials": "~6.4.12",
-    "@storybook/builder-webpack5": "~6.4.12",
-    "@storybook/manager-webpack5": "~6.4.12",
-    "@storybook/react": "~6.4.12",
+    "@storybook/addon-essentials": "~6.5.12",
+    "@storybook/builder-vite": "^0.2.4",
+    "@storybook/builder-webpack5": "~6.5.12",
+    "@storybook/manager-webpack5": "~6.5.12",
+    "@storybook/react": "~6.5.12",
     "@svgr/webpack": "^5.4.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
@@ -55,12 +76,13 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.29.3",
     "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-storybook": "^0.6.6",
+    "jsdom": "^20.0.1",
     "prettier": "^2.5.1",
     "react-test-renderer": "17.0.2",
     "typedoc": "^0.23.6",
-    "typescript": "~4.6.0",
     "url-loader": "^3.0.0",
-    "vite": "^3.0.3",
+    "vite": "^3.1.4",
     "vitest": "^0.19.1"
   }
 }

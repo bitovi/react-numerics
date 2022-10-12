@@ -170,7 +170,7 @@ export function padNumericFraction(
 
   let safeFractionLength: number
   if (!options?.fractionLength && options?.fractionLength !== 0) {
-    ;({ fractionLength: safeFractionLength } = getCurrencyData(
+    ({ fractionLength: safeFractionLength } = getCurrencyData(
       Array.isArray(locales) ? locales[0] : locales,
     ))
   } else {

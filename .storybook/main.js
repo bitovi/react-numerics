@@ -4,7 +4,7 @@ module.exports = {
     "../libs/react-numerics/src/lib/**/*.stories.mdx",
     "../libs/react-numerics/src/lib/**/*.stories.@(js|jsx|ts|tsx)",
   ],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+  addons: ["@storybook/addon-essentials"],
   core: {
     builder: "@storybook/builder-vite",
   },

@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { ChangeType } from "./types";
+import React, { useRef } from "react"
+import { ChangeType } from "./types"
 
 /**
  * Accepts a formatted value to display in a text field and fires a special
@@ -14,11 +14,11 @@ export function FormattedInput({
   inputRef,
   inputMode,
   ...props
-}: FormattedInputProps) {
-  const key = useRef<string | null>(null);
+}: FormattedInputProps): JSX.Element {
+  const key = useRef<string | null>(null)
 
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
-    const { selectionEnd, value } = evt.target;
+    const { selectionEnd, value } = evt.target
 
     const valueChangeType =
       key.current === "Backspace"
@@ -27,18 +27,18 @@ export function FormattedInput({
         ? "delete"
         : (selectionEnd ?? value.length) < value.length
         ? "replace"
-        : "add";
+        : "add"
 
     // Truncate the value to the selection end.
-    const truncValue = value.substring(0, selectionEnd ?? value.length);
+    const truncValue = value.substring(0, selectionEnd ?? value.length)
 
-    onChange(truncValue, valueChangeType);
-    key.current = null;
+    onChange(truncValue, valueChangeType)
+    key.current = null
   }
 
   function handleKeyDown(evt: React.KeyboardEvent<HTMLInputElement>) {
-    key.current = evt.key;
-    onKeyDown && onKeyDown(evt);
+    key.current = evt.key
+    onKeyDown && onKeyDown(evt)
   }
 
   return (
@@ -50,7 +50,7 @@ export function FormattedInput({
       value={formattedValue}
       inputMode={inputMode}
     />
-  );
+  )
 }
 
 export interface FormattedInputProps
@@ -62,13 +62,21 @@ export interface FormattedInputProps
     "onChange" | "value"
   > {
   /** The formatted value to display. */
-  formattedValue: string;
+  formattedValue: string
   /** onChange event with a simplified signature. */
-  onChange: (value: string, changeType: ChangeType) => void;
+  onChange: (value: string, changeType: ChangeType) => void
   /** Pass a handler to be notified of key down events. */
-  onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void
   /** Pass a reference back up to the underlying input element */
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: React.RefObject<HTMLInputElement>
   /** Change the input element's inputmode */
-  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
+  inputMode?:
+    | "none"
+    | "text"
+    | "tel"
+    | "url"
+    | "email"
+    | "numeric"
+    | "decimal"
+    | "search"
 }

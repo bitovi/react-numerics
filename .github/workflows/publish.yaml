@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       segment:
-        description: 'The version segment to increment: major, minor, patch, premajor, preminor, prepatch, or prerelease'
+        description: "The version segment to increment: major, minor, patch, premajor, preminor, prepatch, or prerelease"
         required: true
       preId:
         description: 'Only used when premajor, preminor, or prepatch is added in segment. The name appended to the version bump to represent a pre-release (default: "")'
@@ -23,33 +23,23 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: "16"
 
-      - name: 'Install'
+      - name: Update version
+        id: update-version
+        run: |
+          cd libs/react-numerics
+          git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json
+          cd -
+
+      - name: "Install"
         run: npm ci
 
-      - name: Create TypeDocs
-        run: npx typedoc
-
-      - name: 'Build'
+      - name: "Build"
         run: npm run build
 
-      - name: 'Test'
+      - name: "Test"
         run: npm run test
-
-
-      - name: Increment Version
-        run: |
-          git config --local user.email "Workflow: ${{ env.GITHUB_WORKFLOW }}[bot]"
-          git config --local user.name "${{ env.GITHUB_WORKFLOW }}[bot]@workflow"
-          if [[ "prepatch" == pre* ]]; then
-            PRE_ID="${{ github.event.inputs.preId}}"
-            if [[ -n "$PRE_ID" ]]; then
-              PRE_ID_COMMAND_STR="--preid $PRE_ID"
-            fi
-          fi
-          npm version ${{ github.event.inputs.segment }} $PRE_ID_COMMAND_STR -m "Publish v%s"
-
 
       - name: Publish to NPM Registry
         uses: JS-DevTools/npm-publish@v1

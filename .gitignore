@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+.rollup.cache/
 /tmp
 /out-tsc
 

@@ -25,12 +25,12 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Update version
-        id: update-version
-        run: |
-          cd libs/react-numerics
-          git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json
-          cd -
+      # - name: Update version
+      #   id: update-version
+      #   run: |
+      #     cd libs/react-numerics
+      #     git tag $(npm version ${{ github.event.inputs.update_type }} ) && git add package.json
+      #     cd -
 
       - name: "Install"
         run: npm ci

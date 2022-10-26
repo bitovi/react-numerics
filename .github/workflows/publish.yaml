@@ -41,6 +41,18 @@ jobs:
       - name: "Test"
         run: npm run test
 
+      - name: Increment Version
+        run: |
+          git config --local user.email "Workflow: ${{ env.GITHUB_WORKFLOW }}[bot]"
+          git config --local user.name "${{ env.GITHUB_WORKFLOW }}[bot]@workflow"
+          if [[ "prepatch" == pre* ]]; then
+            PRE_ID="${{ github.event.inputs.preId}}"
+            if [[ -n "$PRE_ID" ]]; then
+              PRE_ID_COMMAND_STR="--preid $PRE_ID"
+            fi
+          fi
+          npm version ${{ github.event.inputs.segment }} $PRE_ID_COMMAND_STR -m "Publish v%s"
+
       - name: Publish to NPM Registry
         uses: JS-DevTools/npm-publish@v1
         with:

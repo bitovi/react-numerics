@@ -36,19 +36,15 @@ jobs:
         run: npm ci
 
       - name: "Build"
-        run: |
-          ls
-          npm run build
-          ls
+        run: npm run build
 
       - name: "Test"
-        run: |
-          ls
-          npm run test
-          ls
+        run: npm run test
 
       - name: Increment Version
         run: |
+          git status
+          echo "----------"
           git config --local user.email "Workflow: ${{ env.GITHUB_WORKFLOW }}[bot]"
           git config --local user.name "${{ env.GITHUB_WORKFLOW }}[bot]@workflow"
           if [[ "prepatch" == pre* ]]; then

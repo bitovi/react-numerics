@@ -38,13 +38,12 @@ jobs:
       - name: "Build"
         run: npm run build
 
-      - name: "Test"
-        run: npm run test
+      # - name: "Test"
+      #   run: npm run test
 
       - name: Increment Version
         run: |
-          git status
-          echo "----------"
+          ls
           git config --local user.email "Workflow: ${{ env.GITHUB_WORKFLOW }}[bot]"
           git config --local user.name "${{ env.GITHUB_WORKFLOW }}[bot]@workflow"
           if [[ "prepatch" == pre* ]]; then
@@ -53,7 +52,7 @@ jobs:
               PRE_ID_COMMAND_STR="--preid $PRE_ID"
             fi
           fi
-          echo npm version ${{ github.event.inputs.segment }} $PRE_ID_COMMAND_STR -m "Publish v%s"
+          npm version ${{ github.event.inputs.segment }} $PRE_ID_COMMAND_STR -m "Publish v%s"
 
 
       # - name: Publish to NPM Registry

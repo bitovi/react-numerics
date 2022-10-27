@@ -1,6 +1,13 @@
 {
   "name": "react-numerics",
   "version": "1.0.0",
+  "main": "./dist/react-numerics.umd",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "libs/react-numerics/src",
+    "!libs/react-numerics/src/**/*.test.ts"
+  ],
   "keywords": [
     "react",
     "input",

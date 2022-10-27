@@ -5,6 +5,7 @@
 .rollup.cache/
 /tmp
 /out-tsc
+docs/
 
 # dependencies
 node_modules
@@ -34,7 +35,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-docs/
+
 # System Files
 .DS_Store
 Thumbs.db

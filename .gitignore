@@ -2,8 +2,10 @@
 
 # compiled output
 /dist
+.rollup.cache/
 /tmp
 /out-tsc
+/docs
 
 # dependencies
 node_modules

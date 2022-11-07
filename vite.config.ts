@@ -7,12 +7,12 @@ export default defineConfig({
   plugins: [react(), typescript()],
   test: {
       globals: true,
-      setupFiles: 'libs/react-numerics/jest.setup.ts',
+      setupFiles: './jest.setup.ts',
       environment: 'jsdom'
   },
   build: {
     lib: {
-      entry: resolve(__dirname, "libs/react-numerics/src/index.ts"),
+      entry: resolve(__dirname, "src/index.ts"),
       name: "react-numerics",
       // the proper extensions will be added
       fileName: "react-numerics",

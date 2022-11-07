@@ -1,5 +1,14 @@
 {
   "name": "react-numerics",
+  "main": "./dist/react-numerics.umd",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "./src/index.ts",
+    "!src/**/*.test.ts",
+    "!src/**/*.spec.ts",
+    "!src/**/*.stories.ts"
+  ],
   "version": "1.0.0",
   "keywords": [
     "react",
@@ -25,10 +34,10 @@
   "scripts": {
     "build": "tsc && vite build",
     "depcheck": "depcheck .",
-    "eslint": "eslint libs/react-numerics/src",
-    "prettier": "prettier --check libs/react-numerics/src",
+    "eslint": "eslint src",
+    "prettier": "prettier --check src",
     "serve": "vite preview",
-    "storybook": "start-storybook -s public -p 6006",
+    "storybook": "start-storybook 6006",
     "start": "vite",
     "test": "vitest",
     "typecheck": "tsc --noEmit"

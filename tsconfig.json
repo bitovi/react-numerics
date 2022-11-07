@@ -17,10 +17,13 @@
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
-  "include": ["@types", "./libs/react-numerics/src", "jsx" ,"tsx"],
-  "exclude": ["node_modules", "./libs/react-numerics/src/**/*.spec.ts"]
+  "include": ["@types", "./src", "jsx", "tsx"],
+  "exclude": [
+    "node_modules",
+    "./src/**/*.spec.ts",
+    "./src/**/*.test.ts",
+    "./src/**/*.stories.ts"
+  ]
 }
-
-

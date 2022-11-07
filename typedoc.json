@@ -1,9 +1,9 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
-    "libs/react-numerics/src/index.ts"
+    "src/index.ts"
   ],
-  "readme": "libs/react-numerics/README.md",
+  "readme": "README.md",
   "tsconfig": "./tsconfig.json",
   "out": "docs"
 }

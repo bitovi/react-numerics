@@ -5,7 +5,7 @@
 .rollup.cache/
 /tmp
 /out-tsc
-docs/
+/docs
 
 # dependencies
 node_modules

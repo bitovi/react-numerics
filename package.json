@@ -4,8 +4,9 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist/",
-    "libs/react-numerics/src",
-    "!libs/react-numerics/src/**/*.test.ts"
+    "./src",
+    "!src/**/*.test.ts",
+    "!src/**/*.stories.ts"
   ],
   "version": "1.0.0",
   "keywords": [
@@ -32,10 +33,10 @@
   "scripts": {
     "build": "tsc && vite build",
     "depcheck": "depcheck .",
-    "eslint": "eslint libs/react-numerics/src",
-    "prettier": "prettier --check libs/react-numerics/src",
+    "eslint": "eslint src",
+    "prettier": "prettier --check src",
     "serve": "vite preview",
-    "storybook": "start-storybook -s public -p 6006",
+    "storybook": "start-storybook 6006",
     "start": "vite",
     "test": "vitest",
     "typecheck": "tsc --noEmit"

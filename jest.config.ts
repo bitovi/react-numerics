@@ -6,6 +6,6 @@ export default {
     "^.+\\.[tj]sx?$": "babel-jest"
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../coverage/libs/react-numerics",
+  coverageDirectory: "./coverage",
   setupFilesAfterEnv: ["./jest.setup.ts"]
 };

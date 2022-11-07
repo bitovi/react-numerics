@@ -4,8 +4,9 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist/",
-    "./src",
+    "./src/index.ts",
     "!src/**/*.test.ts",
+    "!src/**/*.spec.ts",
     "!src/**/*.stories.ts"
   ],
   "version": "1.0.0",

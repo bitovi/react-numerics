@@ -5,19 +5,22 @@ formatted numbers such as currency or telephone numbers.
 
 ## Need help or have questions?
 
-This project is supported by [Bitovi, an end-to-end JavaScript consultancy](https://www.bitovi.com/frontend-javascript-consulting/react-consulting) specializing in React. You can get help or ask questions on our:
+This project is supported by [Bitovi, an end-to-end JavaScript
+consultancy](https://www.bitovi.com/frontend-javascript-consulting/react-consulting)
+specializing in React. You can get help or ask questions on our:
 
 - [Slack Community](https://www.bitovi.com/community/slack)
 - [Twitter](https://twitter.com/bitovi)
 
-Or, you can hire us for training, consulting, or development. [Set up a free consultation.](https://www.bitovi.com/frontend-javascript-consulting/react-consulting)
+Or, you can hire us for training, consulting, or development. [Set up a free
+consultation.](https://www.bitovi.com/frontend-javascript-consulting/react-consulting)
 
 
-## Install & Usage
+## Install & Use
 
 See the [@bitovi/react-numerics
-documentation](https://bitovi.github.io/react-numerics/) for details on
-installing and using the library.
+documentation](https://bitovi.github.io/react-numerics/) for details on using
+the library and the available React components.
 
 ## Publish
 
@@ -31,7 +34,7 @@ this file).
 - `cd` into the "dist/libs/react-numerics" directory.
 - Run `npm publish --access=public`.
 
-# We want to hear from you.
+## We want to hear from you.
 
 Come chat with us about open source in our community [Slack](https://www.bitovi.com/community/slack).
 

@@ -16,8 +16,10 @@ import { formatCurrency, padNumericFraction } from "../../formatters/formatters"
  *
  * Supported locales: U.S.
  *
- * @param props - Component props.<p>`locales` defaults to
- * "en-US".</p><p>`numericValue` must only contain digits.</p>
+ * @param props - <p><code>locales</code> defaults to
+ * "en-US".</p><p><code>numericValue</code> must only contain
+ * digits.</p><p><code>roundingMode</code> defaults to
+ * ROUND_HALF_UP</p><p><code>showFraction</code> defaults to true</p>
  */
 export function CurrencyNumberInput({
   numericValue,
@@ -89,18 +91,12 @@ export function CurrencyNumberInput({
 
 const paddingStages = { pending: -1, active: 0, complete: 1 }
 
+/**
+ * Props for components that display localized currency values.
+ */
 export interface CurrencyNumberInputProps
   extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean
-  inputMode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search"
 }

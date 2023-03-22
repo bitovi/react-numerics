@@ -156,10 +156,11 @@ export interface FormattedNumericInputProps extends FormattedInputProps {
   /** Formats the numeric string for display. */
   formatter?: Formatter
   /** A string containing a numeric representation. The string may only contain
-   * '-', digits 0-9, and '.'. If the string represents a number the integer and
-   * fractional parts of the number must be separated by a '.'. The length and
-   * valid subset of characters in the string will vary by implementation
-   * (restricted by the `filter` and `formatter`). */
+   * the '-' character (0x2D), digits 0-9, and '.' character (0x2E). If the
+   * string represents a number the integer and fractional parts of the number
+   * must be separated by a '.' character. The length and valid subset of
+   * characters in the string will vary by implementation (restricted by the
+   * `filter` and `formatter`). */
   numericValue: string
   /** Invoked when the numeric value of the input changes. In some cases the
    * display value will change, but the numeric value will not. */

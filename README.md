@@ -33,6 +33,6 @@ this file).
 
 # We want to hear from you.
 
-Come chat with us about open source in our community [Slack](https://www.bitovi.com/community/slack).
+Come chat with us about open source in our Bitovi community [Discord](https://discord.gg/J7ejFsZnJ4).
 
 See what we're up to by following us on [Twitter](https://twitter.com/bitovi).

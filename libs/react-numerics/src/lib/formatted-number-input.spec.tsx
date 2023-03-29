@@ -1,170 +1,170 @@
-import React from "react"
-import { render } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import BigNumber from "bignumber.js"
-import { FormattedNumberInput } from "./formatted-number-input"
-import { createFormattedNumberInputWrapper } from "./test/wrapper"
-import { vi } from "vitest"
+import React from "react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import BigNumber from "bignumber.js";
+import { FormattedNumberInput } from "./formatted-number-input";
+import { createFormattedNumberInputWrapper } from "./test/wrapper";
+
 describe("FormattedNumberInput: can pass up a ref to the input element", () => {
   it("inputRef works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={vi.fn()}
+        onNumericChange={jest.fn()}
         inputRef={myRef}
-      />,
-    )
+      />
+    );
 
     if (myRef.current instanceof HTMLInputElement) {
-      expect(myRef.current.value).toEqual("222")
+      expect(myRef.current.value).toEqual("222");
     } else {
       expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
     }
-  })
+  });
 
   it("inputMode is correct when unset", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={vi.fn()}
+        onNumericChange={jest.fn()}
         inputRef={myRef}
-      />,
-    )
+      />
+    );
 
     if (myRef.current instanceof HTMLInputElement) {
-      expect(myRef.current.inputMode).toEqual("")
-      expect(myRef.current.getAttribute("inputmode")).toEqual(null)
-      expect(myRef.current.hasAttribute("inputmode")).toEqual(false)
+      expect(myRef.current.inputMode).toEqual("");
+      expect(myRef.current.getAttribute("inputmode")).toEqual(null);
+      expect(myRef.current.hasAttribute("inputmode")).toEqual(false);
     } else {
       expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
     }
-  })
+  });
 
   it("inputMode works", () => {
     const myRef = React.createRef<HTMLInputElement>()
     render(
       <FormattedNumberInput
         numericValue="222"
-        onNumericChange={vi.fn()}
+        onNumericChange={jest.fn()}
         inputRef={myRef}
         inputMode="search"
-      />,
-    )
+      />
+    );
 
     if (myRef.current instanceof HTMLInputElement) {
-      expect(myRef.current.inputMode).toEqual("search")
+      expect(myRef.current.inputMode).toEqual("search");
     } else {
       expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
     }
-  })
-})
+  });
+});
 
 describe("FormattedNumberInput: initial value", () => {
   it("default integer value", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="123"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("123")
+    getByDisplayValue("123");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("groups a large value", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="987654321.0001"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("987,654,321.0001")
+    getByDisplayValue("987,654,321.0001");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("default float value", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="3.14"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("3.14")
+    getByDisplayValue("3.14");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("truncated float value -> down", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
         numericValue="1.01"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("1.0")
+    getByDisplayValue("1.0");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("truncated float value; no roundingMode", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
         numericValue="10.09"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("10.1")
+    getByDisplayValue("10.1");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("truncated float value; round half up -> down", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
         numericValue="2.04"
         onNumericChange={handleNumericChange}
         roundingMode={BigNumber.ROUND_HALF_UP}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("2.0")
+    getByDisplayValue("2.0");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("truncated float value; round half up -> up", () => {
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         decimalPlaces={1}
         numericValue="3.06"
         onNumericChange={handleNumericChange}
         roundingMode={BigNumber.ROUND_HALF_UP}
-      />,
-    )
+      />
+    );
 
-    getByDisplayValue("3.1")
+    getByDisplayValue("3.1");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-  })
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+  });
 
   it("throws if the max value is less than the min value", () => {
     expect(() => {
@@ -173,65 +173,65 @@ describe("FormattedNumberInput: initial value", () => {
           max={1}
           min={2}
           numericValue="100"
-          onNumericChange={vi.fn()}
+          onNumericChange={jest.fn()}
           placeholder="TEST"
-        />,
-      )
+        />
+      );
     }).toThrowError(
-      "formatNumberString: Max value (1) is less than min value (2).",
-    )
-  })
-})
+      "formatNumberString: Max value (1) is less than min value (2)."
+    );
+  });
+});
 
 describe("FormattedNumberInput: enter value", () => {
   it("replaces value on type", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="999"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    const elem = getByDisplayValue("999") as HTMLInputElement
+    const elem = getByDisplayValue("999") as HTMLInputElement;
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
 
-    const position = 0
-    elem.setSelectionRange(position, position)
-    await user.type(elem, "1", { initialSelectionStart: position })
+    const position = 0;
+    elem.setSelectionRange(position, position);
+    await user.type(elem, "1", { initialSelectionStart: position });
 
-    expect(handleNumericChange).toHaveBeenCalledWith("1")
-  })
+    expect(handleNumericChange).toHaveBeenCalledWith("1");
+  });
 
   it("replaces mid value on type", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="54321"
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    const elem = getByDisplayValue("54,321") as HTMLInputElement
+    const elem = getByDisplayValue("54,321") as HTMLInputElement;
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
 
-    const position = 2
-    elem.setSelectionRange(position, position)
-    await user.type(elem, "0", { initialSelectionStart: position })
+    const position = 2;
+    elem.setSelectionRange(position, position);
+    await user.type(elem, "0", { initialSelectionStart: position });
 
-    expect(handleNumericChange).toHaveBeenCalledWith("540")
-  })
+    expect(handleNumericChange).toHaveBeenCalledWith("540");
+  });
 
   it("allows a typed '-' when the min is not set", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -239,27 +239,27 @@ describe("FormattedNumberInput: enter value", () => {
         onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper() },
-    )
+      { wrapper: createFormattedNumberInputWrapper() }
+    );
 
-    const elem = getByPlaceholderText("TEST") as HTMLInputElement
-    expect(elem).toBeInTheDocument()
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-    expect(elem).toHaveDisplayValue("")
+    const elem = getByPlaceholderText("TEST") as HTMLInputElement;
+    expect(elem).toBeInTheDocument();
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(elem).toHaveDisplayValue("");
 
-    await user.type(elem, "-")
-    expect(handleNumericChange).toHaveBeenCalledWith("-")
-    expect(elem).toHaveDisplayValue("-")
+    await user.type(elem, "-");
+    expect(handleNumericChange).toHaveBeenCalledWith("-");
+    expect(elem).toHaveDisplayValue("-");
 
-    await user.type(elem, "135")
-    expect(handleNumericChange).toHaveBeenLastCalledWith("-135")
-    expect(elem).toHaveDisplayValue("-135")
-  })
+    await user.type(elem, "135");
+    expect(handleNumericChange).toHaveBeenLastCalledWith("-135");
+    expect(elem).toHaveDisplayValue("-135");
+  });
 
   it("allows a typed '-' when the min is less than 0", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -268,27 +268,27 @@ describe("FormattedNumberInput: enter value", () => {
         onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper() },
-    )
+      { wrapper: createFormattedNumberInputWrapper() }
+    );
 
-    const elem = getByPlaceholderText("TEST") as HTMLInputElement
-    expect(elem).toBeInTheDocument()
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-    expect(elem).toHaveDisplayValue("")
+    const elem = getByPlaceholderText("TEST") as HTMLInputElement;
+    expect(elem).toBeInTheDocument();
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(elem).toHaveDisplayValue("");
 
-    await user.type(elem, "-")
-    expect(handleNumericChange).toHaveBeenCalledWith("-")
-    expect(elem).toHaveDisplayValue("-")
+    await user.type(elem, "-");
+    expect(handleNumericChange).toHaveBeenCalledWith("-");
+    expect(elem).toHaveDisplayValue("-");
 
-    await user.type(elem, "0.1")
-    expect(handleNumericChange).toHaveBeenLastCalledWith("-0.1")
-    expect(elem).toHaveDisplayValue("-0.1")
-  })
+    await user.type(elem, "0.1");
+    expect(handleNumericChange).toHaveBeenLastCalledWith("-0.1");
+    expect(elem).toHaveDisplayValue("-0.1");
+  });
 
   it("ignores a typed '-' when the min is greater than or equal to 0", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
 
     const { getByPlaceholderText } = render(
       <FormattedNumberInput
@@ -297,47 +297,47 @@ describe("FormattedNumberInput: enter value", () => {
         onNumericChange={handleNumericChange}
         placeholder="TEST"
       />,
-      { wrapper: createFormattedNumberInputWrapper() },
-    )
+      { wrapper: createFormattedNumberInputWrapper() }
+    );
 
-    const elem = getByPlaceholderText("TEST") as HTMLInputElement
-    expect(elem).toBeInTheDocument()
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-    expect(elem).toHaveDisplayValue("")
+    const elem = getByPlaceholderText("TEST") as HTMLInputElement;
+    expect(elem).toBeInTheDocument();
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(elem).toHaveDisplayValue("");
 
-    await user.type(elem, "-")
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-    expect(elem).toHaveDisplayValue("")
+    await user.type(elem, "-");
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(elem).toHaveDisplayValue("");
 
-    await user.type(elem, "3")
-    expect(handleNumericChange).toHaveBeenCalledWith("3")
-    expect(elem).toHaveDisplayValue("3")
-  })
-})
+    await user.type(elem, "3");
+    expect(handleNumericChange).toHaveBeenCalledWith("3");
+    expect(elem).toHaveDisplayValue("3");
+  });
+});
 
 describe("FormattedNumberInput: format onBlur", () => {
   it("removes trailing decimal", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
 
-    const handleNumericChange = vi.fn()
+    const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
       <FormattedNumberInput
         numericValue="0."
         onNumericChange={handleNumericChange}
-      />,
-    )
+      />
+    );
 
-    const elem = getByDisplayValue("0.", { exact: true }) as HTMLInputElement
-    expect(elem).toBeInTheDocument()
+    const elem = getByDisplayValue("0.", { exact: true }) as HTMLInputElement;
+    expect(elem).toBeInTheDocument();
 
-    elem.focus()
-    expect(elem).toHaveFocus()
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
+    elem.focus();
+    expect(elem).toHaveFocus();
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
 
-    await user.tab()
+    await user.tab();
 
-    expect(elem).not.toHaveFocus()
-    expect(handleNumericChange).toHaveBeenCalledTimes(0)
-    expect(elem).toHaveDisplayValue("0")
-  })
-})
+    expect(elem).not.toHaveFocus();
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(elem).toHaveDisplayValue("0");
+  });
+});

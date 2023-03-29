@@ -1,10 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import BigNumber from "bignumber.js"
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import BigNumber from "bignumber.js";
 import {
   FormattedNumberInput,
-  FormattedNumberInputProps,
-} from "../../formatted-number-input"
-import { formatCurrency, padNumericFraction } from "../../formatters/formatters"
+  FormattedNumberInputProps
+} from "../../formatted-number-input";
+import {
+  formatCurrency,
+  padNumericFraction
+} from "../../formatters/formatters";
 
 /**
  * Allow the user to enter a currency value. Currency format and display are
@@ -28,52 +31,48 @@ export function CurrencyNumberInput({
   locales,
   inputMode = "decimal",
   ...props
-}: CurrencyNumberInputProps): JSX.Element {
+}: CurrencyNumberInputProps) {
   const [paddingStage, setPaddingStage] = useState<
     typeof paddingStages[keyof typeof paddingStages]
-  >(paddingStages.pending)
+  >(paddingStages.pending);
 
   useEffect(() => {
     if (paddingStage === paddingStages.pending) {
       if (typeof numericValue === "string") {
-        setPaddingStage(paddingStages.active)
+        setPaddingStage(paddingStages.active);
         onNumericChange &&
           onNumericChange(
-            padNumericFraction(locales, numericValue, {
-              decimalSeparator: ".",
-            }),
-          )
+            padNumericFraction(locales, numericValue, { decimalSeparator: "." })
+          );
       }
     } else if (paddingStage === paddingStages.active) {
-      setPaddingStage(paddingStages.complete)
+      setPaddingStage(paddingStages.complete);
     }
-  }, [locales, numericValue, onNumericChange, paddingStage])
+  }, [locales, numericValue, onNumericChange, paddingStage]);
 
   const formatter = useMemo(() => {
     return formatCurrency(locales, {
       showFraction,
-      roundingMode,
-    })
-  }, [locales, roundingMode, showFraction])
+      roundingMode
+    });
+  }, [locales, roundingMode, showFraction]);
 
   const handleBlur = useCallback(
     (evt: React.FocusEvent<HTMLInputElement>) => {
       if (showFraction) {
         onNumericChange &&
           onNumericChange(
-            padNumericFraction(locales, numericValue, {
-              decimalSeparator: ".",
-            }),
-          )
+            padNumericFraction(locales, numericValue, { decimalSeparator: "." })
+          );
       }
 
-      onBlur && onBlur(evt)
+      onBlur && onBlur(evt);
     },
-    [locales, numericValue, onBlur, onNumericChange, showFraction],
-  )
+    [locales, numericValue, onBlur, onNumericChange, showFraction]
+  );
 
   const nextNumericValue =
-    paddingStage !== paddingStages.complete ? "" : numericValue
+    paddingStage !== paddingStages.complete ? "" : numericValue;
 
   return (
     <FormattedNumberInput
@@ -84,16 +83,16 @@ export function CurrencyNumberInput({
       onNumericChange={onNumericChange}
       inputMode={inputMode}
     />
-  )
+  );
 }
 
-const paddingStages = { pending: -1, active: 0, complete: 1 }
+const paddingStages = { pending: -1, active: 0, complete: 1 };
 
 export interface CurrencyNumberInputProps
   extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
-  showFraction?: boolean
+  showFraction?: boolean;
   inputMode?:
     | "none"
     | "text"
@@ -102,5 +101,5 @@ export interface CurrencyNumberInputProps
     | "email"
     | "numeric"
     | "decimal"
-    | "search"
+    | "search";
 }

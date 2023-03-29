@@ -1,9 +1,9 @@
 import {
   FormattedNumericInput,
-  FormattedNumericInputProps,
-} from "../../formatted-numeric-input"
-import { filterToNumeric } from "../../filters/filters"
-import { formatEmployerIdentificationNumber } from "../../formatters/formatters"
+  FormattedNumericInputProps
+} from "../../formatted-numeric-input";
+import { filterToNumeric } from "../../filters/filters";
+import { formatEmployerIdentificationNumber } from "../../formatters/formatters";
 
 /**
  * Display a formatted U.S. Employer Identification Number. For example:
@@ -14,7 +14,7 @@ import { formatEmployerIdentificationNumber } from "../../formatters/formatters"
 export function EmployerIdentificationNumberInput({
   inputMode = "numeric",
   ...props
-}: EmployerIdentificationNumberInputProps): JSX.Element {
+}: EmployerIdentificationNumberInputProps) {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
@@ -22,7 +22,7 @@ export function EmployerIdentificationNumberInput({
       inputMode={inputMode}
       {...props}
     />
-  )
+  );
 }
 
 export interface EmployerIdentificationNumberInputProps
@@ -38,5 +38,5 @@ export interface EmployerIdentificationNumberInputProps
     | "email"
     | "numeric"
     | "decimal"
-    | "search"
+    | "search";
 }

@@ -4,6 +4,6 @@
     "libs/react-numerics/src/index.ts"
   ],
   "readme": "libs/react-numerics/README.md",
-  "tsconfig": "./tsconfig.json",
+  "tsconfig": "libs/react-numerics/tsconfig.lib.json",
   "out": "docs"
 }

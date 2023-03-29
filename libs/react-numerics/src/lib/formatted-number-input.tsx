@@ -1,11 +1,11 @@
-import { useMemo } from "react"
-import { convertNumber } from "./converters/converters"
+import { useMemo } from "react";
+import { convertNumber } from "./converters/converters";
 import {
   FormattedNumericInput,
-  FormattedNumericInputProps,
-} from "./formatted-numeric-input"
-import { filterToSignedFloat } from "./filters/filters"
-import { formatFloat, FormatterFactory } from "./formatters/formatters"
+  FormattedNumericInputProps
+} from "./formatted-numeric-input";
+import { filterToSignedFloat } from "./filters/filters";
+import { formatFloat, FormatterFactory } from "./formatters/formatters";
 
 /**
  * Create a formatted number. Generally this is not used directly in an
@@ -31,14 +31,14 @@ export function FormattedNumberInput({
   onNumericChange,
   roundingMode,
   ...props
-}: FormattedNumberInputProps): JSX.Element {
-  const converter = useMemo(() => convertNumber(locales), [locales])
+}: FormattedNumberInputProps) {
+  const converter = useMemo(() => convertNumber(locales), [locales]);
   const formatter = useMemo(
     () =>
       formatterProp ??
       formatFloat(locales, { decimalPlaces, max, min, roundingMode }),
-    [decimalPlaces, formatterProp, locales, max, min, roundingMode],
-  )
+    [decimalPlaces, formatterProp, locales, max, min, roundingMode]
+  );
 
   return (
     <FormattedNumericInput
@@ -49,18 +49,20 @@ export function FormattedNumberInput({
       onNumericChange={onNumericChange}
       {...props}
     />
-  )
+  );
 }
 
-type FormatFloatSecondParameter = NonNullable<Parameters<typeof formatFloat>[1]>
+type FormatFloatSecondParameter = NonNullable<
+  Parameters<typeof formatFloat>[1]
+>;
 
 export interface FormattedNumberInputProps
   extends Omit<FormattedNumericInputProps, "converter" | "filter"> {
   /** The number of places to return in the formatted value. */
-  decimalPlaces?: FormatFloatSecondParameter["decimalPlaces"]
+  decimalPlaces?: FormatFloatSecondParameter["decimalPlaces"];
   /** The locales to use when the Formatter is invoked. */
-  locales?: Parameters<FormatterFactory>[0]
+  locales?: Parameters<FormatterFactory>[0];
   /** How a number with more precision than the allowed decimal places should be
    * rounded. */
-  roundingMode?: FormatFloatSecondParameter["roundingMode"]
+  roundingMode?: FormatFloatSecondParameter["roundingMode"];
 }

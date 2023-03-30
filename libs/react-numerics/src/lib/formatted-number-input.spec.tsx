@@ -7,7 +7,7 @@ import { createFormattedNumberInputWrapper } from "./test/wrapper";
 
 describe("FormattedNumberInput: can pass up a ref to the input element", () => {
   it("inputRef works", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <FormattedNumberInput
         numericValue="222"
@@ -19,12 +19,12 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
     if (myRef.current instanceof HTMLInputElement) {
       expect(myRef.current.value).toEqual("222");
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 
   it("inputMode is correct when unset", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <FormattedNumberInput
         numericValue="222"
@@ -38,12 +38,12 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
       expect(myRef.current.getAttribute("inputmode")).toEqual(null);
       expect(myRef.current.hasAttribute("inputmode")).toEqual(false);
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 
   it("inputMode works", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <FormattedNumberInput
         numericValue="222"
@@ -56,7 +56,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
     if (myRef.current instanceof HTMLInputElement) {
       expect(myRef.current.inputMode).toEqual("search");
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 });
@@ -167,6 +167,9 @@ describe("FormattedNumberInput: initial value", () => {
   });
 
   it("throws if the max value is less than the min value", () => {
+    console.log(
+      `------ The FOLLOWING error is expected and part of a test in formatted-number-input.spec.tsx ------\n------ [Error: formatNumberString: Max value (1) is less than min value (2). ----------------------`
+    );
     expect(() => {
       render(
         <FormattedNumberInput
@@ -179,6 +182,10 @@ describe("FormattedNumberInput: initial value", () => {
       );
     }).toThrowError(
       "formatNumberString: Max value (1) is less than min value (2)."
+    );
+
+    console.log(
+      `------ The PREVIOUS error is expected and part of a test in formatted-number-input.spec.tsx -------\n------ [Error: formatNumberString: Max value (1) is less than min value (2). ----------------------`
     );
   });
 });

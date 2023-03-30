@@ -22,18 +22,24 @@ import {
  * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` must only contain digits.</p>
  */
-export function CurrencyNumberInput({
-  numericValue,
-  onBlur,
-  onNumericChange,
-  roundingMode = BigNumber.ROUND_HALF_UP,
-  showFraction = true,
-  locales,
-  inputMode = "decimal",
-  ...props
-}: CurrencyNumberInputProps) {
+export const CurrencyNumberInput = React.forwardRef<
+  HTMLInputElement,
+  CurrencyNumberInputProps
+>(function CurrencyNumberInputImpl(
+  {
+    numericValue,
+    onBlur,
+    onNumericChange,
+    roundingMode = BigNumber.ROUND_HALF_UP,
+    showFraction = true,
+    locales,
+    inputMode = "decimal",
+    ...props
+  },
+  ref
+) {
   const [paddingStage, setPaddingStage] = useState<
-    typeof paddingStages[keyof typeof paddingStages]
+    (typeof paddingStages)[keyof typeof paddingStages]
   >(paddingStages.pending);
 
   useEffect(() => {
@@ -78,13 +84,14 @@ export function CurrencyNumberInput({
     <FormattedNumberInput
       {...props}
       formatter={formatter}
+      inputMode={inputMode}
       numericValue={nextNumericValue}
       onBlur={handleBlur}
       onNumericChange={onNumericChange}
-      inputMode={inputMode}
+      ref={ref}
     />
   );
-}
+});
 
 const paddingStages = { pending: -1, active: 0, complete: 1 };
 
@@ -93,13 +100,4 @@ export interface CurrencyNumberInputProps
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean;
-  inputMode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search";
 }

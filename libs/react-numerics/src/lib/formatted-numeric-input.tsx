@@ -24,16 +24,22 @@ import {
  * "3,15".
  * @param props Props for this component.
  */
-export function FormattedNumericInput({
-  converter = v => v,
-  filter = v => v,
-  formatter = (v: string) => v,
-  onBlur,
-  onNumericChange,
-  numericValue,
-  ...props
-}: FormattedNumericInputProps) {
-  // console.log(`FormattedNumericInput: numericValue='${numericValue}'`);
+export const FormattedNumericInput = React.forwardRef<
+  HTMLInputElement,
+  FormattedNumericInputProps
+>(function FormattedNumericInputImpl(
+  {
+    converter = v => v,
+    filter = v => v,
+    formatter = (v: string) => v,
+    onBlur,
+    onNumericChange,
+    numericValue,
+    ...props
+  },
+  ref
+) {
+  // console.log(`FormattedNumericInputImpl: numericValue='${numericValue}'`);
 
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */
@@ -49,7 +55,7 @@ export function FormattedNumericInput({
 
     setDisplayValue(current => {
       // console.log(
-      //   `FormattedNumericInput setDisplayValue: current='${current}', numericValue='${numericValue}'`
+      //   `FormattedNumericInputImpl setDisplayValue: current='${current}', numericValue='${numericValue}'`
       // );
       const filtered = filter(numericValue);
       const formatted = formatter(filtered, current, {
@@ -77,7 +83,7 @@ export function FormattedNumericInput({
   const handleChange: FormattedInputPropsImported["onChange"] = useCallback(
     (value, changeType) => {
       // console.log(
-      //   `FormattedNumericInput handleChange: value='${value}', changeType=${changeType}`
+      //   `FormattedNumericInputImpl handleChange: value='${value}', changeType=${changeType}`
       // );
 
       // Value will have the format of the current locale. Before processing the
@@ -108,7 +114,7 @@ export function FormattedNumericInput({
       );
 
       // console.log(
-      //   `FormattedNumericInput handleChange: numericValue='${numericValue}', nextNumeric=${nextNumeric}`
+      //   `FormattedNumericInputImpl handleChange: numericValue='${numericValue}', nextNumeric=${nextNumeric}`
       // );
       if (numericValue !== nextNumeric) {
         onNumericChange && onNumericChange(nextNumeric);
@@ -123,7 +129,7 @@ export function FormattedNumericInput({
     evt => {
       userKeyedNumeric.current = true;
 
-      // console.log(`FormattedNumericInput handleKeyDown: evt.key=${evt.key}`);
+      // console.log(`FormattedNumericInputImpl handleKeyDown: evt.key=${evt.key}`);
 
       // If a modifier key is active do not filter the key (this is the case
       // when say doing "select all" or "copy").
@@ -143,7 +149,7 @@ export function FormattedNumericInput({
       }
 
       // console.log(
-      //   `FormattedNumericInput handleKeyDown: evt.key=${evt.key}, numericValue='${numericValue}'`
+      //   `FormattedNumericInputImpl handleKeyDown: evt.key=${evt.key}, numericValue='${numericValue}'`
       // );
 
       const filtered = filter(evt.key, numericValue);
@@ -155,7 +161,7 @@ export function FormattedNumericInput({
     [filter, numericValue]
   );
 
-  // console.log(`FormattedNumericInput: displayValue='${displayValue}'`);
+  // console.log(`FormattedNumericInputImpl: displayValue='${displayValue}'`);
 
   return (
     <FormattedInput
@@ -163,10 +169,11 @@ export function FormattedNumericInput({
       onBlur={handleBlur}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 type FormattedInputProps = Omit<
   FormattedInputPropsImported,

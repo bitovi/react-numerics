@@ -5,46 +5,46 @@ import { EmployerIdentificationNumberInput } from "./employer-identification-num
 
 describe("EmployerIdentificationNumberInput", () => {
   it("inputRef works", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <EmployerIdentificationNumberInput
         numericValue="222"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
       />
     );
 
     if (myRef.current instanceof HTMLInputElement) {
       expect(myRef.current.value).toEqual("22-2");
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 
   it("inputMode has correct default", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <EmployerIdentificationNumberInput
         numericValue="222.333"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
       />
     );
 
     if (myRef.current instanceof HTMLInputElement) {
       expect(myRef.current.inputMode).toEqual("numeric");
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 
   it("inputMode can be overwritten", () => {
-    const myRef = React.createRef<HTMLInputElement>()
+    const myRef = React.createRef<HTMLInputElement>();
     render(
       <EmployerIdentificationNumberInput
         numericValue="222.333"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
         inputMode="text"
       />
     );
@@ -52,7 +52,7 @@ describe("EmployerIdentificationNumberInput", () => {
     if (myRef.current instanceof HTMLInputElement) {
       expect(myRef.current.inputMode).toEqual("text");
     } else {
-      expect("it wasn't").toBe("myRef should have been an HTMLInputElement")
+      expect("it wasn't").toBe("myRef should have been an HTMLInputElement");
     }
   });
 

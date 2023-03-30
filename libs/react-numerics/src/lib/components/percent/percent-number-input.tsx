@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { formatPercent } from "../../formatters/formatters";
 import {
   FormattedNumberInput,
@@ -11,16 +11,22 @@ import {
  * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` allows: "-", digits 0-9, and ".".</p>
  */
-export function PercentNumberInput({
-  decimalPlaces,
-  onNumericChange,
-  roundingMode,
-  locales,
-  max,
-  min,
-  inputMode = "decimal",
-  ...props
-}: PercentNumberInputProps) {
+export const PercentNumberInput = React.forwardRef<
+  HTMLInputElement,
+  PercentNumberInputProps
+>(function PercentNumberInputImpl(
+  {
+    decimalPlaces,
+    onNumericChange,
+    roundingMode,
+    locales,
+    max,
+    min,
+    inputMode = "decimal",
+    ...props
+  },
+  ref
+) {
   const formatter = useMemo(() => {
     return formatPercent(locales, { decimalPlaces, max, min, roundingMode });
   }, [decimalPlaces, locales, max, min, roundingMode]);
@@ -30,20 +36,11 @@ export function PercentNumberInput({
       {...props}
       formatter={formatter}
       onNumericChange={onNumericChange}
+      ref={ref}
       inputMode={inputMode}
     />
   );
-}
+});
 
 export interface PercentNumberInputProps
-  extends Omit<FormattedNumberInputProps, "formatter"> {
-  inputMode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search";
-}
+  extends Omit<FormattedNumberInputProps, "formatter"> {}

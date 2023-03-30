@@ -12,7 +12,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
       <FormattedNumberInput
         numericValue="222"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
       />
     );
 
@@ -29,7 +29,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
       <FormattedNumberInput
         numericValue="222"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
       />
     );
 
@@ -48,7 +48,7 @@ describe("FormattedNumberInput: can pass up a ref to the input element", () => {
       <FormattedNumberInput
         numericValue="222"
         onNumericChange={jest.fn()}
-        inputRef={myRef}
+        ref={myRef}
         inputMode="search"
       />
     );

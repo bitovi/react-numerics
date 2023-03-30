@@ -1,3 +1,4 @@
+import React from "react";
 import {
   FormattedNumericInput,
   FormattedNumericInputProps
@@ -13,15 +14,20 @@ import { formatPostalCodeNumber } from "../../formatters/formatters";
  * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` must only contain digits.</p>
  */
-export function PostalCodeNumberInput(props: PostalCodeNumberInputProps) {
+export const PostalCodeNumberInput = React.forwardRef<
+  HTMLInputElement,
+  PostalCodeNumberInputProps
+>(function PostalCodeNumberInputImpl({ inputMode = "numeric", ...props }, ref) {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
       formatter={formatPostalCodeNumber}
+      inputMode={inputMode}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 export interface PostalCodeNumberInputProps
   extends Omit<

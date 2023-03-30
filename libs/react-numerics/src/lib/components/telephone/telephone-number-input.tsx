@@ -1,3 +1,4 @@
+import React from "react";
 import {
   FormattedNumericInput,
   FormattedNumericInputProps
@@ -16,20 +17,23 @@ import {
 * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` must only contain digits.</p>
  */
-export function TelephoneNumberInput({
-  locales,
-  inputMode = "tel",
-  ...props
-}: TelephoneNumberInputProps) {
+export const TelephoneNumberInput = React.forwardRef<
+  HTMLInputElement,
+  TelephoneNumberInputProps
+>(function TelephoneNumberInputImpl(
+  { locales, inputMode = "tel", ...props },
+  ref
+) {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
       formatter={formatTelephoneNumber(locales)}
       inputMode={inputMode}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 /**
  * Implemented by a component that renders a telephone number.
@@ -41,13 +45,4 @@ export interface TelephoneNumberInputProps
   > {
   /** The locales to use when the Formatter is invoked. */
   locales?: Parameters<FormatterFactory>[0];
-  inputMode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search";
 }

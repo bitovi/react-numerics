@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { convertNumber } from "./converters/converters";
 import {
   FormattedNumericInput,
@@ -21,17 +21,23 @@ import { formatFloat, FormatterFactory } from "./formatters/formatters";
  * @param props - Component props.<p>`locales` defaults to
  * "en-US".</p><p>`numericValue` allows: "-", digits 0-9, and ".".</p>
  */
-export function FormattedNumberInput({
-  decimalPlaces,
-  formatter: formatterProp,
-  locales,
-  min,
-  max,
-  numericValue,
-  onNumericChange,
-  roundingMode,
-  ...props
-}: FormattedNumberInputProps) {
+export const FormattedNumberInput = React.forwardRef<
+  HTMLInputElement,
+  FormattedNumberInputProps
+>(function FormattedNumberInputImpl(
+  {
+    decimalPlaces,
+    formatter: formatterProp,
+    locales,
+    min,
+    max,
+    numericValue,
+    onNumericChange,
+    roundingMode,
+    ...props
+  },
+  ref
+) {
   const converter = useMemo(() => convertNumber(locales), [locales]);
   const formatter = useMemo(
     () =>
@@ -47,10 +53,11 @@ export function FormattedNumberInput({
       formatter={formatter}
       numericValue={numericValue}
       onNumericChange={onNumericChange}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 type FormatFloatSecondParameter = NonNullable<
   Parameters<typeof formatFloat>[1]

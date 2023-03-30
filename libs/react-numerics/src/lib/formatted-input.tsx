@@ -7,14 +7,13 @@ import { ChangeType } from "./types";
  * change.
  * @param props
  */
-export function FormattedInput({
-  formattedValue,
-  onChange,
-  onKeyDown,
-  inputRef,
-  inputMode,
-  ...props
-}: FormattedInputProps) {
+export const FormattedInput = React.forwardRef<
+  HTMLInputElement,
+  FormattedInputProps
+>(function FormattedInputImpl(
+  { formattedValue, onChange, onKeyDown, ...props },
+  ref
+) {
   const key = useRef<string | null>(null);
 
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
@@ -44,14 +43,13 @@ export function FormattedInput({
   return (
     <input
       {...props}
-      ref={inputRef}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      ref={ref}
       value={formattedValue}
-      inputMode={inputMode}
     />
   );
-}
+});
 
 export interface FormattedInputProps
   extends Omit<
@@ -59,7 +57,7 @@ export interface FormattedInputProps
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >,
-    "onChange" | "value"
+    "onChange" | "ref" | "value"
   > {
   /** The formatted value to display. */
   formattedValue: string;
@@ -67,8 +65,4 @@ export interface FormattedInputProps
   onChange: (value: string, changeType: ChangeType) => void;
   /** Pass a handler to be notified of key down events. */
   onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
-  /** Pass a reference back up to the underlying input element */
-  inputRef?: React.RefObject<HTMLInputElement>;
-  /** Change the input element's inputmode */
-  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
 }

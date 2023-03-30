@@ -1,3 +1,4 @@
+import React from "react";
 import {
   FormattedNumericInput,
   FormattedNumericInputProps
@@ -11,32 +12,26 @@ import { formatSocialSecurityNumber } from "../../formatters/formatters";
  * @param props - Component props.<p>`numericValue` must only contain
  * digits.</p>
  */
-export function SocialSecurityNumberInput({
-  inputMode = "numeric",
-  ...props
-}: SocialSecurityNumberInputProps) {
+export const SocialSecurityNumberInput = React.forwardRef<
+  HTMLInputElement,
+  SocialSecurityNumberInputProps
+>(function SocialSecurityNumberInputImpl(
+  { inputMode = "numeric", ...props },
+  ref
+) {
   return (
     <FormattedNumericInput
       filter={filterToNumeric}
       formatter={formatSocialSecurityNumber}
       inputMode={inputMode}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 export interface SocialSecurityNumberInputProps
   extends Omit<
     FormattedNumericInputProps,
     "converter" | "filter" | "formatter"
-  > {
-  inputMode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search";
-}
+  > {}

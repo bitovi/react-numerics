@@ -405,7 +405,7 @@ export interface FormatNumberStringOptions {
 }
 
 /** The context under which the formatter was invoked. */
-interface FormatterContext {
+export interface FormatterContext {
   /** The name commonly used to refer to the specific event. */
   type?: "blur" | "change";
   /** True if the user typed a key to make the change. */

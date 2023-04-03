@@ -3,6 +3,7 @@ import { act } from "@testing-library/react";
 import { FormattedNumberInput } from "../formatted-number-input";
 
 /**
+ * @deprecated Use `<Stateful>`.
  * Create a Wrapper component that maintains the `numericValue` and provides it
  * to the component that is being tested.
  * @param initialNumericValue The initial value for the input, defaults to an

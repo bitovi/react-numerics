@@ -224,12 +224,7 @@ describe("EmployerIdentificationNumberInput", () => {
   });
 
   it("rejects a string that is too long", async () => {
-    let resolver: (value: void | PromiseLike<void>) => void;
-    const waitForNumericChange = new Promise<void>(resolve => {
-      resolver = resolve;
-    });
-
-    const handleNumericChange = jest.fn(() => resolver());
+    const handleNumericChange = jest.fn();
 
     // onNumericChange invoked because the initial numericValue prop value is
     // "5432109876" which is too long for an EIN.
@@ -241,10 +236,7 @@ describe("EmployerIdentificationNumberInput", () => {
       />
     );
 
-    // Wait for the first handleNumericChange invocation (which happens
-    // asynchronously) before continuing.
-    await waitForNumericChange;
-
-    expect(handleNumericChange).toBeCalledWith("543210987");
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("543210987");
   });
 });

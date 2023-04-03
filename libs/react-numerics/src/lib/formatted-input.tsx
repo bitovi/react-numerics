@@ -19,14 +19,17 @@ export const FormattedInput = React.forwardRef<
   function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
     const { selectionEnd, value } = evt.target;
 
-    const valueChangeType =
-      key.current === "Backspace"
-        ? "backspace"
-        : key.current === "Delete" || key.current === "Del"
-        ? "delete"
-        : (selectionEnd ?? value.length) < value.length
-        ? "replace"
-        : "add";
+    // What type of change happened?
+    let valueChangeType: ChangeType = "add";
+    if (key.current === "Backspace") {
+      valueChangeType = "backspace";
+    } else if (key.current === "Delete" || key.current === "Del") {
+      valueChangeType = "delete";
+    }
+
+    if ((selectionEnd ?? value.length) < value.length) {
+      valueChangeType = "replace";
+    }
 
     // Truncate the value to the selection end.
     const truncValue = value.substring(0, selectionEnd ?? value.length);

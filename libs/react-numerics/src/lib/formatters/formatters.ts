@@ -22,8 +22,15 @@ export const formatCurrency: CurrencyFormatterFactory =
 
     const { fractionLength, symbol } = getCurrencyData(locale);
 
+    let unsignedNumber = number;
+    let sign = "";
+    if (numberStartsWithSign(number)) {
+      sign = number.slice(0, 1);
+      unsignedNumber = number.slice(1);
+    }
+
     let value = formatNumberString(
-      number,
+      unsignedNumber,
       {
         decimalPlaces: showFraction ? fractionLength : 0,
         locales,
@@ -44,7 +51,7 @@ export const formatCurrency: CurrencyFormatterFactory =
       });
     }
 
-    return `${value ? symbol : ""}${value}`;
+    return `${sign}${value ? symbol : ""}${value}`;
   };
 
 /**

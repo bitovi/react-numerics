@@ -116,7 +116,8 @@ describe("FormattedNumberInput: initial value", () => {
 
     getByDisplayValue("1.0");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("1.0");
   });
 
   it("truncated float value; no roundingMode", () => {
@@ -131,7 +132,8 @@ describe("FormattedNumberInput: initial value", () => {
 
     getByDisplayValue("10.1");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("10.1");
   });
 
   it("truncated float value; round half up -> down", () => {
@@ -147,7 +149,8 @@ describe("FormattedNumberInput: initial value", () => {
 
     getByDisplayValue("2.0");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("2.0");
   });
 
   it("truncated float value; round half up -> up", () => {
@@ -163,7 +166,8 @@ describe("FormattedNumberInput: initial value", () => {
 
     getByDisplayValue("3.1");
 
-    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("3.1");
   });
 
   it("throws if the max value is less than the min value", () => {
@@ -319,6 +323,37 @@ describe("FormattedNumberInput: enter value", () => {
     await user.type(elem, "3");
     expect(handleNumericChange).toHaveBeenCalledWith("3");
     expect(elem).toHaveDisplayValue("3");
+  });
+});
+
+describe("FormattedNumberInput: removing characters", () => {
+  it("backspaces a floating point number", async () => {
+    const user = userEvent.setup();
+
+    const handleNumericChange = jest.fn();
+    const { getByDisplayValue } = render(
+      <FormattedNumberInput
+        numericValue="54.3"
+        onNumericChange={handleNumericChange}
+      />
+    );
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+
+    const elem = getByDisplayValue("54.3") as HTMLInputElement;
+    await user.type(elem, "{Backspace}");
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("54.");
+
+    expect(getByDisplayValue("54.")).toBeInTheDocument();
+
+    await user.type(elem, "{Backspace}");
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(2);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("54");
+
+    expect(getByDisplayValue("54")).toBeInTheDocument();
   });
 });
 

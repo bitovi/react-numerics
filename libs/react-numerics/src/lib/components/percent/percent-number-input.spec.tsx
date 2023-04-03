@@ -1,8 +1,9 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PercentNumberInput } from "./percent-number-input";
 import { createFormattedNumberInputWrapper } from "../../test/wrapper";
+import { Stateful } from "../../test/stateful";
 
 describe("PercentNumberInput", () => {
   it("inputRef works", () => {
@@ -202,40 +203,31 @@ describe("PercentNumberInput", () => {
 
   it("does not allow a negative when the min is 0 or greater", async () => {
     const user = userEvent.setup();
-
-    let resolver: (value: void | PromiseLike<void>) => void;
-    const waitForNumericChange = new Promise<void>(resolve => {
-      resolver = resolve;
-    });
-
-    const handleNumericChange = jest.fn(() => resolver());
-
-    const { getAllByPlaceholderText } = render(
-      <PercentNumberInput
+    const handleNumericChange = jest.fn();
+    render(
+      <Stateful
         min={0}
-        numericValue=""
+        numericValue="-23"
         onNumericChange={handleNumericChange}
         placeholder="TEST"
-      />,
-      {
-        wrapper: createFormattedNumberInputWrapper("-23")
-      }
+        renderChild={props => <PercentNumberInput {...props} />}
+      />
     );
 
-    // Wait for the first handleNumericChange invocation (which happens
-    // asynchronously) before continuing.
-    await waitForNumericChange;
-
-    const elem = (getAllByPlaceholderText("TEST") as HTMLInputElement[])[0];
+    const elem = (
+      screen.getAllByPlaceholderText("TEST") as HTMLInputElement[]
+    )[0];
 
     expect(elem).toBeInTheDocument();
-    expect(handleNumericChange).toHaveBeenCalledWith("");
-    expect(elem).toHaveDisplayValue("");
+    expect(elem).toHaveValue("");
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
 
     elem.focus();
     expect(elem).toHaveFocus();
 
     await user.type(elem, "0");
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
     expect(handleNumericChange).toHaveBeenLastCalledWith("0");
     expect(elem).toHaveValue("0");
   });

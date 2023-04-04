@@ -31,8 +31,6 @@ export const FormattedNumberInput = React.forwardRef<
     locales,
     min,
     max,
-    numericValue,
-    onNumericChange,
     roundingMode,
     ...props
   },
@@ -51,8 +49,6 @@ export const FormattedNumberInput = React.forwardRef<
       converter={converter}
       filter={filterToSignedFloat}
       formatter={formatter}
-      numericValue={numericValue}
-      onNumericChange={onNumericChange}
       ref={ref}
       {...props}
     />

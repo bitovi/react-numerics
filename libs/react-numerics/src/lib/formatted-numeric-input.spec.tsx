@@ -129,4 +129,93 @@ describe("FormattedNumericInput", () => {
     expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
     expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
   });
+
+  it("cleared field sets to 0 on blur", async () => {
+    const userEvent = userEvents.setup();
+    const mockHandleNumericChange = jest.fn();
+    const mockHandleBlur = jest.fn(async (evt, setNumericValue) =>
+      setNumericValue("0")
+    );
+
+    render(
+      <Stateful
+        filter={filterToSignedFloat}
+        formatter={formatCurrency("en-US")}
+        numericValue="0"
+        onBlur={mockHandleBlur}
+        onNumericChange={mockHandleNumericChange}
+        renderChild={props => <FormattedNumericInput {...props} />}
+      />
+    );
+
+    const input = screen.getByDisplayValue("$0");
+    expect(input).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(0);
+
+    await userEvent.clear(input);
+
+    const inputAfterClear = screen.getByDisplayValue("");
+    expect(inputAfterClear).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+
+    inputAfterClear.blur();
+
+    expect(mockHandleBlur).toHaveBeenCalledTimes(1);
+    expect(mockHandleBlur).toHaveBeenLastCalledWith(
+      expect.any(Object),
+      expect.any(Function)
+    );
+
+    // We've triggered a render cycle inside `mockHandleBlur` so we need to let
+    // that cycle complete.
+    await new Promise<void>(resolve =>
+      setTimeout(() => {
+        resolve();
+      }, 1)
+    );
+
+    const inputAfterBlur = screen.getByDisplayValue("$0");
+    expect(inputAfterBlur).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+  });
+
+  it("cleared field accepts input of 0", async () => {
+    const userEvent = userEvents.setup();
+    const mockHandleNumericChange = jest.fn();
+
+    render(
+      <Stateful
+        filter={filterToSignedFloat}
+        formatter={formatCurrency("en-US")}
+        numericValue="0"
+        onNumericChange={mockHandleNumericChange}
+        renderChild={props => <FormattedNumericInput {...props} />}
+      />
+    );
+
+    const input = screen.getByDisplayValue("$0");
+    expect(input).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(0);
+
+    await userEvent.clear(input);
+
+    const inputAfterClear = screen.getByDisplayValue("");
+    expect(inputAfterClear).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+
+    await userEvent.type(inputAfterClear, "0");
+
+    expect(screen.getByDisplayValue("$0")).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(2);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
+  });
 });

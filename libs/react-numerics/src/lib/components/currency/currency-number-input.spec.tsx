@@ -1,7 +1,8 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
+import userEvents from "@testing-library/user-event";
 import { CurrencyNumberInput } from "./currency-number-input";
+import { Stateful } from "../../test/stateful";
 
 describe("CurrencyNumberInput", () => {
   it("inputRef works", () => {
@@ -96,7 +97,7 @@ describe("CurrencyNumberInput", () => {
   });
 
   it("does not zero pad when the value is an empty string", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
@@ -120,5 +121,40 @@ describe("CurrencyNumberInput", () => {
     expect(elem).not.toHaveFocus();
     expect(handleNumericChange).toHaveBeenCalledTimes(2);
     expect(elem).toHaveDisplayValue("");
+  });
+
+  it("cleared field accepts input of 0", async () => {
+    const userEvent = userEvents.setup();
+    const mockHandleNumericChange = jest.fn();
+
+    render(
+      <Stateful
+        numericValue="0"
+        onNumericChange={mockHandleNumericChange}
+        renderChild={props => <CurrencyNumberInput {...props} />}
+      />
+    );
+
+    const input = screen.getByDisplayValue("$0");
+    expect(input).toBeInTheDocument();
+
+    // The padding stage triggers this invocation.
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+
+    await userEvent.clear(input);
+
+    const inputAfterClear = screen.getByDisplayValue("");
+    expect(inputAfterClear).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(2);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+
+    await userEvent.type(inputAfterClear, "0");
+
+    expect(screen.getByDisplayValue("$0")).toBeInTheDocument();
+
+    expect(mockHandleNumericChange).toHaveBeenCalledTimes(3);
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
   });
 });

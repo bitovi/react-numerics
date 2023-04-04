@@ -52,11 +52,17 @@ export const FormattedNumericInput = React.forwardRef<
   const userKeyedNumeric = useRef(false);
   const [displayValue, setDisplayValue] = useState("");
 
+  // Only runs once on initial render to validate numericValue.
   useEffect(() => {
-    if (!numericValue && numericValue !== "") {
-      return;
+    const formatted = formatter(filter(numericValue));
+    const filtered = filter(formatted);
+    if (filtered !== numericValue) {
+      onNumericChange && onNumericChange(filtered);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  useEffect(() => {
     setDisplayValue(current => {
       const filtered = filter(numericValue);
       const formatted = formatter(filtered, current, {
@@ -72,16 +78,6 @@ export const FormattedNumericInput = React.forwardRef<
       return formatted;
     });
   }, [filter, formatter, numericValue]);
-
-  // Only runs once on initial render to validate numericValue.
-  useEffect(() => {
-    const formatted = formatter(filter(numericValue));
-    const filtered = filter(formatted);
-    if (filtered !== numericValue) {
-      onNumericChange && onNumericChange(filtered);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   function handleBlur(evt: React.FocusEvent<HTMLInputElement>) {
     const nextDisplayValue = formatter(filter(evt.target.value), displayValue, {

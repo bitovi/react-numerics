@@ -29,7 +29,7 @@
         ],
         "outputPath": "dist/libs/react-numerics",
         "project": "libs/react-numerics/package.json",
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "rollupConfig": "libs/react-numerics/rollup.config.js",
         "tsConfig": "libs/react-numerics/tsconfig.lib.json"
       },
       "outputs": [

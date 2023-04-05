@@ -329,8 +329,19 @@ function formatNumberString(
     return safeNumber;
   }
 
-  if ((min !== null && num.lt(min)) || (max !== null && max.lt(num))) {
+  if (max !== null && max.lt(num)) {
     return previousFormatted;
+  }
+
+  // It's difficult to consistently handle the `min` prop. Right now when the
+  // `min` is set and the input loses focus the previous formatted version will
+  // be displayed.
+  if (min !== null && num.lt(min)) {
+    if (type === "blur") {
+      // TODO: REACTSP-6 - when the user enters a value less than `min` inform
+      // the owner for validation purposes.
+      return previousFormatted;
+    }
   }
 
   const [, fraction = ""] = safeNumber.split(".");

@@ -136,4 +136,15 @@ describe("formatPercent", () => {
     ).toBe("-3.11");
     expect(formatter("-3.119")).toBe("-3.12%");
   });
+
+  it("allows a number less than the min to be entered", () => {
+    const formatter = formatPercent("en-US", { decimalPlaces: 2, min: 10 });
+    expect(formatter("1", "foo", { type: "change", userKeyed: true })).toBe(
+      "1"
+    );
+
+    expect(formatter("1", "foo", { type: "blur", userKeyed: true })).toBe(
+      "foo"
+    );
+  });
 });

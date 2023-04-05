@@ -1,9 +1,10 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
+import userEvents from "@testing-library/user-event";
 import BigNumber from "bignumber.js";
 import { FormattedNumberInput } from "./formatted-number-input";
 import { createFormattedNumberInputWrapper } from "./test/wrapper";
+import { Stateful } from "./test/stateful";
 
 describe("FormattedNumberInput: can pass up a ref to the input element", () => {
   it("inputRef works", () => {
@@ -196,7 +197,7 @@ describe("FormattedNumberInput: initial value", () => {
 
 describe("FormattedNumberInput: enter value", () => {
   it("replaces value on type", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
@@ -218,7 +219,7 @@ describe("FormattedNumberInput: enter value", () => {
   });
 
   it("replaces mid value on type", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
@@ -240,7 +241,7 @@ describe("FormattedNumberInput: enter value", () => {
   });
 
   it("allows a typed '-' when the min is not set", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
 
@@ -268,7 +269,7 @@ describe("FormattedNumberInput: enter value", () => {
   });
 
   it("allows a typed '-' when the min is less than 0", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
 
@@ -297,7 +298,7 @@ describe("FormattedNumberInput: enter value", () => {
   });
 
   it("ignores a typed '-' when the min is greater than or equal to 0", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
 
@@ -324,11 +325,49 @@ describe("FormattedNumberInput: enter value", () => {
     expect(handleNumericChange).toHaveBeenCalledWith("3");
     expect(elem).toHaveDisplayValue("3");
   });
+
+  it("allows values less than min to be entered", async () => {
+    const userEvent = userEvents.setup();
+
+    const handleNumericChange = jest.fn();
+
+    render(
+      <form>
+        <Stateful
+          min={10}
+          numericValue=""
+          onNumericChange={handleNumericChange}
+          placeholder="TEST"
+          renderChild={props => <FormattedNumberInput {...props} />}
+        />
+      </form>
+    );
+
+    const elem = screen.getByPlaceholderText("TEST");
+    expect(elem).toBeInTheDocument();
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(0);
+
+    await userEvent.type(elem, "1");
+
+    const inputAfterTyping = screen.getByDisplayValue("1") as HTMLInputElement;
+    expect(inputAfterTyping).toBeInTheDocument();
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+    expect(handleNumericChange).toHaveBeenLastCalledWith("1");
+
+    inputAfterTyping.blur();
+
+    expect(handleNumericChange).toHaveBeenCalledTimes(1);
+
+    const inputAfterBlur = screen.getByDisplayValue("1") as HTMLInputElement;
+    expect(inputAfterBlur).toBeInTheDocument();
+  });
 });
 
 describe("FormattedNumberInput: removing characters", () => {
   it("backspaces a floating point number", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(
@@ -359,7 +398,7 @@ describe("FormattedNumberInput: removing characters", () => {
 
 describe("FormattedNumberInput: format onBlur", () => {
   it("removes trailing decimal", async () => {
-    const user = userEvent.setup();
+    const user = userEvents.setup();
 
     const handleNumericChange = jest.fn();
     const { getByDisplayValue } = render(

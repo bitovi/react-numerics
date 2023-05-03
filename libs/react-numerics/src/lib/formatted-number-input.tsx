@@ -59,6 +59,7 @@ type FormatFloatSecondParameter = NonNullable<
   Parameters<typeof formatFloat>[1]
 >;
 
+/** Props implemented by a component that displays a formatted number. */
 export interface FormattedNumberInputProps
   extends Omit<FormattedNumericInputProps, "converter" | "filter"> {
   /** The number of places to return in the formatted value. */

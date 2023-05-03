@@ -239,15 +239,17 @@ export interface FloatFormatterFactory {
  */
 export interface Formatter {
   (
-    /** The value to format. If the input represents a number like a float or
-     * integer it must be formatted in the en-US locale, i.e. uses a "." to
-     * separate the whole from the fractional part. */
+    /** The value to format. If the input represents a float it must be
+     * formatted in the en-US locale, i.e. uses a "." to separate the whole from
+     * the fractional part. */
     input: string
   ): string;
+  /** Accepts a numeric input string and other options to return a string
+   * formatted for display. */
   (
-    /** The value to format. If the input represents a number like a float or
-     * integer it must be formatted in the en-US locale, i.e. uses a "." to
-     * separate the whole from the fractional part. */
+    /** The value to format. If the input represents a float it must be
+     * formatted in the en-US locale, i.e. uses a "." to separate the whole from
+     * the fractional part. */
     input: string,
     /** The previous formatted value. */
     previousFormatted: string,
@@ -257,7 +259,7 @@ export interface Formatter {
 }
 
 /**
- * Optionally accepts one or more locales and returns a Formatter.
+ * Optionally accepts one or more locales and returns a Formatter instance.
  */
 export interface FormatterFactory {
   (
@@ -422,10 +424,11 @@ export interface FormatNumberStringOptions {
   min: string | number;
 }
 
-/** The context under which the formatter was invoked. */
+/** Information about the context under which the formatter was invoked. */
 export interface FormatterContext {
-  /** The name commonly used to refer to the specific event. */
+  /** The formatter is being invoked because this DOM event happened. */
   type?: "blur" | "change";
-  /** True if the user typed a key to make the change. */
+  /** True if the formatter is being invoked because the user pressed and
+   * released a key. */
   userKeyed?: boolean;
 }

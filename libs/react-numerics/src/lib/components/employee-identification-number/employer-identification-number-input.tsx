@@ -30,6 +30,8 @@ export const EmployerIdentificationNumberInput = React.forwardRef<
   );
 });
 
+/** Props implemented by a component that displays a U.S. employer
+identification number. */
 export interface EmployerIdentificationNumberInputProps
   extends Omit<
     FormattedNumericInputProps,

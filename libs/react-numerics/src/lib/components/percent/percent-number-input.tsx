@@ -42,5 +42,6 @@ export const PercentNumberInput = React.forwardRef<
   );
 });
 
+/** Props implemented by a component that displays a number as a percent. */
 export interface PercentNumberInputProps
   extends Omit<FormattedNumberInputProps, "formatter"> {}

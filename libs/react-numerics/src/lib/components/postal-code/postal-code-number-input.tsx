@@ -29,6 +29,7 @@ export const PostalCodeNumberInput = React.forwardRef<
   );
 });
 
+/** Props implemented by a component that displays a postal code. */
 export interface PostalCodeNumberInputProps
   extends Omit<
     FormattedNumericInputProps,

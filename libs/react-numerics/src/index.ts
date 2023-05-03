@@ -1,5 +1,6 @@
 import type {
   Formatter,
+  FormatterContext,
   FormatterFactory,
   FormatFloatStringOptions,
   FormatNumberStringOptions
@@ -8,6 +9,7 @@ import { formatFloat, formatInteger } from "./lib/formatters/formatters";
 
 export type {
   Formatter,
+  FormatterContext,
   FormatterFactory,
   FormatFloatStringOptions,
   FormatNumberStringOptions

@@ -30,6 +30,8 @@ export const SocialSecurityNumberInput = React.forwardRef<
   );
 });
 
+/** Props implemented by a component that displays a U.S. social security
+number. */
 export interface SocialSecurityNumberInputProps
   extends Omit<
     FormattedNumericInputProps,

@@ -7,8 +7,6 @@ import {
   FormattedInputProps as FormattedInputPropsImported
 } from "./formatted-input";
 
-// let count = 0;
-
 /**
  * Expects a `numericValue` string containing either only number characters or
  * only characters that can be used to represent a number. This string will be
@@ -41,12 +39,6 @@ export const FormattedNumericInput = React.forwardRef<
   },
   ref
 ) {
-  // count += 1;
-  // const invokeCount = count;
-  // console.log(
-  //   `FormattedNumericInputImpl[${invokeCount}]: enter; numericValue='${numericValue}'`
-  // );
-
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */
   const userKeyedNumeric = useRef(false);
@@ -69,10 +61,6 @@ export const FormattedNumericInput = React.forwardRef<
         userKeyed: userKeyedNumeric.current
       });
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] setDisplayValue: current='${current}', numericValue='${numericValue}', formatted='${formatted}'.`
-      // );
-
       userKeyedNumeric.current = false;
 
       return formatted;
@@ -83,10 +71,6 @@ export const FormattedNumericInput = React.forwardRef<
     const nextDisplayValue = formatter(filter(evt.target.value), displayValue, {
       type: "blur"
     });
-
-    // console.log(
-    //   `FormattedNumericInputImpl handleBlur: displayValue='${displayValue}', nextDisplayValue='${nextDisplayValue}'`
-    // );
 
     setDisplayValue(nextDisplayValue);
 
@@ -117,17 +101,10 @@ export const FormattedNumericInput = React.forwardRef<
         converter ? converter(nextDisplay) : nextDisplay
       );
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleChange: value='${value}', changeType=${changeType}, nextDisplay='${nextDisplay}', nextNumeric='${nextNumeric}'.`
-      // );
-
       if (deleteType) {
         setDisplayValue(nextNumeric.length < 1 ? "" : nextDisplay);
       }
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleChange: numericValue='${numericValue}', nextNumeric='${nextNumeric}'`
-      // );
       if (numericValue !== nextNumeric) {
         onNumericChange && onNumericChange(nextNumeric);
       }
@@ -140,10 +117,6 @@ export const FormattedNumericInput = React.forwardRef<
   >(
     evt => {
       userKeyedNumeric.current = true;
-
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleKeyDown: evt.key=${evt.key}`
-      // );
 
       // If a modifier key is active do not filter the key (this is the case
       // when say doing "select all" or "copy").
@@ -162,10 +135,6 @@ export const FormattedNumericInput = React.forwardRef<
         return;
       }
 
-      // console.log(
-      //   `FormattedNumericInputImpl handleKeyDown: evt.key=${evt.key}, numericValue='${numericValue}'`
-      // );
-
       const filtered = filter(evt.key, numericValue);
       if (!filtered) {
         evt.preventDefault();
@@ -174,10 +143,6 @@ export const FormattedNumericInput = React.forwardRef<
     },
     [filter, numericValue]
   );
-
-  // console.log(
-  //   `FormattedNumericInputImpl[${invokeCount}]: displayValue='${displayValue}'`
-  // );
 
   return (
     <FormattedInput

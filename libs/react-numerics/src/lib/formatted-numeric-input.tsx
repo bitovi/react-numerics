@@ -35,6 +35,7 @@ export const FormattedNumericInput = React.forwardRef<
     onBlur,
     onNumericChange,
     numericValue,
+    validationPattern,
     ...props
   },
   ref
@@ -144,16 +145,19 @@ export const FormattedNumericInput = React.forwardRef<
     [filter, numericValue]
   );
 
-  return (
-    <FormattedInput
-      formattedValue={displayValue}
-      onBlur={handleBlur}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      ref={ref}
-      {...props}
-    />
-  );
+  const nextProps: FormattedInputPropsImported = {
+    formattedValue: displayValue,
+    onBlur: handleBlur,
+    onChange: handleChange,
+    onKeyDown: handleKeyDown,
+    ...props
+  };
+
+  if (validationPattern) {
+    nextProps.pattern = validationPattern();
+  }
+
+  return <FormattedInput {...nextProps} ref={ref} />;
 });
 
 type FormattedInputProps = Omit<
@@ -161,7 +165,9 @@ type FormattedInputProps = Omit<
   "formattedValue" | "onChange" | "onKeyDown"
 >;
 
-export interface FormattedNumericInputProps extends FormattedInputProps {
+export interface FormattedNumericInputProps
+  extends FormattedInputProps,
+    NumericValidationProps {
   /** Converts a numeric string from the display locale to the en-US locale. For
    * example a de-DE value of "1.234,5" will be converted to an en-US string
    * "1,234.56". Normally the default converter (@see convertNumber) should
@@ -183,4 +189,12 @@ export interface FormattedNumericInputProps extends FormattedInputProps {
   /** Invoked when the numeric value of the input changes. In some cases the
    * display value will change, but the numeric value will not. */
   onNumericChange: ((value: string) => void) | null;
+}
+
+export interface NumericValidationProps {
+  /** If provided the pattern will be applied to the input for validation; the
+   * simplest way to validate an input and is applied by the browser. */
+  validationPattern?: () => Required<
+    React.InputHTMLAttributes<HTMLInputElement>
+  >["pattern"];
 }

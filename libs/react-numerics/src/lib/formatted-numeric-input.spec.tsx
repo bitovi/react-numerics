@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import userEvents from "@testing-library/user-event";
 import { filterToSignedFloat } from "./filters/filters";
-import { formatCurrency } from "./formatters/formatters";
+import {
+  formatCurrency,
+  formatPostalCodeNumber
+} from "./formatters/formatters";
 import { FormattedNumericInput } from "./formatted-numeric-input";
 import { Stateful } from "./test/stateful";
 
@@ -217,5 +220,55 @@ describe("FormattedNumericInput", () => {
 
     expect(mockHandleNumericChange).toHaveBeenCalledTimes(2);
     expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
+  });
+
+  it("validates with a provided pattern", () => {
+    const mockHandleNumericChange = jest.fn();
+    const mockHandleInvalid = jest.fn();
+
+    const { rerender } = render(
+      <FormattedNumericInput
+        formatter={formatPostalCodeNumber}
+        onInvalid={mockHandleInvalid}
+        numericValue="333"
+        onNumericChange={mockHandleNumericChange}
+        validationPattern={() => "^[0-9]{5,5}$"}
+      />,
+      {
+        wrapper: ({ children }) => (
+          <form action="/" name="FORM">
+            {children}
+          </form>
+        )
+      }
+    );
+
+    const input = screen.getByDisplayValue("333") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute("pattern", "^[0-9]{5,5}$");
+
+    const form = screen.getByRole("form") as HTMLFormElement;
+    expect(form).toBeInTheDocument();
+
+    let checkValidityResult = form.checkValidity();
+    expect(checkValidityResult).toBe(false);
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
+    expect(mockHandleInvalid).toHaveBeenLastCalledWith(
+      expect.objectContaining({ target: input })
+    );
+
+    rerender(
+      <FormattedNumericInput
+        formatter={formatPostalCodeNumber}
+        onInvalid={mockHandleInvalid}
+        numericValue="33333"
+        onNumericChange={mockHandleNumericChange}
+        validationPattern={() => "^[0-9]{5,5}$"}
+      />
+    );
+
+    checkValidityResult = form.checkValidity();
+    expect(checkValidityResult).toBe(true);
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
   });
 });

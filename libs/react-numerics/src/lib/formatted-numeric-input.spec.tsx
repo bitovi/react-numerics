@@ -5,7 +5,10 @@ import {
   formatCurrency,
   formatPostalCodeNumber
 } from "./formatters/formatters";
-import { FormattedNumericInput } from "./formatted-numeric-input";
+import {
+  FormattedNumericInput,
+  FormattedNumericInputProps
+} from "./formatted-numeric-input";
 import { Stateful } from "./test/stateful";
 
 describe("FormattedNumericInput", () => {
@@ -232,7 +235,7 @@ describe("FormattedNumericInput", () => {
         onInvalid={mockHandleInvalid}
         numericValue="333"
         onNumericChange={mockHandleNumericChange}
-        validationPattern={() => "^[0-9]{5,5}$"}
+        validatePattern={() => "^[0-9]{5,5}$"}
       />,
       {
         wrapper: ({ children }) => (
@@ -246,12 +249,7 @@ describe("FormattedNumericInput", () => {
     const input = screen.getByDisplayValue("333") as HTMLInputElement;
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("pattern", "^[0-9]{5,5}$");
-
-    const form = screen.getByRole("form") as HTMLFormElement;
-    expect(form).toBeInTheDocument();
-
-    let checkValidityResult = form.checkValidity();
-    expect(checkValidityResult).toBe(false);
+    expect(input).toBeInvalid();
     expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
     expect(mockHandleInvalid).toHaveBeenLastCalledWith(
       expect.objectContaining({ target: input })
@@ -263,12 +261,169 @@ describe("FormattedNumericInput", () => {
         onInvalid={mockHandleInvalid}
         numericValue="33333"
         onNumericChange={mockHandleNumericChange}
-        validationPattern={() => "^[0-9]{5,5}$"}
+        validatePattern={() => "^[0-9]{5,5}$"}
       />
     );
 
-    checkValidityResult = form.checkValidity();
-    expect(checkValidityResult).toBe(true);
+    expect(input).toBeValid();
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
+  });
+
+  it("validates on mount", () => {
+    const mockHandleInvalid = jest.fn();
+    const mockValidate = jest.fn<
+      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
+      Parameters<Required<FormattedNumericInputProps>["validate"]>
+    >((numeric, context) =>
+      context === "mount"
+        ? 1 <= numeric.length && numeric.length < 5
+          ? "TOO_SHORT_MOUNT"
+          : ""
+        : undefined
+    );
+
+    render(
+      <Stateful
+        filter={filterToSignedFloat}
+        formatter={formatPostalCodeNumber}
+        numericValue="987"
+        onInvalid={mockHandleInvalid}
+        onNumericChange={jest.fn()}
+        validate={mockValidate}
+        renderChild={props => (
+          <form action="/" name="FORM">
+            <FormattedNumericInput {...props} />
+          </form>
+        )}
+      />
+    );
+
+    const input = screen.getByDisplayValue("987") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toBeInvalid();
+    expect(input.validationMessage).toEqual("TOO_SHORT_MOUNT");
+    expect(mockValidate).toHaveBeenCalledTimes(1);
+    expect(mockValidate).toHaveBeenLastCalledWith("987", "mount");
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
+  });
+
+  it("validates on blur", async () => {
+    const userEvent = userEvents.setup();
+
+    const mockHandleInvalid = jest.fn();
+    const mockValidate = jest.fn<
+      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
+      Parameters<Required<FormattedNumericInputProps>["validate"]>
+    >((numeric, context) =>
+      context === "blur"
+        ? 1 <= numeric.length && numeric.length < 5
+          ? "TOO_SHORT_BLUR"
+          : ""
+        : undefined
+    );
+
+    render(
+      <Stateful
+        filter={filterToSignedFloat}
+        formatter={formatPostalCodeNumber}
+        numericValue=""
+        onInvalid={mockHandleInvalid}
+        onNumericChange={jest.fn()}
+        validate={mockValidate}
+        renderChild={props => (
+          <form action="/" name="FORM">
+            <FormattedNumericInput {...props} />
+            <button>Submit</button>
+          </form>
+        )}
+      />
+    );
+
+    // Verify initial state, should not be any validation errors.
+    const input = screen.getByDisplayValue("") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toBeValid();
+    expect(mockValidate).toHaveBeenCalledTimes(1);
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(0);
+
+    // Type a single character then invoke `blur` on the input; there should be
+    // validation errors because there is only 1 character and exactly 5 are
+    // required.
+    await userEvent.type(input, "1");
+    input.blur();
+    expect(input.validationMessage).toEqual("TOO_SHORT_BLUR");
+    expect(input).toBeInvalid();
+    expect(mockValidate).toHaveBeenCalledTimes(3);
+    expect(mockValidate).toHaveBeenLastCalledWith("1", "blur");
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
+
+    // Enter characters to create a zip code with the required 5 characters then
+    // verify that the input is still invalid because ti hasn't lost focus yet.
+    await userEvent.type(input, "3579");
+    expect(input.validationMessage).toEqual("TOO_SHORT_BLUR");
+    expect(input).toBeInvalid();
+
+    // Cause the input to lose focus and verify that the input is valid.
+    input.blur();
+    expect(input.validationMessage).toEqual("");
+    expect(input).toBeValid();
+  });
+
+  it("validates on change", async () => {
+    const userEvent = userEvents.setup();
+
+    const mockHandleInvalid = jest.fn();
+    const mockValidate = jest.fn<
+      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
+      Parameters<Required<FormattedNumericInputProps>["validate"]>
+    >((numeric, context) =>
+      context === "change"
+        ? 1 <= numeric.length && numeric.length < 5
+          ? "TOO_SHORT_CHANGE"
+          : ""
+        : undefined
+    );
+
+    render(
+      <Stateful
+        filter={filterToSignedFloat}
+        formatter={formatPostalCodeNumber}
+        numericValue=""
+        onInvalid={mockHandleInvalid}
+        onNumericChange={jest.fn()}
+        validate={mockValidate}
+        renderChild={props => (
+          <form action="/" name="FORM">
+            <FormattedNumericInput {...props} />
+          </form>
+        )}
+      />
+    );
+
+    const input = screen.getByDisplayValue("") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toBeValid();
+    expect(mockValidate).toHaveBeenCalledTimes(1);
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(0);
+
+    // This type request should invoke the `validate` function and set an error
+    // message because the zip code is only 1 character long.
+    await userEvent.type(input, "9");
+
+    expect(input.validationMessage).toEqual("TOO_SHORT_CHANGE");
+    expect(input).toBeInvalid();
+    expect(mockValidate).toHaveBeenCalledTimes(2);
+    expect(mockValidate).toHaveBeenLastCalledWith("9", "change");
+    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
+
+    // This type request should invoke the `validate` function and clear the
+    // error message because the zip code is 5 characters long.
+    await userEvent.type(input, "7531");
+
+    expect(input.validationMessage).toEqual("");
+    expect(input).toBeValid();
+    expect(mockValidate).toHaveBeenCalledTimes(6);
+    expect(mockValidate).toHaveBeenLastCalledWith("97531", "change");
     expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
   });
 });

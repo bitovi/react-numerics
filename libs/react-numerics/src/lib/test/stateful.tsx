@@ -21,7 +21,7 @@ export function Stateful<P extends Omit<FormattedNumericInputProps, "onBlur">>({
   renderChild: (props: P) => JSX.Element;
 }) {
   const [numericValue, setNumericValue] =
-    useState<FormattedNumericInputProps["numericValue"]>("");
+    useState<FormattedNumericInputProps["numericValue"]>(propsNumericValue);
 
   useEffect(() => {
     setNumericValue(propsNumericValue);

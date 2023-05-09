@@ -140,7 +140,7 @@ describe("CurrencyNumberInput", () => {
 
     // The padding stage triggers this invocation.
     expect(mockHandleNumericChange).toHaveBeenCalledTimes(1);
-    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("");
+    expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
 
     await userEvent.clear(input);
 

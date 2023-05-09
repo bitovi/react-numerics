@@ -23,8 +23,9 @@ export const PostalCodeNumberInput = React.forwardRef<
       filter={filterToNumeric}
       formatter={formatPostalCodeNumber}
       inputMode={inputMode}
-      ref={ref}
+      validatePattern={() => "^[0-9]{5,5}$"}
       {...props}
+      ref={ref}
     />
   );
 });

@@ -6,6 +6,7 @@ import {
   FormattedInput,
   FormattedInputProps as FormattedInputPropsImported
 } from "./formatted-input";
+import type { Validator } from "./validators/validators-types";
 
 /**
  * Expects a `numericValue` string containing either only number characters or
@@ -35,7 +36,7 @@ export const FormattedNumericInput = React.forwardRef<
     onBlur,
     onNumericChange,
     numericValue,
-    validate,
+    validator,
     validatePattern,
     ...props
   },
@@ -96,8 +97,8 @@ export const FormattedNumericInput = React.forwardRef<
     }
 
     initialValidateRaised.current = true;
-    validateInput(numericValue, "mount", inputRef, validate);
-  }, [inputRef, numericValue, validate]);
+    validateInput(numericValue, "mount", inputRef, validator);
+  }, [inputRef, numericValue, validator]);
 
   function handleBlur(evt: React.FocusEvent<HTMLInputElement>) {
     const nextDisplayValue = formatter(filter(evt.target.value), displayValue, {
@@ -107,7 +108,7 @@ export const FormattedNumericInput = React.forwardRef<
     setDisplayValue(nextDisplayValue);
 
     onBlur && onBlur(evt);
-    validateInput(numericValue, "blur", inputRef, validate);
+    validateInput(numericValue, "blur", inputRef, validator);
   }
 
   const handleChange: FormattedInputPropsImported["onChange"] = useCallback(
@@ -138,7 +139,7 @@ export const FormattedNumericInput = React.forwardRef<
 
       if (numericValue !== nextNumeric) {
         onNumericChange && onNumericChange(nextNumeric);
-        validateInput(nextNumeric, "change", inputRef, validate);
+        validateInput(nextNumeric, "change", inputRef, validator);
       }
     },
     [
@@ -149,7 +150,7 @@ export const FormattedNumericInput = React.forwardRef<
       inputRef,
       numericValue,
       onNumericChange,
-      validate
+      validator
     ]
   );
 
@@ -232,37 +233,27 @@ export interface FormattedNumericInputProps
 }
 
 export interface NumericValidationProps {
-  /**
-   * Update the validity of the input. Return an empty string to make the
-   * element valid.
-   * @returns If a string is returned the value will be set as the element's
-   * custom validity, if null or undefined the validity message will not be
-   * updated.
-   */
-  validate?: (
-    /** The value of the `numericValue` prop. */
-    numericValue: FormattedNumericInputProps["numericValue"],
-    context:
-      | "blur" // The element lost focus.
-      | "change" // The element value changed.
-      | "mount" // The component has mounted.
-  ) => string | void;
   /** If provided the pattern will be applied to the input for validation; the
    * simplest way to validate an input and is applied by the browser. */
   validatePattern?: () => Required<
     React.InputHTMLAttributes<HTMLInputElement>
   >["pattern"];
+  /** Invoke to validate a numericValue. */
+  validator?: Validator;
 }
 
 function validateInput(
   numericValue: FormattedNumericInputProps["numericValue"],
-  context: Parameters<Required<NumericValidationProps>["validate"]>[1],
+  context: Parameters<Required<NumericValidationProps>["validator"]>[1],
   input: HTMLInputElement | null,
-  validate?: NumericValidationProps["validate"]
+  validator?: NumericValidationProps["validator"]
 ) {
-  if (validate && input) {
-    const validateMessage = validate(numericValue, context);
-    typeof validateMessage === "string" &&
-      input.setCustomValidity(validateMessage);
+  if (validator && input) {
+    const validateResult = validator(numericValue, context);
+    if (validateResult) {
+      validateResult.customValidity !== undefined &&
+        input.setCustomValidity(validateResult.customValidity);
+      validateResult.report && input.reportValidity();
+    }
   }
 }

@@ -272,13 +272,13 @@ describe("FormattedNumericInput", () => {
   it("validates on mount", () => {
     const mockHandleInvalid = jest.fn();
     const mockValidate = jest.fn<
-      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
-      Parameters<Required<FormattedNumericInputProps>["validate"]>
+      ReturnType<Required<FormattedNumericInputProps>["validator"]>,
+      Parameters<Required<FormattedNumericInputProps>["validator"]>
     >((numeric, context) =>
       context === "mount"
         ? 1 <= numeric.length && numeric.length < 5
-          ? "TOO_SHORT_MOUNT"
-          : ""
+          ? { customValidity: "TOO_SHORT_MOUNT" }
+          : { customValidity: "" }
         : undefined
     );
 
@@ -289,7 +289,7 @@ describe("FormattedNumericInput", () => {
         numericValue="987"
         onInvalid={mockHandleInvalid}
         onNumericChange={jest.fn()}
-        validate={mockValidate}
+        validator={mockValidate}
         renderChild={props => (
           <form action="/" name="FORM">
             <FormattedNumericInput {...props} />
@@ -312,13 +312,13 @@ describe("FormattedNumericInput", () => {
 
     const mockHandleInvalid = jest.fn();
     const mockValidate = jest.fn<
-      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
-      Parameters<Required<FormattedNumericInputProps>["validate"]>
+      ReturnType<Required<FormattedNumericInputProps>["validator"]>,
+      Parameters<Required<FormattedNumericInputProps>["validator"]>
     >((numeric, context) =>
       context === "blur"
         ? 1 <= numeric.length && numeric.length < 5
-          ? "TOO_SHORT_BLUR"
-          : ""
+          ? { customValidity: "TOO_SHORT_BLUR" }
+          : { customValidity: "" }
         : undefined
     );
 
@@ -329,7 +329,7 @@ describe("FormattedNumericInput", () => {
         numericValue=""
         onInvalid={mockHandleInvalid}
         onNumericChange={jest.fn()}
-        validate={mockValidate}
+        validator={mockValidate}
         renderChild={props => (
           <form action="/" name="FORM">
             <FormattedNumericInput {...props} />
@@ -374,13 +374,13 @@ describe("FormattedNumericInput", () => {
 
     const mockHandleInvalid = jest.fn();
     const mockValidate = jest.fn<
-      ReturnType<Required<FormattedNumericInputProps>["validate"]>,
-      Parameters<Required<FormattedNumericInputProps>["validate"]>
+      ReturnType<Required<FormattedNumericInputProps>["validator"]>,
+      Parameters<Required<FormattedNumericInputProps>["validator"]>
     >((numeric, context) =>
       context === "change"
         ? 1 <= numeric.length && numeric.length < 5
-          ? "TOO_SHORT_CHANGE"
-          : ""
+          ? { customValidity: "TOO_SHORT_CHANGE" }
+          : { customValidity: "" }
         : undefined
     );
 
@@ -391,7 +391,7 @@ describe("FormattedNumericInput", () => {
         numericValue=""
         onInvalid={mockHandleInvalid}
         onNumericChange={jest.fn()}
-        validate={mockValidate}
+        validator={mockValidate}
         renderChild={props => (
           <form action="/" name="FORM">
             <FormattedNumericInput {...props} />
@@ -406,7 +406,7 @@ describe("FormattedNumericInput", () => {
     expect(mockValidate).toHaveBeenCalledTimes(1);
     expect(mockHandleInvalid).toHaveBeenCalledTimes(0);
 
-    // This type request should invoke the `validate` function and set an error
+    // This type request should invoke the `validator` function and set an error
     // message because the zip code is only 1 character long.
     await userEvent.type(input, "9");
 
@@ -416,7 +416,7 @@ describe("FormattedNumericInput", () => {
     expect(mockValidate).toHaveBeenLastCalledWith("9", "change");
     expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
 
-    // This type request should invoke the `validate` function and clear the
+    // This type request should invoke the `validator` function and clear the
     // error message because the zip code is 5 characters long.
     await userEvent.type(input, "7531");
 

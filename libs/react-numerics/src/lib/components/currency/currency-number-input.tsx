@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
-import {
-  FormattedNumberInput,
-  FormattedNumberInputProps
-} from "../../formatted-number-input";
+import type { FormattedNumberInputProps } from "../../formatted-number-input";
+import { FormattedNumberInput } from "../../formatted-number-input";
 import {
   formatCurrency,
   padNumericFraction
 } from "../../formatters/formatters";
+import type {
+  ValidateAndUpdateProps,
+  ValidateMinValue,
+  ValidateProps,
+  Validator
+} from "../../validators/validators-types";
+import { validateCurrency } from "../../validators/validators";
 
 /**
  * Allow the user to enter a currency value. Currency format and display are
@@ -24,20 +29,27 @@ import {
  */
 export const CurrencyNumberInput = React.forwardRef<
   HTMLInputElement,
-  CurrencyNumberInputProps
->(function CurrencyNumberInputImpl(
-  {
+  CurrencyNumberInputProps | CurrencyNumberInputValidationProps
+>(function CurrencyNumberInputImpl(props, ref) {
+  // Spreading here because we want to cast `props` as
+  // `CurrencyNumberInputValidateAndUpdateProps` so the `validate` and
+  // `updateCustomValidity` props can be extracted and not passed on ultimately
+  // to the input element (if they exist).
+  const {
+    inputMode = "decimal",
+    locales,
+    min,
     numericValue,
     onBlur,
     onNumericChange,
     roundingMode = BigNumber.ROUND_HALF_UP,
     showFraction = true,
-    locales,
-    inputMode = "decimal",
-    ...props
-  },
-  ref
-) {
+    title,
+    updateCustomValidity,
+    validate = false,
+    ...remainingProps
+  } = props as CurrencyNumberInputValidateAndUpdateProps;
+
   const [paddingStage, setPaddingStage] = useState<
     (typeof paddingStages)[keyof typeof paddingStages]
   >(paddingStages.pending);
@@ -56,12 +68,14 @@ export const CurrencyNumberInput = React.forwardRef<
     }
   }, [locales, numericValue, onNumericChange, paddingStage]);
 
-  const formatter = useMemo(() => {
-    return formatCurrency(locales, {
-      showFraction,
-      roundingMode
-    });
-  }, [locales, roundingMode, showFraction]);
+  const formatter = useMemo(
+    () =>
+      formatCurrency(locales, {
+        showFraction,
+        roundingMode
+      }),
+    [locales, roundingMode, showFraction]
+  );
 
   const handleBlur = useCallback(
     (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -77,18 +91,38 @@ export const CurrencyNumberInput = React.forwardRef<
     [locales, numericValue, onBlur, onNumericChange, showFraction]
   );
 
+  const validator = useMemo<Validator | undefined>(() => {
+    if (!validate) {
+      return;
+    }
+
+    const context: Parameters<typeof validateCurrency>[0] = {
+      min,
+      title
+    };
+
+    if (updateCustomValidity) {
+      context.updateCustomValidity = updateCustomValidity;
+    }
+
+    return validateCurrency(context);
+  }, [min, title, updateCustomValidity, validate]);
+
   const nextNumericValue =
     paddingStage !== paddingStages.complete ? "" : numericValue;
 
   return (
     <FormattedNumberInput
-      {...props}
+      {...remainingProps}
       formatter={formatter}
       inputMode={inputMode}
+      min={min}
       numericValue={nextNumericValue}
       onBlur={handleBlur}
       onNumericChange={onNumericChange}
       ref={ref}
+      title={title}
+      validator={validator}
     />
   );
 });
@@ -96,8 +130,21 @@ export const CurrencyNumberInput = React.forwardRef<
 const paddingStages = { pending: -1, active: 0, complete: 1 };
 
 export interface CurrencyNumberInputProps
-  extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {
+  extends Omit<
+    FormattedNumberInputProps,
+    "formatter" | "decimalPlaces" | "validatePattern" | "validator"
+  > {
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean;
 }
+
+export type CurrencyNumberInputValidationProps =
+  | CurrencyNumberInputValidateProps
+  | CurrencyNumberInputValidateAndUpdateProps;
+
+export type CurrencyNumberInputValidateProps = CurrencyNumberInputProps &
+  ValidateProps;
+
+export type CurrencyNumberInputValidateAndUpdateProps =
+  CurrencyNumberInputProps & ValidateAndUpdateProps<ValidateMinValue>;

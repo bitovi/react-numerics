@@ -1,7 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvents from "@testing-library/user-event";
-import { CurrencyNumberInput } from "./currency-number-input";
+import { validateErrorsMap } from "../../validators/validators-types";
+import {
+  CurrencyNumberInput,
+  CurrencyNumberInputValidateAndUpdateProps,
+  CurrencyNumberInputValidationProps
+} from "./currency-number-input";
 import { Stateful } from "../../test/stateful";
 
 describe("CurrencyNumberInput", () => {
@@ -156,5 +161,153 @@ describe("CurrencyNumberInput", () => {
 
     expect(mockHandleNumericChange).toHaveBeenCalledTimes(3);
     expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
+  });
+
+  it("will validate input", async () => {
+    const userEvent = userEvents.setup();
+
+    const props: CurrencyNumberInputValidationProps = {
+      min: 10,
+      numericValue: "0",
+      onInvalid: jest.fn(),
+      onNumericChange: jest.fn(),
+      validate: true
+    };
+
+    render(
+      <Stateful
+        {...props}
+        renderChild={props => <CurrencyNumberInput {...props} />}
+      />
+    );
+
+    const input = screen.getByDisplayValue("$0") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toBeValid();
+    await userEvent.clear(input);
+
+    await userEvent.type(input, "9");
+    expect(input).toHaveValue("$9");
+    expect(props.onInvalid).toHaveBeenCalledTimes(0);
+    expect(input).toBeValid();
+
+    input.blur();
+    expect(props.onInvalid).toHaveBeenCalledTimes(1);
+    expect(props.onInvalid).toHaveBeenLastCalledWith(
+      expect.objectContaining({ target: input })
+    );
+    expect(input).toBeInvalid(); // This will raise `onInvalid` again.
+    expect(input.validationMessage).toBe(
+      validateErrorsMap["INVALID_LESS_THAN_MIN_VALUE"]
+    );
+
+    await userEvent.clear(input);
+    await userEvent.type(input, "1");
+    expect(input).toBeValid();
+
+    await userEvent.type(input, "0");
+    expect(input).toHaveValue("$10");
+    expect(input).toBeValid();
+
+    input.blur();
+    expect(input).toBeValid();
+  });
+
+  it("will validate input with a custom validity message", async () => {
+    const userEvent = userEvents.setup();
+
+    const updateCustomValidity = jest.fn<
+      ReturnType<
+        Required<CurrencyNumberInputValidateAndUpdateProps>["updateCustomValidity"]
+      >,
+      Parameters<
+        Required<CurrencyNumberInputValidateAndUpdateProps>["updateCustomValidity"]
+      >
+    >((number, context, error) => {
+      // A custom validity message is provided for "INVALID_LESS_THAN_MIN."
+      return error?.customValidity === "INVALID_LESS_THAN_MIN_VALUE"
+        ? { ...error, customValidity: `${number} is not enough money.` }
+        : error;
+    });
+
+    const props: CurrencyNumberInputValidationProps = {
+      min: 7,
+      numericValue: "0",
+      onInvalid: jest.fn(),
+      onNumericChange: jest.fn(),
+      updateCustomValidity,
+      validate: true
+    };
+
+    render(
+      <Stateful
+        {...props}
+        renderChild={props => <CurrencyNumberInput {...props} />}
+      />
+    );
+
+    // Validity invoked for "mount."
+    expect(props.updateCustomValidity).toHaveBeenCalledTimes(1);
+    expect(props.updateCustomValidity).toHaveBeenLastCalledWith(
+      "",
+      {
+        min: 7,
+        type: "mount",
+        updateCustomValidity: expect.any(Function)
+      },
+      undefined
+    );
+
+    const input = screen.getByDisplayValue("$0") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(input).toBeValid();
+
+    // Validity invoked for "change."
+    await userEvent.clear(input);
+    expect(props.updateCustomValidity).toHaveBeenCalledTimes(2);
+    expect(props.updateCustomValidity).toHaveBeenLastCalledWith(
+      "",
+      {
+        min: 7,
+        type: "change",
+        updateCustomValidity: expect.any(Function)
+      },
+      { customValidity: "", report: true }
+    );
+
+    // Validity invoked for "change."
+    await userEvent.type(input, "6");
+    expect(props.updateCustomValidity).toHaveBeenCalledTimes(3);
+    expect(props.updateCustomValidity).toHaveBeenLastCalledWith(
+      "6",
+      {
+        min: 7,
+        type: "change",
+        updateCustomValidity: expect.any(Function)
+      },
+      { customValidity: "", report: true }
+    );
+    expect(input).toHaveValue("$6");
+    expect(props.onInvalid).toHaveBeenCalledTimes(0);
+    expect(input).toBeValid();
+
+    // Validity invoked for "blur."
+    input.blur();
+    expect(props.updateCustomValidity).toHaveBeenCalledTimes(4);
+    expect(props.updateCustomValidity).toHaveBeenLastCalledWith(
+      "6",
+      {
+        min: 7,
+        type: "blur",
+        updateCustomValidity: expect.any(Function)
+      },
+      { customValidity: "INVALID_LESS_THAN_MIN_VALUE", report: true }
+    );
+    expect(props.onInvalid).toHaveBeenCalledTimes(1);
+    expect(props.onInvalid).toHaveBeenLastCalledWith(
+      expect.objectContaining({ target: input })
+    );
+    expect(input).toBeInvalid(); // This will raise `onInvalid` again.
+    expect(input.validationMessage).toBe("6 is not enough money.");
   });
 });

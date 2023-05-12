@@ -225,50 +225,6 @@ describe("FormattedNumericInput", () => {
     expect(mockHandleNumericChange).toHaveBeenLastCalledWith("0");
   });
 
-  it("validates with a provided pattern", () => {
-    const mockHandleNumericChange = jest.fn();
-    const mockHandleInvalid = jest.fn();
-
-    const { rerender } = render(
-      <FormattedNumericInput
-        formatter={formatPostalCodeNumber}
-        onInvalid={mockHandleInvalid}
-        numericValue="333"
-        onNumericChange={mockHandleNumericChange}
-        validatePattern={() => "^[0-9]{5,5}$"}
-      />,
-      {
-        wrapper: ({ children }) => (
-          <form action="/" name="FORM">
-            {children}
-          </form>
-        )
-      }
-    );
-
-    const input = screen.getByDisplayValue("333") as HTMLInputElement;
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute("pattern", "^[0-9]{5,5}$");
-    expect(input).toBeInvalid();
-    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
-    expect(mockHandleInvalid).toHaveBeenLastCalledWith(
-      expect.objectContaining({ target: input })
-    );
-
-    rerender(
-      <FormattedNumericInput
-        formatter={formatPostalCodeNumber}
-        onInvalid={mockHandleInvalid}
-        numericValue="33333"
-        onNumericChange={mockHandleNumericChange}
-        validatePattern={() => "^[0-9]{5,5}$"}
-      />
-    );
-
-    expect(input).toBeValid();
-    expect(mockHandleInvalid).toHaveBeenCalledTimes(1);
-  });
-
   it("validates on mount", () => {
     const mockHandleInvalid = jest.fn();
     const mockValidate = jest.fn<

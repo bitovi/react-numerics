@@ -5,6 +5,12 @@ import {
 } from "../../formatted-numeric-input";
 import { filterToNumeric } from "../../filters/filters";
 import { formatPostalCodeNumber } from "../../formatters/formatters";
+import type {
+  ValidateMin,
+  ValidationProps
+} from "../../validators/validators-types";
+import { validatePostalCode } from "../../validators/validators";
+import { useValidator } from "../../validators/use-validator";
 
 /**
  * Create a formatted postal code. For example a U.S. 5 digit zip code "12345".
@@ -16,23 +22,34 @@ import { formatPostalCodeNumber } from "../../formatters/formatters";
  */
 export const PostalCodeNumberInput = React.forwardRef<
   HTMLInputElement,
-  PostalCodeNumberInputProps
->(function PostalCodeNumberInputImpl({ inputMode = "numeric", ...props }, ref) {
+  PostalCodeNumberInputValidationProps
+>(function PostalCodeNumberInputImpl(
+  { inputMode = "numeric", updateCustomValidity, validate, ...props },
+  ref
+) {
+  const validator = useValidator(
+    { updateCustomValidity, validate },
+    { min: 5 },
+    validatePostalCode
+  );
+
   return (
     <FormattedNumericInput
+      inputMode={inputMode}
+      {...props}
       filter={filterToNumeric}
       formatter={formatPostalCodeNumber}
-      inputMode={inputMode}
-      validatePattern={() => "^[0-9]{5,5}$"}
-      {...props}
       ref={ref}
+      validator={validator}
     />
   );
 });
 
 /** Props implemented by a component that displays a postal code. */
-export interface PostalCodeNumberInputProps
-  extends Omit<
-    FormattedNumericInputProps,
-    "converter" | "filter" | "formatter"
-  > {}
+export type PostalCodeNumberInputProps = Omit<
+  FormattedNumericInputProps,
+  "converter" | "filter" | "formatter"
+>;
+
+export type PostalCodeNumberInputValidationProps = PostalCodeNumberInputProps &
+  ValidationProps<ValidateMin>;

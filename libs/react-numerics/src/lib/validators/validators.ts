@@ -1,12 +1,13 @@
 import BigNumber from "bignumber.js";
-import {
+import type {
   ValidateContext,
-  ValidateMinValue,
+  ValidateErrorTypes,
+  ValidateMin,
   ValidateResult,
-  ValidateResultError,
-  Validator,
-  validateErrorsMap
+  ValidateResultInternal,
+  Validator
 } from "./validators-types";
+import { validateErrorsMap } from "./validators-types";
 
 /**
  * Factory function to create a Validator that will test a currency value for
@@ -15,13 +16,31 @@ import {
  * returned to test validity.
  */
 export function validateCurrency(
-  context: ValidateContext<ValidateMinValue>
+  context: ValidateContext<ValidateMin>
 ): Validator {
   // The filter and formatter should handle `max` for us by refusing to allow
   // a value greater than the max to be entered. The same goes for characters
   // that are not numbers.
   return (number, type) =>
-    updateDefaultCustomValidity(validateMin(number, type, context), context);
+    updateDefaultCustomValidity(
+      validateMinValue(number, type, context),
+      context
+    );
+}
+
+export function validatePostalCode(
+  context: ValidateContext<ValidateMin>
+): Validator {
+  return (number, type) =>
+    updateDefaultCustomValidity(
+      validateMinValue(
+        number.length ? "" + number.length : "",
+        type,
+        context,
+        "INVALID_LESS_THAN_MIN_LENGTH"
+      ),
+      context
+    );
 }
 
 /**
@@ -30,7 +49,10 @@ export function validateCurrency(
  * @param number The number to compare.
  * @param [min] The minimum acceptable value.
  */
-function compareMin(number: string, min?: ValidateMinValue["min"]): boolean {
+function compareMinValue(
+  number: string | number,
+  min?: ValidateMin["min"]
+): boolean {
   if (!min && min !== 0) {
     return true;
   }
@@ -77,27 +99,28 @@ function updateDefaultCustomValidity(
  *   - blur: set invalid if less than min and show error
  *   - mount: set invalid if less than min
  */
-function validateMin(
+function validateMinValue(
   number: Parameters<Validator>[0],
   type: Parameters<Validator>[1],
-  context: ValidateContext<ValidateMinValue>
+  context: ValidateContext<ValidateMin>,
+  customValidity: ValidateErrorTypes = "INVALID_LESS_THAN_MIN_VALUE"
 ): ReturnType<Validator> {
-  let result: ValidateResultError | undefined;
+  let result: ValidateResultInternal | undefined;
 
   if (type === "change") {
     // If the user is changing the value so set the input to be valid for now.
     result = { customValidity: "", report: true };
   } else if (type === "blur") {
-    if (!compareMin(number, context.min)) {
-      result = { customValidity: "INVALID_LESS_THAN_MIN_VALUE", report: true };
+    if (!compareMinValue(number, context.min)) {
+      result = { customValidity, report: true };
     } else {
       result = { customValidity: "", report: true };
     }
   } else if (type === "mount") {
     // The initial value provided to the input is invalid, set the input
     // invalid but don't raise an error - that would be annoying.
-    if (!compareMin(number, context.min)) {
-      result = { customValidity: "INVALID_LESS_THAN_MIN_VALUE" };
+    if (!compareMinValue(number, context.min)) {
+      result = { customValidity };
     }
   }
 

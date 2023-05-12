@@ -1,4 +1,4 @@
-import type { ValidateContext, ValidateMinValue } from "./validators-types";
+import type { ValidateContext, ValidateMin } from "./validators-types";
 import { validateErrorsMap } from "./validators-types";
 import { validateCurrency } from "./validators";
 
@@ -59,10 +59,10 @@ describe("validateCurrency", () => {
     const mockUpdateCustomValidity = jest
       .fn<
         ReturnType<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >,
         Parameters<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >
       >()
       .mockReturnValue({
@@ -70,7 +70,7 @@ describe("validateCurrency", () => {
         report: false
       });
 
-    const ctx: ValidateContext<ValidateMinValue> = {
+    const ctx: ValidateContext<ValidateMin> = {
       updateCustomValidity: mockUpdateCustomValidity,
       min: 10000
     };
@@ -96,10 +96,10 @@ describe("validateCurrency", () => {
     const mockUpdateCustomValidity = jest
       .fn<
         ReturnType<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >,
         Parameters<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >
       >()
       .mockReturnValue({
@@ -107,7 +107,7 @@ describe("validateCurrency", () => {
         report: false
       });
 
-    const ctx: ValidateContext<ValidateMinValue> = {
+    const ctx: ValidateContext<ValidateMin> = {
       min: 78,
       title: "ELEMENT_TITLE_ATTRIBUTE_1",
       updateCustomValidity: mockUpdateCustomValidity
@@ -134,10 +134,10 @@ describe("validateCurrency", () => {
     const mockUpdateCustomValidity = jest
       .fn<
         ReturnType<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >,
         Parameters<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >
       >()
       .mockReturnValue({
@@ -145,7 +145,7 @@ describe("validateCurrency", () => {
         report: false
       });
 
-    const ctx: ValidateContext<ValidateMinValue> = {
+    const ctx: ValidateContext<ValidateMin> = {
       min: 5723,
       title: "ELEMENT_TITLE_ATTRIBUTE_2",
       updateCustomValidity: mockUpdateCustomValidity
@@ -172,10 +172,10 @@ describe("validateCurrency", () => {
     const mockUpdateCustomValidity = jest
       .fn<
         ReturnType<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >,
         Parameters<
-          Required<ValidateContext<ValidateMinValue>>["updateCustomValidity"]
+          Required<ValidateContext<ValidateMin>>["updateCustomValidity"]
         >
       >()
       .mockReturnValue({
@@ -183,7 +183,7 @@ describe("validateCurrency", () => {
         report: false
       });
 
-    const ctx: ValidateContext<ValidateMinValue> = {
+    const ctx: ValidateContext<ValidateMin> = {
       min: 31,
       title: "ELEMENT_TITLE_ATTRIBUTE_3",
       updateCustomValidity: mockUpdateCustomValidity

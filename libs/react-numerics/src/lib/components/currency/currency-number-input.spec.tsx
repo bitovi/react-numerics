@@ -4,7 +4,6 @@ import userEvents from "@testing-library/user-event";
 import { validateErrorsMap } from "../../validators/validators-types";
 import {
   CurrencyNumberInput,
-  CurrencyNumberInputValidateAndUpdateProps,
   CurrencyNumberInputValidationProps
 } from "./currency-number-input";
 import { Stateful } from "../../test/stateful";
@@ -218,10 +217,10 @@ describe("CurrencyNumberInput", () => {
 
     const updateCustomValidity = jest.fn<
       ReturnType<
-        Required<CurrencyNumberInputValidateAndUpdateProps>["updateCustomValidity"]
+        Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
       >,
       Parameters<
-        Required<CurrencyNumberInputValidateAndUpdateProps>["updateCustomValidity"]
+        Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
       >
     >((number, context, error) => {
       // A custom validity message is provided for "INVALID_LESS_THAN_MIN."
@@ -309,5 +308,43 @@ describe("CurrencyNumberInput", () => {
     );
     expect(input).toBeInvalid(); // This will raise `onInvalid` again.
     expect(input.validationMessage).toBe("6 is not enough money.");
+  });
+
+  it("validates input if `validate` is false but `updateCustomValidity` is provided", () => {
+    const updateCustomValidity = jest
+      .fn<
+        ReturnType<
+          Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
+        >,
+        Parameters<
+          Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
+        >
+      >()
+      .mockReturnValue({
+        customValidity: "CUSTOM_VALIDATION_MESSAGE",
+        report: true
+      });
+
+    const props: CurrencyNumberInputValidationProps = {
+      min: 33,
+      numericValue: "32.99",
+      onInvalid: jest.fn(),
+      onNumericChange: jest.fn(),
+      updateCustomValidity,
+      validate: false
+    };
+
+    render(
+      <Stateful
+        {...props}
+        renderChild={props => <CurrencyNumberInput {...props} />}
+      />
+    );
+
+    const input = screen.getByDisplayValue("$32.99") as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+    expect(props.onInvalid).toHaveBeenCalledTimes(1);
+    expect(input).toBeInvalid(); // This will raise `onInvalid` again.
+    expect(input.validationMessage).toBe("CUSTOM_VALIDATION_MESSAGE");
   });
 });

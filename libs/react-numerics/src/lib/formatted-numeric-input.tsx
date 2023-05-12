@@ -6,7 +6,10 @@ import {
   FormattedInput,
   FormattedInputProps as FormattedInputPropsImported
 } from "./formatted-input";
-import type { Validator } from "./validators/validators-types";
+import type {
+  ValidateContextType,
+  Validator
+} from "./validators/validators-types";
 
 /**
  * Expects a `numericValue` string containing either only number characters or
@@ -201,13 +204,13 @@ type FormattedInputProps = Omit<
   "formattedValue" | "onChange" | "onKeyDown"
 >;
 
-export interface FormattedNumericInputProps
-  extends FormattedInputProps,
-    NumericValidationProps {
-  /** Converts a numeric string from the display locale to the en-US locale. For
-   * example a de-DE value of "1.234,5" will be converted to an en-US string
-   * "1,234.56". Normally the default converter (@see convertNumber) should
-   * provide the correct result. */
+/** Implemented by components that manage a numeric value in an input element. */
+export interface FormattedNumericInputProps extends FormattedInputProps {
+  /**
+   * Convert a numeric string from the display locale to the en-US locale. For
+   * example a de-DE value of "1.234,5" must be converted to an en-US string
+   * "1,234.56".
+   */
   converter?: Converter;
   /** Function that can accept a string and return only the characters that make
    * up the numericValue. For example, if working with currency, input of
@@ -225,18 +228,17 @@ export interface FormattedNumericInputProps
   /** Invoked when the numeric value of the input changes. In some cases the
    * display value will change, but the numeric value will not. */
   onNumericChange: ((value: string) => void) | null;
-}
-
-export interface NumericValidationProps {
-  /** Invoke to validate a numericValue. */
+  /** A function that validates a `numericValue`. This will be invoked at
+   * certain lifecycle phases (such as mount) or events (like change or blur).
+   */
   validator?: Validator;
 }
 
 function validateInput(
   numericValue: FormattedNumericInputProps["numericValue"],
-  context: Parameters<Required<NumericValidationProps>["validator"]>[1],
+  context: ValidateContextType,
   input: HTMLInputElement | null,
-  validator?: NumericValidationProps["validator"]
+  validator?: FormattedNumericInputProps["validator"]
 ) {
   if (validator && input) {
     const validateResult = validator(numericValue, context);

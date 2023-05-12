@@ -234,18 +234,22 @@ export interface FloatFormatterFactory {
   ): Formatter;
 }
 
-/**
- * Accepts a numeric input string and returns a string formatted for display.
- */
 export interface Formatter {
+  /**
+   * Accepts a numeric input string and returns a string formatted for display.
+   * @see {@link FormatterFactory}
+   */
   (
     /** The value to format. If the input represents a float it must be
      * formatted in the en-US locale, i.e. uses a "." to separate the whole from
      * the fractional part. */
     input: string
   ): string;
-  /** Accepts a numeric input string and other options to return a string
-   * formatted for display. */
+  /**
+   * Accepts a numeric input string and other options to return a string
+   * formatted for display.
+   * @see {@link FormatterFactory}
+   */
   (
     /** The value to format. If the input represents a float it must be
      * formatted in the en-US locale, i.e. uses a "." to separate the whole from
@@ -264,7 +268,7 @@ export interface Formatter {
 export interface FormatterFactory {
   (
     /** The locales to use when the Formatter is invoked. */
-    locales?: FormatNumberStringOptions["locales"],
+    locales?: Locales,
     /** Requested options for formatting the number. */
     options?: Partial<Omit<FormatNumberStringOptions, "locales">>
   ): Formatter;
@@ -337,11 +341,9 @@ function formatNumberString(
 
   // It's difficult to consistently handle the `min` prop. Right now when the
   // `min` is set and the input loses focus the previous formatted version will
-  // be displayed.
+  // be displayed. See validators which are enforce min options.
   if (min !== null && num.lt(min)) {
     if (type === "blur") {
-      // TODO: REACTSP-6 - when the user enters a value less than `min` inform
-      // the owner for validation purposes.
       return previousFormatted;
     }
   }
@@ -409,8 +411,11 @@ function numberStartsWithSign(input: string) {
 export interface FormatFloatStringOptions {
   /** The number of places to return in the formatted value. */
   decimalPlaces: number;
-  /** How a number with more precision than the allowed decimal places should be
-   * rounded. */
+  /**
+   * How a number with more precision than the allowed decimal places should be
+   * rounded.
+   * @see {@link https://mikemcl.github.io/bignumber.js/#rounding-mode}
+   */
   roundingMode: BigNumber.RoundingMode;
 }
 
@@ -424,11 +429,11 @@ export interface FormatNumberStringOptions {
   min: string | number;
 }
 
-/** Information about the context under which the formatter was invoked. */
+/** Information about the context under which a Formatter is invoked. */
 export interface FormatterContext {
-  /** The formatter is being invoked because this DOM event happened. */
+  /** The Formatter is being invoked because this type of DOM event happened. */
   type?: "blur" | "change";
-  /** True if the formatter is being invoked because the user pressed and
+  /** True if the Formatter is being invoked because the user pressed and
    * released a key. */
   userKeyed?: boolean;
 }

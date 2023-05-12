@@ -23,12 +23,12 @@ import { useValidator } from "../../validators/use-validator";
  *
  * Supported locales: U.S.
  *
- * @param props - Component props.<p>`locales` defaults to
- * "en-US".</p><p>`numericValue` must only contain digits.</p>
+ * @param props
+ * @category Components
  */
 export const CurrencyNumberInput = React.forwardRef<
   HTMLInputElement,
-  CurrencyNumberInputValidationProps
+  CurrencyNumberInputProps
 >(function CurrencyNumberInputImpl(
   {
     inputMode = "decimal",
@@ -114,16 +114,16 @@ export const CurrencyNumberInput = React.forwardRef<
 
 const paddingStages = { pending: -1, active: 0, complete: 1 };
 
+/**
+ * Implemented by a component that displays a number as currency.
+ */
 export interface CurrencyNumberInputProps
   extends Omit<
-    FormattedNumberInputProps,
-    "formatter" | "decimalPlaces" | "validator"
-  > {
+      FormattedNumberInputProps,
+      "formatter" | "decimalPlaces" | "validator"
+    >,
+    ValidationProps<ValidateMin> {
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean;
 }
-
-/** Implemented by currency components that support validation. */
-export type CurrencyNumberInputValidationProps = CurrencyNumberInputProps &
-  ValidationProps<ValidateMin>;

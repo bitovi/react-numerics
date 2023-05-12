@@ -4,7 +4,7 @@ import userEvents from "@testing-library/user-event";
 import { validateErrorsMap } from "../../validators/validators-types";
 import {
   CurrencyNumberInput,
-  CurrencyNumberInputValidationProps
+  CurrencyNumberInputProps
 } from "./currency-number-input";
 import { Stateful } from "../../test/stateful";
 
@@ -165,7 +165,7 @@ describe("CurrencyNumberInput", () => {
   it("will validate input", async () => {
     const userEvent = userEvents.setup();
 
-    const props: CurrencyNumberInputValidationProps = {
+    const props: CurrencyNumberInputProps = {
       min: 10,
       numericValue: "0",
       onInvalid: jest.fn(),
@@ -216,12 +216,8 @@ describe("CurrencyNumberInput", () => {
     const userEvent = userEvents.setup();
 
     const updateCustomValidity = jest.fn<
-      ReturnType<
-        Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
-      >,
-      Parameters<
-        Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
-      >
+      ReturnType<Required<CurrencyNumberInputProps>["updateCustomValidity"]>,
+      Parameters<Required<CurrencyNumberInputProps>["updateCustomValidity"]>
     >((number, context, error) => {
       // A custom validity message is provided for "INVALID_LESS_THAN_MIN."
       return error?.customValidity === "INVALID_LESS_THAN_MIN_VALUE"
@@ -229,7 +225,7 @@ describe("CurrencyNumberInput", () => {
         : error;
     });
 
-    const props: CurrencyNumberInputValidationProps = {
+    const props: CurrencyNumberInputProps = {
       min: 7,
       numericValue: "0",
       onInvalid: jest.fn(),
@@ -313,19 +309,15 @@ describe("CurrencyNumberInput", () => {
   it("validates input if `validate` is false but `updateCustomValidity` is provided", () => {
     const updateCustomValidity = jest
       .fn<
-        ReturnType<
-          Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
-        >,
-        Parameters<
-          Required<CurrencyNumberInputValidationProps>["updateCustomValidity"]
-        >
+        ReturnType<Required<CurrencyNumberInputProps>["updateCustomValidity"]>,
+        Parameters<Required<CurrencyNumberInputProps>["updateCustomValidity"]>
       >()
       .mockReturnValue({
         customValidity: "CUSTOM_VALIDATION_MESSAGE",
         report: true
       });
 
-    const props: CurrencyNumberInputValidationProps = {
+    const props: CurrencyNumberInputProps = {
       min: 33,
       numericValue: "32.99",
       onInvalid: jest.fn(),

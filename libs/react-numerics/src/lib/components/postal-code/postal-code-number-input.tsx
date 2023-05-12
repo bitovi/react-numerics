@@ -6,10 +6,10 @@ import {
 import { filterToNumeric } from "../../filters/filters";
 import { formatPostalCodeNumber } from "../../formatters/formatters";
 import type {
-  ValidateMin,
+  ValidateMinLength,
   ValidationProps
 } from "../../validators/validators-types";
-import { validatePostalCode } from "../../validators/validators";
+import { validateNumericLength } from "../../validators/validators";
 import { useValidator } from "../../validators/use-validator";
 
 /**
@@ -17,39 +17,57 @@ import { useValidator } from "../../validators/use-validator";
  *
  * Supported locales: U.S.
  *
- * @param props - Component props.<p>`locales` defaults to
- * "en-US".</p><p>`numericValue` must only contain digits.</p>
+ * @param props
+ * @category Components
  */
 export const PostalCodeNumberInput = React.forwardRef<
   HTMLInputElement,
-  PostalCodeNumberInputValidationProps
+  PostalCodeNumberInputProps
 >(function PostalCodeNumberInputImpl(
-  { inputMode = "numeric", updateCustomValidity, validate, ...props },
+  {
+    inputMode = "numeric",
+    /** @deprecated Will be removed in next major version upgrade. */
+    min, // TODO: in next major version update Omit to exclude `min` property; for now `min` is ignored when validate is true.
+    /** @deprecated Will be removed in next major version upgrade. */
+    minLength, // TODO: in next major version update Omit to exclude `minLength` property; for now `minLength` is ignored when validate is true.
+    title,
+    updateCustomValidity,
+    validate,
+    ...props
+  },
   ref
 ) {
   const validator = useValidator(
     { updateCustomValidity, validate },
-    { min: 5 },
-    validatePostalCode
+    { minLength: 5, title },
+    validateNumericLength
   );
 
-  return (
-    <FormattedNumericInput
-      inputMode={inputMode}
-      {...props}
-      filter={filterToNumeric}
-      formatter={formatPostalCodeNumber}
-      ref={ref}
-      validator={validator}
-    />
-  );
+  const nextProps: FormattedNumericInputProps = {
+    ...props,
+    inputMode,
+    filter: filterToNumeric,
+    formatter: formatPostalCodeNumber,
+    title
+  };
+
+  if (validator) {
+    nextProps.validator = validator;
+  } else {
+    nextProps.min = min;
+    nextProps.minLength = minLength;
+  }
+
+  return <FormattedNumericInput {...nextProps} ref={ref} />;
 });
 
-/** Props implemented by a component that displays a postal code. */
-export type PostalCodeNumberInputProps = Omit<
-  FormattedNumericInputProps,
-  "converter" | "filter" | "formatter"
->;
-
-export type PostalCodeNumberInputValidationProps = PostalCodeNumberInputProps &
-  ValidationProps<ValidateMin>;
+/**
+ * Props implemented by a component that displays a postal code.
+ * @interface
+ */
+export interface PostalCodeNumberInputProps // An empty interface rather than a type because the docs are better.
+  extends Omit<
+      FormattedNumericInputProps,
+      "converter" | "filter" | "formatter" | "validator"
+    >,
+    ValidationProps<ValidateMinLength> {}

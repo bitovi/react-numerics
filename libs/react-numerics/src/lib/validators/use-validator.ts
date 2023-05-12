@@ -13,7 +13,10 @@ import type {
  * @param factory
  */
 export function useValidator<ValidationProperties = unknown>(
-  { updateCustomValidity, validate = false }: ValidationProps<unknown>,
+  {
+    updateCustomValidity,
+    validate = false
+  }: ValidationProps<ValidationProperties>,
   context: ValidateContext<ValidationProperties>,
   factory: ValidatorFactory<ValidationProperties>
 ): Validator | undefined {

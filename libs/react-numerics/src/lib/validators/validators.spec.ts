@@ -1,22 +1,22 @@
 import type { ValidateContext, ValidateMin } from "./validators-types";
 import { validateErrorsMap } from "./validators-types";
-import { validateCurrency } from "./validators";
+import { validateMinValue } from "./validators";
 
-describe("validateCurrency", () => {
+describe("validateMinValue", () => {
   it("valid on mount", () => {
-    const validator = validateCurrency({ min: 1 });
+    const validator = validateMinValue({ min: 1 });
     expect(validator("1", "mount")).toEqual(undefined);
   });
 
   it("invalid on mount; no report", () => {
-    const validator = validateCurrency({ min: 100 });
+    const validator = validateMinValue({ min: 100 });
     expect(validator("99", "mount")).toEqual({
       customValidity: validateErrorsMap["INVALID_LESS_THAN_MIN_VALUE"]
     });
   });
 
   it("valid on change; less than min; report", () => {
-    const validator = validateCurrency({ min: 3 });
+    const validator = validateMinValue({ min: 3 });
     expect(validator("2", "change")).toEqual({
       customValidity: "",
       report: true
@@ -24,7 +24,7 @@ describe("validateCurrency", () => {
   });
 
   it("valid on change; greater than min; report", () => {
-    const validator = validateCurrency({ min: 30 });
+    const validator = validateMinValue({ min: 30 });
     expect(validator("300", "change")).toEqual({
       customValidity: "",
       report: true
@@ -32,7 +32,7 @@ describe("validateCurrency", () => {
   });
 
   it("valid on blur", () => {
-    const validator = validateCurrency({ min: 9 });
+    const validator = validateMinValue({ min: 9 });
     expect(validator("9.01", "blur")).toEqual({
       customValidity: "",
       report: true
@@ -40,7 +40,7 @@ describe("validateCurrency", () => {
   });
 
   it("valid on blur; empty string", () => {
-    const validator = validateCurrency({ min: 111 });
+    const validator = validateMinValue({ min: 111 });
     expect(validator("", "blur")).toEqual({
       customValidity: "",
       report: true
@@ -48,7 +48,7 @@ describe("validateCurrency", () => {
   });
 
   it("invalid on blur", () => {
-    const validator = validateCurrency({ min: 2 });
+    const validator = validateMinValue({ min: 2 });
     expect(validator("1.99", "blur")).toEqual({
       customValidity: validateErrorsMap["INVALID_LESS_THAN_MIN_VALUE"],
       report: true
@@ -75,7 +75,7 @@ describe("validateCurrency", () => {
       min: 10000
     };
 
-    const validator = validateCurrency(ctx);
+    const validator = validateMinValue(ctx);
 
     expect(validator("1", "blur")).toEqual({
       customValidity: validateErrorsMap["INVALID_LESS_THAN_MIN_VALUE"],
@@ -113,7 +113,7 @@ describe("validateCurrency", () => {
       updateCustomValidity: mockUpdateCustomValidity
     };
 
-    const validator = validateCurrency(ctx);
+    const validator = validateMinValue(ctx);
 
     expect(validator("1", "blur")).toEqual({
       customValidity: "ELEMENT_TITLE_ATTRIBUTE_1",
@@ -151,7 +151,7 @@ describe("validateCurrency", () => {
       updateCustomValidity: mockUpdateCustomValidity
     };
 
-    const validator = validateCurrency(ctx);
+    const validator = validateMinValue(ctx);
 
     expect(validator("1", "blur")).toEqual({
       customValidity: "ELEMENT_TITLE_ATTRIBUTE_2",
@@ -189,7 +189,7 @@ describe("validateCurrency", () => {
       updateCustomValidity: mockUpdateCustomValidity
     };
 
-    const validator = validateCurrency(ctx);
+    const validator = validateMinValue(ctx);
 
     expect(validator("1", "blur")).toEqual({
       customValidity: "",

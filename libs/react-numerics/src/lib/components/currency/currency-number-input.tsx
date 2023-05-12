@@ -10,7 +10,7 @@ import type {
   ValidateMin,
   ValidationProps
 } from "../../validators/validators-types";
-import { validateCurrency } from "../../validators/validators";
+import { validateMinValue } from "../../validators/validators";
 import { useValidator } from "../../validators/use-validator";
 
 /**
@@ -90,7 +90,7 @@ export const CurrencyNumberInput = React.forwardRef<
   const validator = useValidator(
     { updateCustomValidity, validate },
     { min, title },
-    validateCurrency
+    validateMinValue
   );
 
   const nextNumericValue =

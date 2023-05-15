@@ -14,14 +14,15 @@ import { validateMinValue } from "../../validators/validators";
 import { useValidator } from "../../validators/use-validator";
 
 /**
- * Allow the user to enter a currency value. Currency format and display are
- * driven by the locale. The ability to enter fractional parts of a currency
- * (e.g. cents) can also be controlled.
+ * Allow the user to enter a currency value.
+ * @description Currency format and display are driven by the locale. The
+ * ability to enter fractional parts of a currency (e.g. cents) can also be
+ * controlled.
  *
  * The display will show the localized currency symbol then the amount as the
  * user types. For example "$1.23".
  *
- * Supported locales: U.S.
+ * Supported locales: en-US
  *
  * @param props
  * @category Components

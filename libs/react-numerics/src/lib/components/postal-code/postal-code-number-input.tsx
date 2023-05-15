@@ -14,9 +14,7 @@ import { useValidator } from "../../validators/use-validator";
 
 /**
  * Create a formatted postal code. For example a U.S. 5 digit zip code "12345".
- *
- * Supported locales: U.S.
- *
+ * @description Supported locales: en-US (5 digit)
  * @param props
  * @category Components
  */

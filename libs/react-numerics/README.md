@@ -31,6 +31,19 @@ yarn add @bitovi/react-numerics
 
 ## Usage
 
+### Available components
+
+The following types of components are currently available:
+
+|Use|Component|Locales|Note|
+|---|---|---|---|
+|currency|CurrencyNumberInput|any||
+|percent|PercentNumberInput|any||
+|phone number|TelephoneNumberInput|en-US|10 digit - area code and exchange required|
+|postal code|PostalCodeNumberInput|en-US|5 digit|
+|social security number|SocialSecurityNumberInput|US only||
+|employer identification number|EmployerIdentificationNumberInput|US only||
+
 Import the component that you need.
 
 ```tsx
@@ -45,6 +58,7 @@ export function Form({ numericValue }: Props) {
     <PercentNumberInput
       numericValue={numericValue}
       onNumericChange={handleNumericChange}
+      validate
     />
   );
 }
@@ -66,7 +80,7 @@ reference to the underlying `<input>` element.
 import { PostalCodeNumberInput } from "@bitovi/react-numerics";
 
 export function Form({ numericValue }: Props) {
-  const myRef = React.createRef<HTMLInputElement>();
+  const myRef = React.useRef<HTMLInputElement | null>(null);
   // Once rendered, `myRef.current` is the underlying <input> element.
 
   function handleNumericChange(value) {
@@ -78,16 +92,98 @@ export function Form({ numericValue }: Props) {
       numericValue="01970"
       onNumericChange={handleNumericChange}
       ref={myRef}
+      validate
     />
   );
 }
 ```
 
-### Available components
+### Validation
 
-The following types of components are currently available:
+As of version 1.3.4 validation is built-in to the current higher order
+components as well as being available through interfaces and functionality for
+composing new components.
 
-<table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg"><thead><tr><th style="background-color:#f0f0f0;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">Component</th><th style="background-color:#f0f0f0;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">Locales</th><th style="background-color:#f0f0f0;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">Note</th></tr></thead><tbody><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">CurrencyNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">en-US</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal"></td></tr><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">PercentNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">any</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal"></td></tr><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">TelephoneNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">en-US</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">Requires area code and exchange.</td></tr><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">PostalCodeNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">en-US</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">Only 5 digit zip code supported.</td></tr><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">SocialSecurityNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">en-US</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal"></td></tr><tr><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">EmployerIdentificationNumberInput</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal">en-US</td><td style="background-color:#fff;border-color:inherit;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;text-align:left;vertical-align:top;word-break:normal"></td></tr></tbody></table>
+By default validation is **NOT** enabled in components so that it doesn't
+interfere with any custom validation that may have been created using a
+component's `ref`.
+
+To enable validation add the `validate` prop to a component. When the component
+ fails validation the `:invalid` pseudo class will be set on the input element.
+The browser's default error UI will be displayed with an English error message;
+[this behavior can be changed](#modifying-the-validation-result).
+
+Currently validation is performed when:
+
+- a component first mounts
+- the value of an input changes
+- a component loses focus (i.e. blur)
+
+#### Modifying the validation result
+
+There are two ways to modify the text of the message that is displayed to the
+user, the simplest is to provide a string using the input element's `title`
+attribute. If the input is invalid the title is displayed. The same message is
+always displayed regardless of the reason the input is invalid.
+
+The most flexible way to alter how a component is validated &#x2014; and the
+error text &#x2014; is by adding the `updateCustomValidity` prop with a callback
+function. This callback is invoked with three arguments: a `number` which is the
+current numeric value, `context` which has information about the conditions the
+validator is being invoked under, and `result` that contains the validation
+result generated by the default validation.
+
+👉 _If `updateCustomValidity` is provided you do not need to set
+`validate=true`; that will be inferred._
+
+The value of `result.customValidity` will be a string constant from
+`ValidateErrorTypes` that indicates the type of validation error.
+
+The callback can either return `void` or a `ValidationResult` with the
+validation that should be applied. If void is returned the current validity of
+the input will not be changed. When returning a `ValidationResult`:
+
+- `customValidity`
+  - An empty string `""` will make the input **valid**.
+  - Any string will be set as the input's validation message and may be
+      displayed to the user.
+- `report` if true the input's `reportValidity` method will be invoked and will
+  cause the browser to display the value of customValidity, if false the
+  validity will be updated but the user will not be informed of the current
+  validity status.
+
+The following example illustrates code that sets a localized string for the
+error message that will be displayed to the user.
+
+```tsx
+import { PostalCodeNumberInput } from "@bitovi/react-numerics";
+
+export function Form({ handleNumericChange, getLocalizedString, numericValue }: Props) {
+  function updateCustomValidity(number, context, result) {
+    if(result.customValidity){
+      // Create a new ValidationResult where the customValidity
+      // property is set to a localized string. So for example
+      // the constant "INVALID_LESS_THAN_MIN_LENGTH" might
+      // result in a string like
+      // "El valor del código postal debe tener 5 dígitos."
+      return {
+        ...result,
+        customValidity: getLocalizedString(result.customValidity, { minimum: context.minLength })
+      };
+    }
+
+    return result;
+  }
+
+return (
+    <PostalCodeNumberInput
+      numericValue={numericValue}
+      onNumericChange={handleNumericChange}
+      updateCustomValidity={updateCustomValidity}
+    />
+  );
+}
+```
 
 ## We want to hear from you
 

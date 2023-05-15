@@ -16,6 +16,7 @@ import { validateNumericLength } from "../../validators/validators";
  * Display a formatted U.S. Social Security Number. For example:
  * "123-45-6789".
  * @param props
+ * @category Components
  */
 export const SocialSecurityNumberInput = React.forwardRef<
   HTMLInputElement,

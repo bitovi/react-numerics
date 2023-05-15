@@ -12,8 +12,9 @@ import { validateTelephoneNumber } from "../../validators/validators";
 
 /**
  * Display a formatted telephone number.
- * @description Supported locales: U.S. (10 digit)
+ * @description Supported locales: en-US (10 digit)
  * @param props
+ * @category Components
  */
 export const TelephoneNumberInput = React.forwardRef<
   HTMLInputElement,

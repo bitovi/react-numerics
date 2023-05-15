@@ -14,8 +14,8 @@ import { validateMinValue } from "../../validators/validators";
 /**
  * Create a number followed by the % sign. The percent sign will be appended
  * when the user leaves the field (i.e. `onBlur`).
- * @param props - Component props.<p>`locales` defaults to
- * "en-US".</p><p>`numericValue` allows: "-", digits 0-9, and ".".</p>
+ * @param props
+ * @category Components
  */
 export const PercentNumberInput = React.forwardRef<
   HTMLInputElement,

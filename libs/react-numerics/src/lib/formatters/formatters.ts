@@ -8,9 +8,7 @@ import {
 } from "../util/numbers";
 
 /**
- * Format a number as localized currency.<p>`locales defaults to "en-US".`</p>
- * @see CurrencyFormatterFactory
- * @see Formatter
+ * Format a number as currency for the provided locale; defaults to "en-US"
  */
 export const formatCurrency: CurrencyFormatterFactory =
   (
@@ -64,9 +62,7 @@ export const formatEmployerIdentificationNumber: Formatter = (
 };
 
 /**
- * Format a floating point number.
- * @see FloatFormatterFactory
- * @see Formatter
+ * Format a floating point number for the provided locale; defaults to "en-US".
  */
 export const formatFloat: FloatFormatterFactory =
   (locales, options) =>
@@ -84,14 +80,10 @@ export const formatFloat: FloatFormatterFactory =
     );
 
 /**
- * Format an integer.
- * @param locales Defaults to "en-US".
- * @see FormatterFactory
- * @see Formatter
+ * Format an integer number for the provided locale; defaults to "en-US".
  */
 export const formatInteger: FormatterFactory =
-  (locales = "en-US", options) =>
-  (number: string) =>
+  (locales, options) => (number: string) =>
     formatNumberString(number, {
       ...options,
       locales,
@@ -207,6 +199,7 @@ export interface CurrencyFormatterFactory {
   (
     /** The locales to use when the Formatter is invoked. */
     locales?: FormatNumberStringOptions["locales"],
+    /** Options for formatting the number. */
     options?: Partial<
       Omit<FormatNumberStringOptions, "locales"> &
         Pick<FormatFloatStringOptions, "roundingMode">
@@ -228,6 +221,7 @@ export interface FloatFormatterFactory {
   (
     /** The locales to use when the Formatter is invoked. */
     locales?: FormatNumberStringOptions["locales"],
+    /** Options for formatting the number. */
     options?: Partial<
       Omit<FormatNumberStringOptions, "locales"> & FormatFloatStringOptions
     >
@@ -269,7 +263,7 @@ export interface FormatterFactory {
   (
     /** The locales to use when the Formatter is invoked. */
     locales?: Locales,
-    /** Requested options for formatting the number. */
+    /** Options for formatting the number. */
     options?: Partial<Omit<FormatNumberStringOptions, "locales">>
   ): Formatter;
 }

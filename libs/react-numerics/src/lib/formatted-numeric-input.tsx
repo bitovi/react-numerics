@@ -15,11 +15,12 @@ import type {
  * Expects a `numericValue` string containing either only number characters or
  * only characters that can be used to represent a number.
  * @see {@link FormattedNumberInput} for number-like numerics.
- * @description `numericValue` will be formatted for display. The owner will be
- * notified when the numeric string value changes by `onNumericChange`. If the
- * numericValue represents a number like a float or integer it must be formatted
- * in the en-US locale, i.e. uses a "." to separate the whole from the
- * fractional part.
+ * @description `numericValue` will be formatted for display. Generally this is
+ * not used directly in an application but wrapped in a component at a higher
+ * level of abstraction. The owner will be notified when the numeric string
+ * value changes by `onNumericChange`. If the numericValue represents a number
+ * like a float or integer it must be formatted in the en-US locale, i.e. uses a
+ * "." to separate the whole from the fractional part.
  *
  * For example, feed in a string like "1234567890" with the correct filters and
  * formatters (e.g. US telephone) and it will be displayed as "(123) 456-7890".

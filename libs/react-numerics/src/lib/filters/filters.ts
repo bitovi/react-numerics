@@ -32,8 +32,11 @@ export const filterToSignedNumeric: Filter = input => {
 };
 
 /**
- * Accepts an input string and returns a version that has had invalid characters
+ * Accepts a string as input and returns a copy that has had invalid characters
  * removed.
+ * @description When a user changes the value of the input field that value is
+ * passed to the Filter. The Filter creates a new string that has had any
+ * characters that are not allowed removed.
  * @param next The value to filter.
  * @param previous The previous filtered value.
  */

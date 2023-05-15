@@ -15,13 +15,13 @@ export function Stateful<P extends Omit<FormattedNumericInputProps, "onBlur">>({
   /** Provides the normal focus event and a second param to set the
    * `numericValue` of the child. */
   onBlur?: (
-    evt: React.FocusEvent,
+    evt: React.FocusEvent<HTMLInputElement>,
     setNumericValue: Dispatch<SetStateAction<string>>
   ) => void;
   renderChild: (props: P) => JSX.Element;
 }) {
   const [numericValue, setNumericValue] =
-    useState<FormattedNumericInputProps["numericValue"]>("");
+    useState<FormattedNumericInputProps["numericValue"]>(propsNumericValue);
 
   useEffect(() => {
     setNumericValue(propsNumericValue);

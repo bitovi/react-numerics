@@ -1,39 +1,48 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
-import {
-  FormattedNumberInput,
-  FormattedNumberInputProps
-} from "../../formatted-number-input";
+import type { FormattedNumberInputProps } from "../../formatted-number-input";
+import { FormattedNumberInput } from "../../formatted-number-input";
 import {
   formatCurrency,
   padNumericFraction
 } from "../../formatters/formatters";
+import type {
+  ValidateMin,
+  ValidationProps
+} from "../../validators/validators-types";
+import { validateMinValue } from "../../validators/validators";
+import { useValidator } from "../../validators/use-validator";
 
 /**
- * Allow the user to enter a currency value. Currency format and display are
- * driven by the locale. The ability to enter fractional parts of a currency
- * (e.g. cents) can also be controlled.
+ * Allow the user to enter a currency value.
+ * @description Currency format and display are driven by the locale. The
+ * ability to enter fractional parts of a currency (e.g. cents) can also be
+ * controlled.
  *
  * The display will show the localized currency symbol then the amount as the
  * user types. For example "$1.23".
  *
- * Supported locales: U.S.
+ * Supported locales: en-US
  *
- * @param props - Component props.<p>`locales` defaults to
- * "en-US".</p><p>`numericValue` must only contain digits.</p>
+ * @param props
+ * @category Components
  */
 export const CurrencyNumberInput = React.forwardRef<
   HTMLInputElement,
   CurrencyNumberInputProps
 >(function CurrencyNumberInputImpl(
   {
+    inputMode = "decimal",
+    locales,
+    min,
     numericValue,
     onBlur,
     onNumericChange,
     roundingMode = BigNumber.ROUND_HALF_UP,
     showFraction = true,
-    locales,
-    inputMode = "decimal",
+    title,
+    updateCustomValidity,
+    validate,
     ...props
   },
   ref
@@ -56,12 +65,14 @@ export const CurrencyNumberInput = React.forwardRef<
     }
   }, [locales, numericValue, onNumericChange, paddingStage]);
 
-  const formatter = useMemo(() => {
-    return formatCurrency(locales, {
-      showFraction,
-      roundingMode
-    });
-  }, [locales, roundingMode, showFraction]);
+  const formatter = useMemo(
+    () =>
+      formatCurrency(locales, {
+        showFraction,
+        roundingMode
+      }),
+    [locales, roundingMode, showFraction]
+  );
 
   const handleBlur = useCallback(
     (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -77,6 +88,12 @@ export const CurrencyNumberInput = React.forwardRef<
     [locales, numericValue, onBlur, onNumericChange, showFraction]
   );
 
+  const validator = useValidator(
+    { updateCustomValidity, validate },
+    { min, title },
+    validateMinValue
+  );
+
   const nextNumericValue =
     paddingStage !== paddingStages.complete ? "" : numericValue;
 
@@ -85,18 +102,28 @@ export const CurrencyNumberInput = React.forwardRef<
       {...props}
       formatter={formatter}
       inputMode={inputMode}
+      min={min}
       numericValue={nextNumericValue}
       onBlur={handleBlur}
       onNumericChange={onNumericChange}
       ref={ref}
+      title={title}
+      validator={validator}
     />
   );
 });
 
 const paddingStages = { pending: -1, active: 0, complete: 1 };
 
+/**
+ * Implemented by a component that displays a number as currency.
+ */
 export interface CurrencyNumberInputProps
-  extends Omit<FormattedNumberInputProps, "formatter" | "decimalPlaces"> {
+  extends Omit<
+      FormattedNumberInputProps,
+      "formatter" | "decimalPlaces" | "validator"
+    >,
+    ValidationProps<ValidateMin> {
   /** Control whether the user can enter fractional parts of the currency (e.g.
    * cents). */
   showFraction?: boolean;

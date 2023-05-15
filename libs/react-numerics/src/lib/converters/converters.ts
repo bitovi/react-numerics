@@ -34,10 +34,10 @@ export const convertNumber: ConverterFactory =
 
 /**
  * Accepts an input string of the specified locale and returns a string
- * formatted to the en-US locale.
+ * formatted to the output locale.
  * @param input The value to convert. The input locale is supplied as the
  * `locale` argument to the ConverterFactory.
- * @param outputLocale The locale of the return value.
+ * @param outputLocale The locale of the return value; defaults to "en-US".
  */
 export interface Converter {
   (input: string, outputLocale?: string): string;

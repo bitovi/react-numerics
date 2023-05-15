@@ -6,18 +6,21 @@ import {
   FormattedInput,
   FormattedInputProps as FormattedInputPropsImported
 } from "./formatted-input";
-
-// let count = 0;
+import type {
+  ValidateContextType,
+  Validator
+} from "./validators/validators-types";
 
 /**
  * Expects a `numericValue` string containing either only number characters or
- * only characters that can be used to represent a number. This string will be
- * formatted for display. The owner will be notified when the numeric string
- * value changes by `onNumericChange`.
- *
- * If the numericValue represents a number like a float or integer it must be
- * formatted in the en-US locale, i.e. uses a "." to separate the whole from the
- * fractional part.
+ * only characters that can be used to represent a number.
+ * @see {@link FormattedNumberInput} for number-like numerics.
+ * @description `numericValue` will be formatted for display. Generally this is
+ * not used directly in an application but wrapped in a component at a higher
+ * level of abstraction. The owner will be notified when the numeric string
+ * value changes by `onNumericChange`. If the numericValue represents a number
+ * like a float or integer it must be formatted in the en-US locale, i.e. uses a
+ * "." to separate the whole from the fractional part.
  *
  * For example, feed in a string like "1234567890" with the correct filters and
  * formatters (e.g. US telephone) and it will be displayed as "(123) 456-7890".
@@ -37,22 +40,20 @@ export const FormattedNumericInput = React.forwardRef<
     onBlur,
     onNumericChange,
     numericValue,
+    validator,
     ...props
   },
   ref
 ) {
-  // count += 1;
-  // const invokeCount = count;
-  // console.log(
-  //   `FormattedNumericInputImpl[${invokeCount}]: enter; numericValue='${numericValue}'`
-  // );
-
   /** Must be true when the user has entered a numeric value. This is passed to
    * the formatter when the numeric value changes and then is reset to false. */
   const userKeyedNumeric = useRef(false);
+  const initialValidateRaised = useRef(false);
+  const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
   const [displayValue, setDisplayValue] = useState("");
 
-  // Only runs once on initial render to validate numericValue.
+  // Only runs once on initial render to make sure the provided numericValue can
+  // be displayed properly.
   useEffect(() => {
     const formatted = formatter(filter(numericValue));
     const filtered = filter(formatted);
@@ -62,6 +63,7 @@ export const FormattedNumericInput = React.forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Sets the display value when the numericValue changes.
   useEffect(() => {
     setDisplayValue(current => {
       const filtered = filter(numericValue);
@@ -69,30 +71,47 @@ export const FormattedNumericInput = React.forwardRef<
         userKeyed: userKeyedNumeric.current
       });
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] setDisplayValue: current='${current}', numericValue='${numericValue}', formatted='${formatted}'.`
-      // );
-
       userKeyedNumeric.current = false;
 
       return formatted;
     });
   }, [filter, formatter, numericValue]);
 
+  // FormattedNumericInput keeps its own copy of a ref to the input element for
+  // validation purposes, we need to manually pass along this reference to
+  // `ref`, if it is provided.
+  useEffect(() => {
+    if (!ref) {
+      return;
+    }
+
+    if ("current" in ref) {
+      ref.current = inputRef;
+    } else if (typeof ref === "function") {
+      ref(inputRef);
+    }
+  }, [inputRef, ref]);
+
+  // Do "mount" validation once when the `inputRef` is available; `inputRef`
+  // will not be available until the second component render.
+  useEffect(() => {
+    if (!inputRef || initialValidateRaised.current) {
+      return;
+    }
+
+    initialValidateRaised.current = true;
+    validateInput(numericValue, "mount", inputRef, validator);
+  }, [inputRef, numericValue, validator]);
+
   function handleBlur(evt: React.FocusEvent<HTMLInputElement>) {
     const nextDisplayValue = formatter(filter(evt.target.value), displayValue, {
       type: "blur"
     });
 
-    // console.log(
-    //   `FormattedNumericInputImpl handleBlur: displayValue='${displayValue}', nextDisplayValue='${nextDisplayValue}'`
-    // );
-
     setDisplayValue(nextDisplayValue);
 
-    if (onBlur) {
-      onBlur(evt);
-    }
+    onBlur && onBlur(evt);
+    validateInput(numericValue, "blur", inputRef, validator);
   }
 
   const handleChange: FormattedInputPropsImported["onChange"] = useCallback(
@@ -117,22 +136,25 @@ export const FormattedNumericInput = React.forwardRef<
         converter ? converter(nextDisplay) : nextDisplay
       );
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleChange: value='${value}', changeType=${changeType}, nextDisplay='${nextDisplay}', nextNumeric='${nextNumeric}'.`
-      // );
-
       if (deleteType) {
         setDisplayValue(nextNumeric.length < 1 ? "" : nextDisplay);
       }
 
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleChange: numericValue='${numericValue}', nextNumeric='${nextNumeric}'`
-      // );
       if (numericValue !== nextNumeric) {
         onNumericChange && onNumericChange(nextNumeric);
+        validateInput(nextNumeric, "change", inputRef, validator);
       }
     },
-    [converter, displayValue, filter, formatter, numericValue, onNumericChange]
+    [
+      converter,
+      displayValue,
+      filter,
+      formatter,
+      inputRef,
+      numericValue,
+      onNumericChange,
+      validator
+    ]
   );
 
   const handleKeyDown = useCallback<
@@ -140,10 +162,6 @@ export const FormattedNumericInput = React.forwardRef<
   >(
     evt => {
       userKeyedNumeric.current = true;
-
-      // console.log(
-      //   `FormattedNumericInputImpl[${invokeCount}] handleKeyDown: evt.key=${evt.key}`
-      // );
 
       // If a modifier key is active do not filter the key (this is the case
       // when say doing "select all" or "copy").
@@ -162,10 +180,6 @@ export const FormattedNumericInput = React.forwardRef<
         return;
       }
 
-      // console.log(
-      //   `FormattedNumericInputImpl handleKeyDown: evt.key=${evt.key}, numericValue='${numericValue}'`
-      // );
-
       const filtered = filter(evt.key, numericValue);
       if (!filtered) {
         evt.preventDefault();
@@ -175,20 +189,15 @@ export const FormattedNumericInput = React.forwardRef<
     [filter, numericValue]
   );
 
-  // console.log(
-  //   `FormattedNumericInputImpl[${invokeCount}]: displayValue='${displayValue}'`
-  // );
+  const nextProps: FormattedInputPropsImported = {
+    formattedValue: displayValue,
+    onBlur: handleBlur,
+    onChange: handleChange,
+    onKeyDown: handleKeyDown,
+    ...props
+  };
 
-  return (
-    <FormattedInput
-      formattedValue={displayValue}
-      onBlur={handleBlur}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      ref={ref}
-      {...props}
-    />
-  );
+  return <FormattedInput {...nextProps} ref={setInputRef} />;
 });
 
 type FormattedInputProps = Omit<
@@ -196,11 +205,13 @@ type FormattedInputProps = Omit<
   "formattedValue" | "onChange" | "onKeyDown"
 >;
 
+/** Implemented by components that manage a numeric value in an input element. */
 export interface FormattedNumericInputProps extends FormattedInputProps {
-  /** Converts a numeric string from the display locale to the en-US locale. For
-   * example a de-DE value of "1.234,5" will be converted to an en-US string
-   * "1,234.56". Normally the default converter (@see convertNumber) should
-   * provide the correct result. */
+  /**
+   * Convert a numeric string from the display locale to the en-US locale. For
+   * example a de-DE value of "1.234,5" must be converted to an en-US string
+   * "1,234.56".
+   */
   converter?: Converter;
   /** Function that can accept a string and return only the characters that make
    * up the numericValue. For example, if working with currency, input of
@@ -218,4 +229,24 @@ export interface FormattedNumericInputProps extends FormattedInputProps {
   /** Invoked when the numeric value of the input changes. In some cases the
    * display value will change, but the numeric value will not. */
   onNumericChange: ((value: string) => void) | null;
+  /** A function that validates a `numericValue`. This will be invoked at
+   * certain lifecycle phases (such as mount) or events (like change or blur).
+   */
+  validator?: Validator;
+}
+
+function validateInput(
+  numericValue: FormattedNumericInputProps["numericValue"],
+  context: ValidateContextType,
+  input: HTMLInputElement | null,
+  validator?: FormattedNumericInputProps["validator"]
+) {
+  if (validator && input) {
+    const validateResult = validator(numericValue, context);
+    if (validateResult) {
+      validateResult.customValidity !== undefined &&
+        input.setCustomValidity(validateResult.customValidity);
+      validateResult.report && input.reportValidity();
+    }
+  }
 }
